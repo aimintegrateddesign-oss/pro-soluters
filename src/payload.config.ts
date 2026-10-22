@@ -1,3 +1,4 @@
+import dns from 'dns'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import sharp from 'sharp'
 import path from 'path'
@@ -14,6 +15,10 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+
+// Atlas `mongodb+srv://` URIs need DNS SRV lookups, which some local resolvers refuse.
+// Override with DNS_SERVERS (comma-separated) if needed.
+dns.setServers((process.env.DNS_SERVERS || '8.8.8.8,1.1.1.1').split(',').map((s) => s.trim()))
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
