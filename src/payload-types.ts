@@ -72,6 +72,10 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    solutions: Solution;
+    industries: Industry;
+    'case-studies': CaseStudy;
+    submissions: Submission;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,6 +98,10 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    solutions: SolutionsSelect<false> | SolutionsSelect<true>;
+    industries: IndustriesSelect<false> | IndustriesSelect<true>;
+    'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
+    submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -775,6 +783,241 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "solutions".
+ */
+export interface Solution {
+  id: string;
+  name: string;
+  slug: string;
+  eyebrow: string;
+  order: number;
+  shortSummary: string;
+  /**
+   * Path under /public, e.g. /images/solve-and-prove.svg
+   */
+  image: string;
+  imageAlt: string;
+  icon?: ('search-check' | 'trending-up' | 'database') | null;
+  highlights?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  problemStatement?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  approachSteps?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  deliverables?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  entryOffer: {
+    label: string;
+    description: string;
+    ctaLabel: string;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "industries".
+ */
+export interface Industry {
+  id: string;
+  name: string;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-studies".
+ */
+export interface CaseStudy {
+  id: string;
+  title: string;
+  slug: string;
+  subtitle?: string | null;
+  solution: string | Solution;
+  industries?: (string | Industry)[] | null;
+  referenceCode: string;
+  editionDate?: string | null;
+  clientName?: string | null;
+  clientDescription?: string | null;
+  isSample?: boolean | null;
+  featured?: boolean | null;
+  /**
+   * Path under /public
+   */
+  cover?: string | null;
+  coverAlt?: string | null;
+  /**
+   * Set only for case studies sent in through the public form.
+   */
+  submission?: {
+    userSubmitted?: boolean | null;
+    submitterName?: string | null;
+    submitterEmail?: string | null;
+    organisation?: string | null;
+    ipHash?: string | null;
+  };
+  duration?: string | null;
+  outcome?: string | null;
+  kpis?:
+    | {
+        value: string;
+        caption: string;
+        id?: string | null;
+      }[]
+    | null;
+  challengeIntro?: string | null;
+  symptoms?:
+    | {
+        symptom: string;
+        finding: string;
+        id?: string | null;
+      }[]
+    | null;
+  approachSteps?:
+    | {
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  opportunities?:
+    | {
+        opportunity: string;
+        impact: 'low' | 'medium' | 'high';
+        effort: 'low' | 'medium' | 'high';
+        phase: number;
+        id?: string | null;
+      }[]
+    | null;
+  phases?:
+    | {
+        name: string;
+        when: string;
+        focus: string;
+        goal: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Column headings for the results table (4).
+   */
+  resultsHeadings?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  results?:
+    | {
+        measure: string;
+        before?: string | null;
+        after?: string | null;
+        change?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  recommendation?: {
+    title?: string | null;
+    text?: string | null;
+  };
+  chart?: {
+    title?: string | null;
+    type?: ('line' | 'bar') | null;
+    unit?: string | null;
+    labels?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    values?:
+      | {
+          value: number;
+          id?: string | null;
+        }[]
+      | null;
+    caption?: string | null;
+  };
+  benefits?:
+    | {
+        label: string;
+        amountUsdK: number;
+        id?: string | null;
+      }[]
+    | null;
+  investmentUsdK?: number | null;
+  paybackText?: string | null;
+  lessonsHeading?: string | null;
+  whatMadeItWork?:
+    | {
+        title: string;
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  nextSteps?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  assumptions?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Path or URL of the public PDF
+   */
+  pdf?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "submissions".
+ */
+export interface Submission {
+  id: string;
+  name: string;
+  company: string;
+  email: string;
+  country: string;
+  orgType: 'consultant' | 'contractor' | 'research' | 'government' | 'other';
+  discipline: 'civil' | 'mechanical' | 'hvac' | 'electrical' | 'mep' | 'mechatronics' | 'transportation' | 'other';
+  solution?: (string | null) | Solution;
+  description: string;
+  urgency: 'exploring' | 'three-months' | 'urgent';
+  consent: boolean;
+  status?: ('new' | 'in-review' | 'replied') | null;
+  internalNotes?: string | null;
+  ipHash?: string | null;
+  userAgent?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -982,6 +1225,22 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'solutions';
+        value: string | Solution;
+      } | null)
+    | ({
+        relationTo: 'industries';
+        value: string | Industry;
+      } | null)
+    | ({
+        relationTo: 'case-studies';
+        value: string | CaseStudy;
+      } | null)
+    | ({
+        relationTo: 'submissions';
+        value: string | Submission;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1348,6 +1607,230 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "solutions_select".
+ */
+export interface SolutionsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  eyebrow?: T;
+  order?: T;
+  shortSummary?: T;
+  image?: T;
+  imageAlt?: T;
+  icon?: T;
+  highlights?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  problemStatement?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  approachSteps?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  deliverables?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  entryOffer?:
+    | T
+    | {
+        label?: T;
+        description?: T;
+        ctaLabel?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "industries_select".
+ */
+export interface IndustriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-studies_select".
+ */
+export interface CaseStudiesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  subtitle?: T;
+  solution?: T;
+  industries?: T;
+  referenceCode?: T;
+  editionDate?: T;
+  clientName?: T;
+  clientDescription?: T;
+  isSample?: T;
+  featured?: T;
+  cover?: T;
+  coverAlt?: T;
+  submission?:
+    | T
+    | {
+        userSubmitted?: T;
+        submitterName?: T;
+        submitterEmail?: T;
+        organisation?: T;
+        ipHash?: T;
+      };
+  duration?: T;
+  outcome?: T;
+  kpis?:
+    | T
+    | {
+        value?: T;
+        caption?: T;
+        id?: T;
+      };
+  challengeIntro?: T;
+  symptoms?:
+    | T
+    | {
+        symptom?: T;
+        finding?: T;
+        id?: T;
+      };
+  approachSteps?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  opportunities?:
+    | T
+    | {
+        opportunity?: T;
+        impact?: T;
+        effort?: T;
+        phase?: T;
+        id?: T;
+      };
+  phases?:
+    | T
+    | {
+        name?: T;
+        when?: T;
+        focus?: T;
+        goal?: T;
+        id?: T;
+      };
+  resultsHeadings?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  results?:
+    | T
+    | {
+        measure?: T;
+        before?: T;
+        after?: T;
+        change?: T;
+        id?: T;
+      };
+  recommendation?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+      };
+  chart?:
+    | T
+    | {
+        title?: T;
+        type?: T;
+        unit?: T;
+        labels?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        values?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
+        caption?: T;
+      };
+  benefits?:
+    | T
+    | {
+        label?: T;
+        amountUsdK?: T;
+        id?: T;
+      };
+  investmentUsdK?: T;
+  paybackText?: T;
+  lessonsHeading?: T;
+  whatMadeItWork?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  nextSteps?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  assumptions?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  pdf?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "submissions_select".
+ */
+export interface SubmissionsSelect<T extends boolean = true> {
+  name?: T;
+  company?: T;
+  email?: T;
+  country?: T;
+  orgType?: T;
+  discipline?: T;
+  solution?: T;
+  description?: T;
+  urgency?: T;
+  consent?: T;
+  status?: T;
+  internalNotes?: T;
+  ipHash?: T;
+  userAgent?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
