@@ -1,6 +1,7 @@
 import type { CollectionConfig, Field } from 'payload'
 
 import { authenticated } from '../access/authenticated'
+import { seoGroup } from '../globals/helpers'
 import { revalidateContent, revalidateContentDelete } from '../hooks/revalidateContent'
 import { authenticatedOrPublished } from '../access/authenticatedOrPublished'
 
@@ -209,6 +210,7 @@ export const CaseStudies: CollectionConfig = {
             { name: 'pdf', type: 'text', admin: { description: 'Path or URL of the public PDF' } },
           ],
         },
+        { label: 'SEO', fields: [seoGroup()] },
       ],
     },
   ],

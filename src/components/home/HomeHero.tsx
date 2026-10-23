@@ -8,18 +8,25 @@ import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ds/primitives'
 import { useMediaQuery } from '@/components/motion/useMediaQuery'
 import { useTilt } from '@/components/motion/useTilt'
-import { heroStages, siteSettings } from '@/data/site'
+import type { homePage } from '@/data/site'
 import { cn } from '@/lib/utils'
 
 const icons = { 'search-check': ClipboardCheck, 'trending-up': Cog, database: Database }
 const CYCLE_MS = 3800
+// Position of each floating tile on the photo, in percent. Layout tuning, so it stays in code.
+const TILES = [
+  { left: 11.8, top: 18.6 },
+  { left: 32.2, top: 9.8 },
+  { left: 53.1, top: 14.3 },
+]
 
 /**
  * Home hero. A tilting 3D plane (photo, three floating solution tiles, an info panel) reads scroll and pointer
  * position. Tiles and the pillar buttons under the headline are one control: both pick the active solution.
  * Resting state (no scroll, no pointer, reduced motion) is a flat, finished layout.
  */
-export function HomeHero({ image }: { image: { src: string; alt: string } }) {
+export function HomeHero({ hero, promiseText, image }: { hero: (typeof homePage)['hero']; promiseText: string; image: { src: string; alt: string } }) {
+  const heroStages = hero.stages
   const heroRef = useRef<HTMLElement>(null)
   const reduce = useReducedMotion()
   const coarse = useMediaQuery('(hover: none)')
@@ -72,21 +79,20 @@ export function HomeHero({ image }: { image: { src: string; alt: string } }) {
         <div className="fade-up max-w-[34rem]">
           <p className="mb-5 flex items-center gap-2.5 text-[13px] font-bold text-accent">
             <span aria-hidden className="size-2 bg-accent" />
-            Research. Solve. Align.
+            {hero.eyebrow}
           </p>
           <h1 className="text-[clamp(2.25rem,4.4vw,4rem)] font-extrabold leading-[1.02] !tracking-[-0.035em] text-white">
-            Engineering problems solved. Data aligned. <span className="text-accent">Decisions proven.</span>
+            {hero.headline} <span className="text-accent">{hero.headlineAccent}</span>
           </h1>
           <p className="mt-6 max-w-[30rem] text-[17px] leading-relaxed text-[#c3d0dd]">
-            Pro Solutors helps engineering consultants, contractors, research centres and government institutions around the world
-            innovate, align their technical data, and choose solutions backed by feasibility analysis.
+            {hero.intro}
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Button href="/submit-a-problem" className="min-h-12 px-6 shadow-[0_8px_28px_-8px_rgba(45,212,196,0.55)]">
-              Submit your problem
+              {hero.primaryCta}
             </Button>
             <Button href="/solutions" tone="navy" variant="secondary" className="min-h-12 px-6 !border-line">
-              Explore our solutions
+              {hero.secondaryCta}
             </Button>
           </div>
 
@@ -116,7 +122,7 @@ export function HomeHero({ image }: { image: { src: string; alt: string } }) {
 
           <p className="mt-5 flex items-center gap-2.5 text-[13px] text-[#a3b3c4]">
             <Clock aria-hidden className="size-4 shrink-0 text-accent" />
-            {siteSettings.promiseText}
+            {promiseText}
           </p>
         </div>
       </div>
@@ -159,7 +165,7 @@ export function HomeHero({ image }: { image: { src: string; alt: string } }) {
                     ? 'border-accent bg-btn text-white shadow-[0_0_28px_rgba(45,212,196,0.55)]'
                     : 'border-accent/40 bg-[#0e1d30]/85 text-accent backdrop-blur-sm hover:border-accent',
                 )}
-                style={{ left: `${s.tile.left}%`, top: `${s.tile.top}%`, width: '11.4%' }}
+                style={{ left: `${TILES[i].left}%`, top: `${TILES[i].top}%`, width: '11.4%' }}
               >
                 <Icon aria-hidden className="size-[46%]" />
               </motion.button>
@@ -189,9 +195,9 @@ export function HomeHero({ image }: { image: { src: string; alt: string } }) {
             </p>
           </motion.div>
         </motion.div>
-        <p className="absolute bottom-3 right-0 hidden text-[11px] text-[#8fa2b6] lg:block">Figures from illustrative sample studies</p>
+        <p className="absolute bottom-3 right-0 hidden text-[11px] text-[#8fa2b6] lg:block">{hero.figuresNote}</p>
       </div>
-      <p className="px-5 pb-6 text-right text-[11px] text-[#8fa2b6] lg:hidden">Figures from illustrative sample studies</p>
+      <p className="px-5 pb-6 text-right text-[11px] text-[#8fa2b6] lg:hidden">{hero.figuresNote}</p>
     </section>
   )
 }

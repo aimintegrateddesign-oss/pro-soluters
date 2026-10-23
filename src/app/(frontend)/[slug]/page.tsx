@@ -3,24 +3,32 @@ import { notFound } from 'next/navigation'
 
 import { Container, Section } from '@/components/ds/primitives'
 import { PageBand } from '@/components/sections/sections'
-import { legalPages } from '@/data/site'
+import { getLegalPages } from '@/lib/queries/content'
 import { formatDate } from '@/lib/utils'
 
 type Props = { params: Promise<{ slug: string }> }
 
-export const dynamicParams = false
+// Pages added in Payload appear without a rebuild; unknown slugs 404.
+export const dynamicParams = true
 
-export function generateStaticParams() {
-  return Object.keys(legalPages).map((slug) => ({ slug }))
+async function findPage(slug: string) {
+  const { content } = await getLegalPages()
+  return content.pages.find((p) => p.slug === slug)
+}
+
+export async function generateStaticParams() {
+  const { content } = await getLegalPages()
+  return content.pages.map((p) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const page = legalPages[(await params).slug]
-  return page ? { title: page.title, alternates: { canonical: `/${(await params).slug}` } } : {}
+  const slug = (await params).slug
+  const page = await findPage(slug)
+  return page ? { title: page.title, alternates: { canonical: `/${slug}` } } : {}
 }
 
 export default async function GenericPage({ params }: Props) {
-  const page = legalPages[(await params).slug]
+  const page = await findPage((await params).slug)
   if (!page) notFound()
   return (
     <>

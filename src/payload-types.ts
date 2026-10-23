@@ -120,10 +120,28 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'site-settings': SiteSetting;
+    navigation: Navigation;
+    'home-page': HomePage;
+    'case-studies-page': CaseStudiesPage;
+    'solutions-page': SolutionsPage;
+    'who-we-serve-page': WhoWeServePage;
+    'sample-report-page': SampleReportPage;
+    'submit-page': SubmitPage;
+    'legal-pages': LegalPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
+    'case-studies-page': CaseStudiesPageSelect<false> | CaseStudiesPageSelect<true>;
+    'solutions-page': SolutionsPageSelect<false> | SolutionsPageSelect<true>;
+    'who-we-serve-page': WhoWeServePageSelect<false> | WhoWeServePageSelect<true>;
+    'sample-report-page': SampleReportPageSelect<false> | SampleReportPageSelect<true>;
+    'submit-page': SubmitPageSelect<false> | SubmitPageSelect<true>;
+    'legal-pages': LegalPagesSelect<false> | LegalPagesSelect<true>;
   };
   locale: null;
   widgets: {
@@ -828,6 +846,20 @@ export interface Solution {
     description: string;
     ctaLabel: string;
   };
+  meta?: {
+    /**
+     * Shown in the browser tab and search results. Aim for 50 to 60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown under the title in search results. Aim for 120 to 160 characters.
+     */
+    description?: string | null;
+    /**
+     * Path under /public, e.g. /images/og-default.jpg (1200 x 630).
+     */
+    image?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -989,6 +1021,20 @@ export interface CaseStudy {
    * Path or URL of the public PDF
    */
   pdf?: string | null;
+  meta?: {
+    /**
+     * Shown in the browser tab and search results. Aim for 50 to 60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown under the title in search results. Aim for 120 to 160 characters.
+     */
+    description?: string | null;
+    /**
+     * Path under /public, e.g. /images/og-default.jpg (1200 x 630).
+     */
+    image?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -1653,6 +1699,13 @@ export interface SolutionsSelect<T extends boolean = true> {
         description?: T;
         ctaLabel?: T;
       };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1806,6 +1859,13 @@ export interface CaseStudiesSelect<T extends boolean = true> {
         id?: T;
       };
   pdf?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -2166,6 +2226,544 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
+ * Company-wide text: tagline, contact email, the promise line and the sample disclaimer. The SEO tab is the site default.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: string;
+  tagline?: string | null;
+  description?: string | null;
+  /**
+   * Shown in the hero, on the Submit page and in call-to-action panels.
+   */
+  promiseText?: string | null;
+  notificationEmail?: string | null;
+  /**
+   * Shown on sample case studies and reports.
+   */
+  sampleDisclaimerText?: string | null;
+  meta?: {
+    /**
+     * Shown in the browser tab and search results. Aim for 50 to 60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown under the title in search results. Aim for 120 to 160 characters.
+     */
+    description?: string | null;
+    /**
+     * Path under /public, e.g. /images/og-default.jpg (1200 x 630).
+     */
+    image?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Header links, footer columns and footer text.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation".
+ */
+export interface Navigation {
+  id: string;
+  headerNav?:
+    | {
+        label: string;
+        /**
+         * e.g. /solutions or https://example.com
+         */
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  footer?: {
+    blurb?: string | null;
+    responseTime?: string | null;
+    confidentiality?: string | null;
+    sampleNote?: string | null;
+    copyright?: string | null;
+  };
+  footerColumns?:
+    | {
+        title: string;
+        links?:
+          | {
+              label: string;
+              /**
+               * e.g. /solutions or https://example.com
+               */
+              href: string;
+              muted?: boolean | null;
+              accent?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  legalLinks?:
+    | {
+        label: string;
+        /**
+         * e.g. /solutions or https://example.com
+         */
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: string;
+  hero?: {
+    eyebrow?: string | null;
+    headline?: string | null;
+    headlineAccent?: string | null;
+    intro?: string | null;
+    primaryCta?: string | null;
+    secondaryCta?: string | null;
+    figuresNote?: string | null;
+    stages?:
+      | {
+          icon: 'search-check' | 'trending-up' | 'database';
+          label: string;
+          text?: string | null;
+          kicker?: string | null;
+          title?: string | null;
+          /**
+           * Illustrative figure from a sample case study.
+           */
+          stat?: string | null;
+          statNote?: string | null;
+          offer?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  why?: {
+    title?: string | null;
+    lead?: string | null;
+    items?:
+      | {
+          title: string;
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  solutions?: {
+    title?: string | null;
+    lead?: string | null;
+  };
+  path?: {
+    title?: string | null;
+    lead?: string | null;
+    steps?:
+      | {
+          title: string;
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  cta?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    body?: string | null;
+    primaryLabel?: string | null;
+    secondaryLabel?: string | null;
+  };
+  meta?: {
+    /**
+     * Shown in the browser tab and search results. Aim for 50 to 60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown under the title in search results. Aim for 120 to 160 characters.
+     */
+    description?: string | null;
+    /**
+     * Path under /public, e.g. /images/og-default.jpg (1200 x 630).
+     */
+    image?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Heading and call to action of the case studies list. The studies themselves are in the Case studies collection.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-studies-page".
+ */
+export interface CaseStudiesPage {
+  id: string;
+  hero?: {
+    title?: string | null;
+    accent?: string | null;
+    intro?: string | null;
+  };
+  cta?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    body?: string | null;
+    primaryLabel?: string | null;
+    secondaryLabel?: string | null;
+  };
+  meta?: {
+    /**
+     * Shown in the browser tab and search results. Aim for 50 to 60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown under the title in search results. Aim for 120 to 160 characters.
+     */
+    description?: string | null;
+    /**
+     * Path under /public, e.g. /images/og-default.jpg (1200 x 630).
+     */
+    image?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Text on the Solutions overview. The three solutions themselves are in the Solutions collection.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "solutions-page".
+ */
+export interface SolutionsPage {
+  id: string;
+  hero?: {
+    title?: string | null;
+    accent?: string | null;
+    intro?: string | null;
+  };
+  fit?: {
+    title?: string | null;
+    lead?: string | null;
+    items?:
+      | {
+          quote: string;
+          /**
+           * The exact name of a solution, or "Free Problem Review".
+           */
+          startWith: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  how?: {
+    title?: string | null;
+    lead?: string | null;
+    steps?:
+      | {
+          title: string;
+          description: string;
+          detail?: string | null;
+          youGet?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  cta?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    body?: string | null;
+    primaryLabel?: string | null;
+    secondaryLabel?: string | null;
+  };
+  meta?: {
+    /**
+     * Shown in the browser tab and search results. Aim for 50 to 60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown under the title in search results. Aim for 120 to 160 characters.
+     */
+    description?: string | null;
+    /**
+     * Path under /public, e.g. /images/og-default.jpg (1200 x 630).
+     */
+    image?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "who-we-serve-page".
+ */
+export interface WhoWeServePage {
+  id: string;
+  hero?: {
+    title?: string | null;
+    accent?: string | null;
+    intro?: string | null;
+  };
+  audiences?: {
+    title?: string | null;
+    lead?: string | null;
+    items?:
+      | {
+          code: string;
+          title: string;
+          text: string;
+          lead?: string | null;
+          start?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  domains?: {
+    title?: string | null;
+    lead?: string | null;
+    items?:
+      | {
+          name: string;
+          note?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  reassurance?: {
+    title?: string | null;
+    lead?: string | null;
+    items?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  cta?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    body?: string | null;
+    primaryLabel?: string | null;
+    secondaryLabel?: string | null;
+  };
+  meta?: {
+    /**
+     * Shown in the browser tab and search results. Aim for 50 to 60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown under the title in search results. Aim for 120 to 160 characters.
+     */
+    description?: string | null;
+    /**
+     * Path under /public, e.g. /images/og-default.jpg (1200 x 630).
+     */
+    image?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * The fictional sample report. Keep figures in step with the sample case study PS-SAMPLE-001.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sample-report-page".
+ */
+export interface SampleReportPage {
+  id: string;
+  hero?: {
+    tag?: string | null;
+    title?: string | null;
+    accent?: string | null;
+    intro?: string | null;
+    primaryCta?: string | null;
+    secondaryCta?: string | null;
+  };
+  notice?: string | null;
+  report?: {
+    title?: string | null;
+    client?: string | null;
+    project?: string | null;
+    decision?: string | null;
+  };
+  summary?: {
+    title?: string | null;
+    text?: string | null;
+  };
+  options?: {
+    title?: string | null;
+    lead?: string | null;
+    rows?:
+      | {
+          option: string;
+          capital?: string | null;
+          energy?: string | null;
+          maintenance?: string | null;
+          /**
+           * The option with the lowest total is highlighted.
+           */
+          total?: string | null;
+          risk?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    note?: string | null;
+  };
+  conditions?: {
+    title?: string | null;
+    items?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  risks?: {
+    title?: string | null;
+    items?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  assumptions?: {
+    title?: string | null;
+    items?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  example?: {
+    title?: string | null;
+    text?: string | null;
+    linkLabel?: string | null;
+  };
+  feedback?: {
+    title?: string | null;
+    text?: string | null;
+    buttonLabel?: string | null;
+  };
+  sheet?: {
+    reference?: string | null;
+    title?: string | null;
+    recommendation?: string | null;
+    recommendationText?: string | null;
+    scores?:
+      | {
+          label: string;
+          score: number;
+          best?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  cta?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    body?: string | null;
+    primaryLabel?: string | null;
+    secondaryLabel?: string | null;
+  };
+  meta?: {
+    /**
+     * Shown in the browser tab and search results. Aim for 50 to 60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown under the title in search results. Aim for 120 to 160 characters.
+     */
+    description?: string | null;
+    /**
+     * Path under /public, e.g. /images/og-default.jpg (1200 x 630).
+     */
+    image?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Text around the Submit your problem form. The form fields and their options are part of the code.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "submit-page".
+ */
+export interface SubmitPage {
+  id: string;
+  hero?: {
+    title?: string | null;
+    accent?: string | null;
+    intro?: string | null;
+  };
+  next?: {
+    title?: string | null;
+    steps?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  thanks?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    text?: string | null;
+  };
+  meta?: {
+    /**
+     * Shown in the browser tab and search results. Aim for 50 to 60 characters.
+     */
+    title?: string | null;
+    /**
+     * Shown under the title in search results. Aim for 120 to 160 characters.
+     */
+    description?: string | null;
+    /**
+     * Path under /public, e.g. /images/og-default.jpg (1200 x 630).
+     */
+    image?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Privacy policy, Terms of use and any other simple text page. The slug becomes the URL, e.g. privacy gives /privacy.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-pages".
+ */
+export interface LegalPage {
+  id: string;
+  pages?:
+    | {
+        /**
+         * Lowercase, no spaces, e.g. privacy
+         */
+        slug: string;
+        title: string;
+        updated?: string | null;
+        sections?:
+          | {
+              heading: string;
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -2204,6 +2802,516 @@ export interface FooterSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  tagline?: T;
+  description?: T;
+  promiseText?: T;
+  notificationEmail?: T;
+  sampleDisclaimerText?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation_select".
+ */
+export interface NavigationSelect<T extends boolean = true> {
+  headerNav?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  footer?:
+    | T
+    | {
+        blurb?: T;
+        responseTime?: T;
+        confidentiality?: T;
+        sampleNote?: T;
+        copyright?: T;
+      };
+  footerColumns?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              muted?: T;
+              accent?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  legalLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        headline?: T;
+        headlineAccent?: T;
+        intro?: T;
+        primaryCta?: T;
+        secondaryCta?: T;
+        figuresNote?: T;
+        stages?:
+          | T
+          | {
+              icon?: T;
+              label?: T;
+              text?: T;
+              kicker?: T;
+              title?: T;
+              stat?: T;
+              statNote?: T;
+              offer?: T;
+              id?: T;
+            };
+      };
+  why?:
+    | T
+    | {
+        title?: T;
+        lead?: T;
+        items?:
+          | T
+          | {
+              title?: T;
+              text?: T;
+              id?: T;
+            };
+      };
+  solutions?:
+    | T
+    | {
+        title?: T;
+        lead?: T;
+      };
+  path?:
+    | T
+    | {
+        title?: T;
+        lead?: T;
+        steps?:
+          | T
+          | {
+              title?: T;
+              text?: T;
+              id?: T;
+            };
+      };
+  cta?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        body?: T;
+        primaryLabel?: T;
+        secondaryLabel?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "case-studies-page_select".
+ */
+export interface CaseStudiesPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        accent?: T;
+        intro?: T;
+      };
+  cta?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        body?: T;
+        primaryLabel?: T;
+        secondaryLabel?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "solutions-page_select".
+ */
+export interface SolutionsPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        accent?: T;
+        intro?: T;
+      };
+  fit?:
+    | T
+    | {
+        title?: T;
+        lead?: T;
+        items?:
+          | T
+          | {
+              quote?: T;
+              startWith?: T;
+              id?: T;
+            };
+      };
+  how?:
+    | T
+    | {
+        title?: T;
+        lead?: T;
+        steps?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              detail?: T;
+              youGet?: T;
+              id?: T;
+            };
+      };
+  cta?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        body?: T;
+        primaryLabel?: T;
+        secondaryLabel?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "who-we-serve-page_select".
+ */
+export interface WhoWeServePageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        accent?: T;
+        intro?: T;
+      };
+  audiences?:
+    | T
+    | {
+        title?: T;
+        lead?: T;
+        items?:
+          | T
+          | {
+              code?: T;
+              title?: T;
+              text?: T;
+              lead?: T;
+              start?: T;
+              id?: T;
+            };
+      };
+  domains?:
+    | T
+    | {
+        title?: T;
+        lead?: T;
+        items?:
+          | T
+          | {
+              name?: T;
+              note?: T;
+              id?: T;
+            };
+      };
+  reassurance?:
+    | T
+    | {
+        title?: T;
+        lead?: T;
+        items?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
+  cta?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        body?: T;
+        primaryLabel?: T;
+        secondaryLabel?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sample-report-page_select".
+ */
+export interface SampleReportPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        tag?: T;
+        title?: T;
+        accent?: T;
+        intro?: T;
+        primaryCta?: T;
+        secondaryCta?: T;
+      };
+  notice?: T;
+  report?:
+    | T
+    | {
+        title?: T;
+        client?: T;
+        project?: T;
+        decision?: T;
+      };
+  summary?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+      };
+  options?:
+    | T
+    | {
+        title?: T;
+        lead?: T;
+        rows?:
+          | T
+          | {
+              option?: T;
+              capital?: T;
+              energy?: T;
+              maintenance?: T;
+              total?: T;
+              risk?: T;
+              id?: T;
+            };
+        note?: T;
+      };
+  conditions?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
+  risks?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
+  assumptions?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
+  example?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        linkLabel?: T;
+      };
+  feedback?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        buttonLabel?: T;
+      };
+  sheet?:
+    | T
+    | {
+        reference?: T;
+        title?: T;
+        recommendation?: T;
+        recommendationText?: T;
+        scores?:
+          | T
+          | {
+              label?: T;
+              score?: T;
+              best?: T;
+              id?: T;
+            };
+      };
+  cta?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        body?: T;
+        primaryLabel?: T;
+        secondaryLabel?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "submit-page_select".
+ */
+export interface SubmitPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        accent?: T;
+        intro?: T;
+      };
+  next?:
+    | T
+    | {
+        title?: T;
+        steps?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
+  thanks?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        text?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "legal-pages_select".
+ */
+export interface LegalPagesSelect<T extends boolean = true> {
+  pages?:
+    | T
+    | {
+        slug?: T;
+        title?: T;
+        updated?: T;
+        sections?:
+          | T
+          | {
+              heading?: T;
+              text?: T;
+              id?: T;
             };
         id?: T;
       };

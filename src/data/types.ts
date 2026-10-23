@@ -1,3 +1,5 @@
+import type { Seo } from '@/lib/content-merge'
+
 export type SolutionSlug = 'solve-and-prove' | 'improve-and-innovate' | 'align-your-technical-data'
 
 export type Kpi = { value: string; caption: string }
@@ -18,6 +20,8 @@ export type Solution = {
   approachSteps: { title: string; description: string }[]
   deliverables: string[]
   entryOffer: { label: string; description: string; ctaLabel: string }
+  /** SEO overrides set in Payload; blanks fall back to generated values. */
+  seo?: Seo
 }
 
 export type Industry = { slug: string; name: string }
@@ -58,6 +62,7 @@ export type CaseStudy = {
   nextSteps: string[]
   assumptions: string[]
   pdf?: string
+  seo?: Seo
 }
 
 export type SiteSettings = {

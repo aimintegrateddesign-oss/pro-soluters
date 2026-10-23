@@ -2,18 +2,18 @@ import { ArrowRight, Clock, Mail, ShieldCheck } from 'lucide-react'
 import Link from 'next/link'
 
 import { Button } from '@/components/ds/primitives'
-import { footerColumns, footerLinks, siteSettings } from '@/data/site'
+import type { navigation } from '@/data/site'
+import type { SiteSettings } from '@/data/types'
 import { cn } from '@/lib/utils'
 import { Logo } from './Logo'
 
-const contact = [
-  { icon: Mail, label: 'Email an engineer', value: siteSettings.notificationEmail, href: `mailto:${siteSettings.notificationEmail}` },
-  { icon: Clock, label: 'Response time', value: 'Within 2 working days' },
-  { icon: ShieldCheck, label: 'Confidential', value: 'NDA first on request' },
-]
-
 // The footer is always navy (theme-dark), so its text contrast holds on every page and in either OS theme.
-export function Footer() {
+export function Footer({ settings, navigation: nav }: { settings: SiteSettings; navigation: typeof navigation }) {
+  const contact = [
+    { icon: Mail, label: 'Email an engineer', value: settings.notificationEmail, href: `mailto:${settings.notificationEmail}` },
+    { icon: Clock, label: 'Response time', value: nav.footer.responseTime },
+    { icon: ShieldCheck, label: 'Confidential', value: nav.footer.confidentiality },
+  ]
   return (
     <footer className="theme-dark bg-blueprint relative overflow-hidden border-t border-accent/40 bg-[#050e19] text-ink">
       <div className="mx-auto w-full max-w-[77.5rem] px-5 pt-10">
@@ -40,10 +40,7 @@ export function Footer() {
         <div className="grid gap-10 py-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)]">
           <div>
             <Logo variant="full" />
-            <p className="mt-5 max-w-[26rem] text-[15px] leading-relaxed text-muted">
-              Practical engineering solutions that solve problems, improve performance and align your data. Research-led, evidence-based and
-              built only for engineering organisations worldwide.
-            </p>
+            <p className="mt-5 max-w-[26rem] text-[15px] leading-relaxed text-muted">{nav.footer.blurb}</p>
             <Button href="/submit-a-problem" className="mt-6">
               Submit your problem
               <ArrowRight aria-hidden className="size-4" />
@@ -51,7 +48,7 @@ export function Footer() {
           </div>
 
           <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
-            {footerColumns.map((col) => (
+            {nav.footerColumns.map((col) => (
               <div key={col.title}>
                 <h2 className="border-b border-line pb-2 text-[13px] font-bold text-accent [font-family:var(--font-sans)] !tracking-normal">{col.title}</h2>
                 <ul className="mt-3 space-y-2.5">
@@ -74,11 +71,11 @@ export function Footer() {
           </nav>
         </div>
 
-                <div className="flex flex-col items-start justify-between gap-3 border-t border-line py-5 text-[13px] text-muted md:flex-row md:items-center">
-          <p>© {new Date().getFullYear()} Pro Solutors. All rights reserved.</p>
-          <p>Sample reports and case studies are illustrative and fictional.</p>
+        <div className="flex flex-col items-start justify-between gap-3 border-t border-line py-5 text-[13px] text-muted md:flex-row md:items-center">
+          <p>© {new Date().getFullYear()} {nav.footer.copyright}</p>
+          <p>{nav.footer.sampleNote}</p>
           <nav aria-label="Legal" className="flex gap-5">
-            {footerLinks.map((l) => (
+            {nav.legalLinks.map((l) => (
               <Link key={l.href} href={l.href} className="text-white hover:text-accent">
                 {l.label}
               </Link>

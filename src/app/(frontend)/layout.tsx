@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
-import { headerNav, siteSettings } from '@/data/site'
+import { getNavigation, getSiteSettings } from '@/lib/queries/content'
 import { getServerSideURL } from '@/utilities/getURL'
 
 import './globals.css'
@@ -12,30 +12,38 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' })
 const interTight = Inter_Tight({ subsets: ['latin'], display: 'swap', weight: ['700', '800'], variable: '--font-inter-tight' })
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getServerSideURL()),
-  title: { default: `Pro Solutors | ${siteSettings.tagline}`, template: '%s | Pro Solutors' },
-  description: siteSettings.description,
-  icons: { icon: '/favicon.png' },
-  openGraph: {
-    siteName: 'Pro Solutors',
-    type: 'website',
-    title: 'Pro Solutors',
-    description: siteSettings.description,
-    images: [{ url: '/images/og-default.jpg', width: 1200, height: 630, alt: 'Pro Solutors. Research. Solve. Align.' }],
-  },
+// Site-wide defaults. Each page overrides title, description and image from its own SEO fields in Payload.
+export async function generateMetadata(): Promise<Metadata> {
+  const { content: settings, seo } = await getSiteSettings()
+  const title = seo.title ?? `Pro Solutors | ${settings.tagline}`
+  const description = seo.description ?? settings.description
+  return {
+    metadataBase: new URL(getServerSideURL()),
+    title: { default: title, template: '%s | Pro Solutors' },
+    description,
+    icons: { icon: '/favicon.png' },
+    openGraph: {
+      siteName: 'Pro Solutors',
+      type: 'website',
+      title: 'Pro Solutors',
+      description,
+      images: [{ url: seo.image ?? '/images/og-default.jpg', width: 1200, height: 630, alt: 'Pro Solutors. Research. Solve. Align.' }],
+    },
+  }
 }
 
-const organizationJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'Pro Solutors',
-  slogan: siteSettings.tagline,
-  description: siteSettings.description,
-  url: getServerSideURL(),
-}
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const [{ content: settings }, { content: nav }] = await Promise.all([getSiteSettings(), getNavigation()])
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+  const organizationJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Pro Solutors',
+    slogan: settings.tagline,
+    description: settings.description,
+    url: getServerSideURL(),
+  }
+
   return (
     <html lang="en" className={`${inter.variable} ${interTight.variable}`}>
       <body>
@@ -45,9 +53,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
-        <Header nav={headerNav} />
+        <Header nav={nav.headerNav} />
         <main id="main">{children}</main>
-        <Footer />
+        <Footer settings={settings} navigation={nav} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </body>
     </html>

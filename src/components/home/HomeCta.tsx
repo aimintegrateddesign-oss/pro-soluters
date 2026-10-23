@@ -6,7 +6,8 @@ import { useRef } from 'react'
 
 import { Button } from '@/components/ds/primitives'
 import { useTilt } from '@/components/motion/useTilt'
-import { siteSettings } from '@/data/site'
+import type { Cta } from '@/data/site'
+import { cn } from '@/lib/utils'
 
 const fields = [
   ['Organisation', 'Contractor'],
@@ -21,8 +22,22 @@ const facts = [
   ['NDA first', 'on request, before details'],
 ]
 
-/** Closing call to action with a tilting 3D "submission ticket". Flat and complete at rest and for reduced motion. */
-export function HomeCta() {
+/**
+ * Closing call to action with a tilting 3D "submission ticket". Flat and complete at rest and for reduced motion.
+ * The text comes from the page's Payload content; `tone` is the colour of the band around the panel (the panel is always navy).
+ * Leave `cta.secondaryLabel` empty to hide the second button.
+ */
+export function HomeCta({
+  cta,
+  primaryHref = '/submit-a-problem',
+  secondaryHref,
+  tone = 'dark',
+}: {
+  cta: Cta
+  primaryHref?: string
+  secondaryHref?: string
+  tone?: 'dark' | 'light'
+}) {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
   const { mx, my, bind } = useTilt()
@@ -31,10 +46,10 @@ export function HomeCta() {
   const rotateX = useTransform([my, scrollYProgress], ([y, p]: number[]) => 8 - y * 8 + (1 - p) * 24)
 
   return (
-    <section className="theme-dark bg-hero px-5 py-14 sm:py-20">
+    <section className={cn(tone === 'dark' ? 'theme-dark bg-hero' : 'theme-light bg-bg', 'px-5 py-14 sm:py-20')}>
       <div
         ref={ref}
-        className="bg-blueprint relative mx-auto max-w-[77.5rem] overflow-hidden rounded-[4px] border border-line border-t-2 border-t-accent bg-[#0b2038] px-6 py-10 sm:px-12 sm:py-14 lg:overflow-visible"
+        className="theme-dark bg-blueprint relative mx-auto max-w-[77.5rem] overflow-hidden rounded-[4px] border border-line border-t-2 border-t-accent bg-[#0b2038] px-6 py-10 sm:px-12 sm:py-14 lg:overflow-visible"
       >
         <span aria-hidden className="absolute right-4 top-4 size-6 border-r border-t border-accent" />
         <span aria-hidden className="absolute bottom-4 left-4 size-6 border-b border-l border-accent" />
@@ -43,17 +58,19 @@ export function HomeCta() {
           <div>
             <p className="mb-4 flex items-center gap-2.5 text-[13px] font-bold text-accent">
               <span aria-hidden className="size-2 bg-accent" />
-              Free problem review
+              {cta.eyebrow}
             </p>
-            <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-extrabold leading-[1.02] text-white">Have an engineering problem worth solving?</h2>
-            <p className="mt-4 max-w-[30rem] text-[17px] text-[#c3d0dd]">{siteSettings.promiseText}</p>
+            <h2 className="text-[clamp(2rem,4vw,3.25rem)] font-extrabold leading-[1.02] text-white">{cta.title}</h2>
+            <p className="mt-4 max-w-[30rem] text-[17px] text-[#c3d0dd]">{cta.body}</p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Button href="/submit-a-problem" className="min-h-12 px-6 shadow-[0_8px_28px_-8px_rgba(45,212,196,0.55)]">
-                Submit your problem
+              <Button href={primaryHref} className="min-h-12 px-6 shadow-[0_8px_28px_-8px_rgba(45,212,196,0.55)]">
+                {cta.primaryLabel}
               </Button>
-              <Button href="/sample-reports" tone="navy" variant="secondary" className="min-h-12 px-6 !border-line">
-                See a sample report
-              </Button>
+              {cta.secondaryLabel && secondaryHref && (
+                <Button href={secondaryHref} tone="navy" variant="secondary" className="min-h-12 px-6 !border-line">
+                  {cta.secondaryLabel}
+                </Button>
+              )}
             </div>
             <dl className="mt-8 grid grid-cols-3 gap-4 border-t border-line pt-5">
               {facts.map(([t, d]) => (

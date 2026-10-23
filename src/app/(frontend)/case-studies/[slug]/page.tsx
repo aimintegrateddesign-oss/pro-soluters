@@ -1,14 +1,16 @@
-import Image from 'next/image'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Download } from 'lucide-react'
+import type { ReactNode } from 'react'
 
-import { CoverBand, ResultsChart, Roadmap, StudySection } from '@/components/case-study/parts'
-import { Button, Callout, Container, DataTable, Disclaimer, Section } from '@/components/ds/primitives'
-import { CaseStudyCard, CtaBand, KpiStrip } from '@/components/sections/sections'
-import { siteSettings } from '@/data/site'
+import { CaseCard, CaseCover, KpiTiles, ResultsChart, Roadmap, StudySection } from '@/components/case-study/parts'
+import { Band, WIDE, otherTone, ruleCard, toneAt } from '@/components/ds/band'
+import { Callout, Container, DataTable, Disclaimer } from '@/components/ds/primitives'
+import { HomeCta } from '@/components/home/HomeCta'
+import { getHomePage, getSiteSettings, pageMetadata } from '@/lib/queries/content'
 import { getAllCaseStudies, getCaseStudy, getRelatedCaseStudies } from '@/lib/queries/caseStudies'
+import { getIndustries } from '@/lib/queries/industries'
 import { getSolution, getSolutions } from '@/lib/queries/solutions'
+import { cn } from '@/lib/utils'
 import { getServerSideURL } from '@/utilities/getURL'
 
 type Props = { params: Promise<{ slug: string }> }
@@ -20,13 +22,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const study = await getCaseStudy((await params).slug)
+  const [study, { seo: site }] = await Promise.all([getCaseStudy((await params).slug), getSiteSettings()])
   if (!study) return {}
-  return {
-    title: study.title,
-    description: `${study.subtitle}. ${study.outcome}`,
-    alternates: { canonical: `/case-studies/${study.slug}` },
-  }
+  return pageMetadata(
+    study.seo ?? {},
+    { title: study.title, description: `${study.subtitle}. ${study.outcome}`, path: `/case-studies/${study.slug}` },
+    { image: study.cover || site.image },
+  )
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
@@ -35,13 +37,17 @@ export default async function CaseStudyPage({ params }: Props) {
   const study = await getCaseStudy((await params).slug)
   if (!study) notFound()
 
-  const [solution, related, solutions] = await Promise.all([getSolution(study.solution), getRelatedCaseStudies(study), getSolutions()])
+  const [solution, related, solutions, industries, { content: settings }, { content: home }] = await Promise.all([
+    getSolution(study.solution),
+    getRelatedCaseStudies(study),
+    getSolutions(),
+    getIndustries(),
+    getSiteSettings(),
+    getHomePage(),
+  ])
   const names = Object.fromEntries(solutions.map((s) => [s.slug, s.name]))
+  const industryNames = Object.fromEntries(industries.map((i) => [i.slug, i.name]))
   const totalBenefit = study.benefits?.reduce((sum, b) => sum + b.amountUsdK, 0)
-
-  // Numbered sections are built in order so the numbering never has gaps.
-  let n = 0
-  const next = () => ++n
 
   const url = `${getServerSideURL()}/case-studies/${study.slug}`
   const jsonLd = [
@@ -64,136 +70,205 @@ export default async function CaseStudyPage({ params }: Props) {
     },
   ]
 
-  return (
-    <>
-      <CoverBand study={study} eyebrow={`${solution?.name ?? ''} | ${study.solution === 'solve-and-prove' ? 'Feasibility Proof Report' : 'Case Study'}`.toUpperCase()} />
+  // Content blocks are numbered in order and alternate white / navy, so numbering and colours never have gaps.
+  const blocks: { id: string; title: string; node: ReactNode }[] = []
 
-      <Container className="pb-8">
-        <figure className="relative mb-4 aspect-video overflow-hidden rounded-card border border-line bg-navy">
-          <Image src={study.cover} alt={study.coverAlt} fill priority sizes="(min-width: 1080px) 1040px, 100vw" className="object-cover" />
-        </figure>
-        {study.pdf && (
-          <div className="mb-4 flex justify-end lg:sticky lg:top-24 lg:z-30 lg:float-right lg:mb-0 lg:ml-6">
-            <Button href={study.pdf} variant="secondary" data-analytics="download-pdf">
-              <Download aria-hidden className="size-4" /> Download PDF
-            </Button>
-          </div>
+  blocks.push({
+    id: 'glance',
+    title: 'The result at a glance',
+    node: (
+      <>
+        <KpiTiles kpis={study.kpis} />
+        <DataTable
+          caption="Result at a glance"
+          headings={['Item', 'Detail']}
+          rows={[
+            ['Client', `${study.clientName} (${study.clientDescription})`],
+            ['Our solution', solution?.name ?? ''],
+            ['Duration', study.duration],
+            ['Outcome', study.outcome],
+          ]}
+        />
+        {study.isSample && <p className="text-sm text-muted">All results are fictional and illustrative.</p>}
+      </>
+    ),
+  })
+
+  blocks.push({
+    id: 'challenge',
+    title: 'The challenge',
+    node: (
+      <>
+        <p className="max-w-3xl text-lg">{study.challengeIntro}</p>
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {study.symptoms.map((x) => (
+            <li key={x.symptom} className={ruleCard}>
+              <h3 className="text-lg font-bold text-heading">{x.symptom}</h3>
+              <p className="mt-2 text-[15px] text-muted">{x.finding}</p>
+            </li>
+          ))}
+        </ul>
+      </>
+    ),
+  })
+
+  blocks.push({
+    id: 'approach',
+    title: 'Our approach',
+    node: (
+      <>
+        <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {study.approachSteps.map((a, i) => (
+            <li key={a.title} className={ruleCard}>
+              <span aria-hidden className="inline-flex size-8 items-center justify-center rounded-[4px] bg-btn text-sm font-bold text-white">
+                {i + 1}
+              </span>
+              <h3 className="mt-3 text-lg font-bold text-heading">{a.title}</h3>
+              <p className="mt-1.5 text-[15px] text-muted">{a.description}</p>
+            </li>
+          ))}
+        </ol>
+        {study.opportunities && (
+          <>
+            <h3 className="text-xl font-bold text-heading">The main opportunities, ranked</h3>
+            <DataTable
+              caption="Ranked opportunities"
+              headings={['Opportunity', 'Impact', 'Effort', 'Phase']}
+              rows={study.opportunities.map((o) => [o.opportunity, cap(o.impact), cap(o.effort), String(o.phase)])}
+            />
+          </>
         )}
+      </>
+    ),
+  })
 
-        <StudySection n={next()} id="glance" title="The result at a glance">
+  blocks.push({ id: 'roadmap', title: 'The roadmap', node: <Roadmap phases={study.phases} /> })
+
+  blocks.push({
+    id: 'results',
+    title: 'The evidence and results',
+    node: (
+      <>
+        <DataTable caption="Results" headings={[...study.resultsHeadings]} rows={study.results.map((r) => [r.measure, r.before, r.after, r.change])} />
+        {study.recommendation && <Callout title={study.recommendation.title}>{study.recommendation.text}</Callout>}
+        <ResultsChart chart={study.chart} />
+      </>
+    ),
+  })
+
+  if (study.benefits && totalBenefit !== undefined) {
+    blocks.push({
+      id: 'value',
+      title: 'Value delivered (illustrative)',
+      node: (
+        <>
           <DataTable
-            caption="Result at a glance"
-            headings={['Item', 'Detail']}
+            caption="Annual benefit and investment"
+            headings={['Annual benefit', 'USD thousands']}
             rows={[
-              ['Client', `${study.clientName} (${study.clientDescription})`],
-              ['Our solution', solution?.name ?? ''],
-              ['Duration', study.duration],
-              ['Outcome', study.outcome],
+              ...study.benefits.map((b) => [b.label, String(b.amountUsdK)]),
+              [<strong key="t">Total annual benefit</strong>, <strong key="tv">{totalBenefit.toLocaleString('en-US')}</strong>],
+              ['One-off investment', String(study.investmentUsdK ?? '')],
             ]}
           />
-          <KpiStrip kpis={study.kpis} note={study.isSample ? 'All results are fictional and illustrative.' : undefined} />
-        </StudySection>
+          {study.paybackText && <Callout title="Payback">{study.paybackText}</Callout>}
+        </>
+      ),
+    })
+  }
 
-        <StudySection n={next()} id="challenge" title="The challenge">
-          <p className="max-w-3xl">{study.challengeIntro}</p>
-          <DataTable caption="Symptoms and findings" headings={['Symptom', 'What we found']} rows={study.symptoms.map((s) => [s.symptom, s.finding])} />
-        </StudySection>
+  blocks.push({
+    id: 'lessons',
+    title: study.lessonsHeading,
+    node: (
+      <ul className="grid gap-4 md:grid-cols-2">
+        {study.whatMadeItWork.map((w) => (
+          <li key={w.title} className={ruleCard}>
+            <p className="font-bold text-heading">{w.title}</p>
+            <p className="mt-1 text-[16px] text-muted">{w.text}</p>
+          </li>
+        ))}
+      </ul>
+    ),
+  })
 
-        <StudySection n={next()} id="approach" title="Our approach">
-          <DataTable caption="Approach steps" headings={['Step', 'What we did']} rows={study.approachSteps.map((s, i) => [`${i + 1}. ${s.title}`, s.description])} />
-          {study.opportunities && (
-            <>
-              <h3 className="type-h3 text-xl">The main opportunities, ranked</h3>
-              <DataTable
-                caption="Ranked opportunities"
-                headings={['Opportunity', 'Impact', 'Effort', 'Phase']}
-                rows={study.opportunities.map((o) => [o.opportunity, cap(o.impact), cap(o.effort), String(o.phase)])}
-              />
-            </>
-          )}
-        </StudySection>
-
-        <StudySection n={next()} id="roadmap" title="The roadmap">
-          <Roadmap phases={study.phases} />
-        </StudySection>
-
-        <StudySection n={next()} id="results" title="The evidence and results">
-          <DataTable
-            caption="Results"
-            headings={[...study.resultsHeadings]}
-            rows={study.results.map((r) => [r.measure, r.before, r.after, r.change])}
-          />
-          {study.recommendation && <Callout title={study.recommendation.title}>{study.recommendation.text}</Callout>}
-          <ResultsChart chart={study.chart} />
-        </StudySection>
-
-        {study.benefits && totalBenefit !== undefined && (
-          <StudySection n={next()} id="value" title="Value delivered (illustrative)">
-            <DataTable
-              caption="Annual benefit and investment"
-              headings={['Annual benefit', 'USD thousands']}
-              rows={[
-                ...study.benefits.map((b) => [b.label, String(b.amountUsdK)]),
-                [<strong key="t">Total annual benefit</strong>, <strong key="tv">{totalBenefit.toLocaleString('en-US')}</strong>],
-                ['One-off investment', String(study.investmentUsdK ?? '')],
-              ]}
-            />
-            {study.paybackText && <Callout title="Payback">{study.paybackText}</Callout>}
-          </StudySection>
-        )}
-
-        <StudySection n={next()} id="lessons" title={study.lessonsHeading}>
-          <ul className="grid gap-4 md:grid-cols-2">
-            {study.whatMadeItWork.map((w) => (
-              <li key={w.title} className="rounded-card border border-line p-5">
-                <p className="font-bold text-heading">{w.title}</p>
-                <p className="mt-1 text-[16px] text-muted">{w.text}</p>
-              </li>
-            ))}
-          </ul>
-        </StudySection>
-
-        <StudySection n={next()} id="next" title={study.recommendation ? 'Conditions to confirm first' : 'What comes next'}>
-          <ul className="list-disc space-y-2 pl-6">
-            {study.nextSteps.map((s) => (
-              <li key={s}>{s}</li>
-            ))}
-          </ul>
-        </StudySection>
-
-        <section aria-labelledby="assumptions" className="mt-4 border-t border-line pt-8">
-          <h2 id="assumptions" className="text-xl font-bold text-accent-strong">
+  blocks.push({
+    id: 'next',
+    title: study.recommendation ? 'Conditions to confirm first' : 'What comes next',
+    node: (
+      <div className="grid gap-10 lg:grid-cols-2">
+        <ul className="space-y-3">
+          {study.nextSteps.map((x) => (
+            <li key={x} className={cn(ruleCard, 'text-[15px]')}>
+              {x}
+            </li>
+          ))}
+        </ul>
+        <section aria-labelledby="assumptions">
+          <h3 id="assumptions" className="text-xl font-bold text-heading">
             Assumptions and limits
-          </h2>
-          <ul className="mt-3 list-disc space-y-1 pl-6 text-[16px]">
+          </h3>
+          <ul className="mt-3 list-disc space-y-1.5 pl-6 text-[15px] text-muted">
             {study.assumptions.map((a) => (
               <li key={a}>{a}</li>
             ))}
           </ul>
-          {study.isSample && <Disclaimer className="mt-4">{siteSettings.sampleDisclaimerText}</Disclaimer>}
+          {study.isSample && <Disclaimer className="mt-4">{settings.sampleDisclaimerText}</Disclaimer>}
         </section>
-      </Container>
+      </div>
+    ),
+  })
 
-      <CtaBand
-        title={solution?.entryOffer.label ?? 'Submit a problem'}
-        body={solution?.entryOffer.description}
-        label={solution?.entryOffer.ctaLabel}
+  // The first band after the cover is white, then they alternate. The closing CTA takes the opposite tone of the band before it.
+  const bandCount = blocks.length + (related.length > 0 ? 1 : 0)
+  const ctaTone = otherTone(toneAt(bandCount - 1))
+
+  return (
+    <>
+      <CaseCover
+        study={study}
+        disclaimer={settings.sampleDisclaimerText}
+        solutionName={solution?.name ?? ''}
+        entryOffer={study.solution === 'solve-and-prove' ? 'Feasibility Proof Report' : 'Case Study'}
+        sections={blocks.map(({ id, title }) => ({ id, title }))}
       />
 
+      {blocks.map((b, i) => (
+        <StudySection key={b.id} n={i + 1} id={b.id} title={b.title} tone={toneAt(i)}>
+          {b.node}
+        </StudySection>
+      ))}
+
       {related.length > 0 && (
-        <Section tone="alt">
-          <Container>
-            <h2 className="type-h2">Related case studies</h2>
+        <Band tone={toneAt(blocks.length)}>
+          <Container className={WIDE}>
+            <h2 className="text-[clamp(1.9rem,3.6vw,3rem)] font-extrabold leading-[1.05] text-heading">Related case studies</h2>
             <ul className="mt-8 grid gap-6 md:grid-cols-2">
               {related.map((c) => (
                 <li key={c.slug}>
-                  <CaseStudyCard study={c} solutionName={names[c.solution]} />
+                  <CaseCard study={c} solutionName={names[c.solution]} industryName={industryNames[c.industries[0]]} />
                 </li>
               ))}
             </ul>
           </Container>
-        </Section>
+        </Band>
       )}
+
+      <HomeCta
+        tone={ctaTone}
+        cta={
+          solution
+            ? {
+                eyebrow: solution.name,
+                title: solution.entryOffer.label,
+                body: solution.entryOffer.description,
+                primaryLabel: solution.entryOffer.ctaLabel,
+                secondaryLabel: 'All case studies',
+              }
+            : home.cta
+        }
+        secondaryHref="/case-studies"
+      />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </>

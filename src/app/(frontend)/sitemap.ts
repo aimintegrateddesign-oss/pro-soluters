@@ -1,13 +1,13 @@
 import type { MetadataRoute } from 'next'
 
-import { legalPages } from '@/data/site'
+import { getLegalPages } from '@/lib/queries/content'
 import { getAllCaseStudies } from '@/lib/queries/caseStudies'
 import { getSolutions } from '@/lib/queries/solutions'
 import { getServerSideURL } from '@/utilities/getURL'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getServerSideURL()
-  const [solutions, studies] = await Promise.all([getSolutions(), getAllCaseStudies()])
+  const [solutions, studies, { content: legal }] = await Promise.all([getSolutions(), getAllCaseStudies(), getLegalPages()])
   const paths = [
     '',
     '/solutions',
@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/who-we-serve',
     '/sample-reports',
     '/submit-a-problem',
-    ...Object.keys(legalPages).map((s) => `/${s}`),
+    ...legal.pages.map((p) => `/${p.slug}`),
     ...solutions.map((s) => `/solutions/${s.slug}`),
     ...studies.map((c) => `/case-studies/${c.slug}`),
   ]

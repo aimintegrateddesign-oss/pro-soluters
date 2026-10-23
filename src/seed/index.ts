@@ -5,6 +5,8 @@
  * Run once the database is reachable:
  *   npm run seed
  * Optional env: SEED_ADMIN_EMAIL, SEED_ADMIN_PASSWORD (creates the first admin user).
+ * Page text lives in Payload globals (src/globals). They are filled from src/data/site.ts, but only when a global has
+ * never been saved, so re-running never overwrites edits made in the admin. Set SEED_FORCE_GLOBALS=true to reset them.
  *
  * All case-study content is fictional SAMPLE content (see src/seed/data/caseStudies.ts).
  */
@@ -15,6 +17,48 @@ import config from '../payload.config'
 import { caseStudies } from './data/caseStudies'
 import { industries } from './data/industries'
 import { solutions } from './data/solutions'
+import { toDoc } from '../lib/content-merge'
+import { caseStudiesPage, homePage, legalPages, navigation, sampleReportPage, siteSettings, solutionsPage, submitPage, whoWeServePage } from '../data/site'
+
+// SEO defaults seeded into each page global. Inner-page titles carry the brand suffix themselves because a title set in
+// Payload is used exactly as written.
+const OG = '/images/og-default.jpg'
+const seo = (title: string, description: string, image = OG) => ({ meta: { title, description, image } })
+const brand = ' | Pro Solutors'
+
+const globals = [
+  ['site-settings', { ...siteSettings, ...seo(`Pro Solutors | ${siteSettings.tagline}`, siteSettings.description) }],
+  ['navigation', navigation],
+  ['home-page', { ...homePage, ...seo(`Pro Solutors | ${siteSettings.tagline}`, siteSettings.description) }],
+  [
+    'case-studies-page',
+    { ...caseStudiesPage, ...seo(`Case studies${brand}`, 'Sample case studies and feasibility reports showing how Pro Solutors works. All sample content is fictional.') },
+  ],
+  [
+    'solutions-page',
+    {
+      ...solutionsPage,
+      ...seo(`Solutions${brand}`, 'Improve and Innovate, Align Your Technical Data, and Solve and Prove: three ways Pro Solutors delivers decision-ready engineering.', '/images/solutions-banner.webp'),
+    },
+  ],
+  [
+    'who-we-serve-page',
+    {
+      ...whoWeServePage,
+      ...seo(
+        `Who We Serve & Domains${brand}`,
+        'Pro Solutors serves engineering consultants, contractors, research centres and government institutions across every major engineering discipline.',
+        '/images/og-who-we-serve.jpg',
+      ),
+    },
+  ],
+  [
+    'sample-report-page',
+    { ...sampleReportPage, ...seo(`Sample Report${brand}`, 'See what a Pro Solutors feasibility report looks like: an illustrative example for a fictional company.') },
+  ],
+  ['submit-page', { ...submitPage, ...seo(`Submit your problem${brand}`, siteSettings.promiseText) }],
+  ['legal-pages', legalPages],
+] as const
 
 const rows = <K extends string>(key: K, items: string[]) => items.map((v) => ({ [key]: v }) as Record<K, string>)
 
@@ -88,6 +132,18 @@ async function seed() {
       await payload.create({ collection: 'case-studies', data, draft: false })
       payload.logger.info(`case study ${c.slug}: created`)
     }
+  }
+
+  // 5. Page text and SEO (Payload globals)
+  const force = process.env.SEED_FORCE_GLOBALS === 'true'
+  for (const [slug, content] of globals) {
+    const current = (await payload.findGlobal({ slug, depth: 0 })) as { updatedAt?: string | null }
+    if (current.updatedAt && !force) {
+      payload.logger.info(`global ${slug}: already has content, skipped (SEED_FORCE_GLOBALS=true to reset)`)
+      continue
+    }
+    await payload.updateGlobal({ slug, data: toDoc(content) as never, depth: 0 })
+    payload.logger.info(`global ${slug}: ${current.updatedAt ? 'reset' : 'created'}`)
   }
 
   payload.logger.info('Seed complete.')

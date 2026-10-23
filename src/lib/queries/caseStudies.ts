@@ -1,6 +1,7 @@
 import type { CaseStudy as CaseStudyDoc, Industry as IndustryDoc, Solution as SolutionDoc } from '@/payload-types'
 import type { CaseStudy, Level, SolutionSlug } from '@/data/types'
 import { getPayloadClient } from '@/lib/payload'
+import { readSeo } from '@/lib/content-merge'
 import { isOffline } from './offline'
 
 export const CASE_STUDIES_PER_PAGE = 9
@@ -61,6 +62,7 @@ function mapCaseStudy(d: CaseStudyDoc): CaseStudy {
     nextSteps: texts(d.nextSteps),
     assumptions: texts(d.assumptions),
     pdf: d.pdf ?? undefined,
+    seo: readSeo(d),
   }
 }
 

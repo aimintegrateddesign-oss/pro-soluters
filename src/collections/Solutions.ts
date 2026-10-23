@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
+import { seoGroup } from '../globals/helpers'
 import { revalidateContent, revalidateContentDelete } from '../hooks/revalidateContent'
 
 // DECISION: images are stored as public-folder paths (text) rather than Media uploads, so the
@@ -55,5 +56,6 @@ export const Solutions: CollectionConfig = {
         { name: 'ctaLabel', type: 'text', required: true },
       ],
     },
+    seoGroup(),
   ],
 }

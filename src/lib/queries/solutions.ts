@@ -1,6 +1,7 @@
 import type { Solution as SolutionDoc } from '@/payload-types'
 import type { Solution, SolutionSlug } from '@/data/types'
 import { getPayloadClient } from '@/lib/payload'
+import { readSeo } from '@/lib/content-merge'
 import { isOffline } from './offline'
 
 const list = (rows?: { text?: string | null }[] | null) => (rows ?? []).map((r) => r.text ?? '')
@@ -20,6 +21,7 @@ export function mapSolution(d: SolutionDoc): Solution {
     approachSteps: (d.approachSteps ?? []).map((s) => ({ title: s.title, description: s.description })),
     deliverables: list(d.deliverables),
     entryOffer: d.entryOffer,
+    seo: readSeo(d),
   }
 }
 

@@ -1,18 +1,24 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Search } from 'lucide-react'
 
-import { Button, CheckList, Container, Section, SectionHead } from '@/components/ds/primitives'
-import { CaseStudyForm } from '@/components/forms/CaseStudyForm'
-import { CaseStudyCard, PageBand, cardClass } from '@/components/sections/sections'
+import { CaseCard } from '@/components/case-study/parts'
+import { Band, HeroContainer, HeroShell, WIDE } from '@/components/ds/band'
+import { Button, Container } from '@/components/ds/primitives'
+import { HomeCta } from '@/components/home/HomeCta'
+import { getCaseStudiesPage, getSiteSettings, pageMetadata } from '@/lib/queries/content'
 import { getIndustries } from '@/lib/queries/industries'
 import { searchCaseStudies } from '@/lib/queries/caseStudies'
 import { getSolutions } from '@/lib/queries/solutions'
 import { cn } from '@/lib/utils'
 
-export const metadata: Metadata = {
-  title: 'Case studies',
-  description: 'Sample case studies and feasibility reports showing how Pro Solutors works. All sample content is fictional.',
-  alternates: { canonical: '/case-studies' },
+export async function generateMetadata(): Promise<Metadata> {
+  const [{ seo: site }, { seo }] = await Promise.all([getSiteSettings(), getCaseStudiesPage()])
+  return pageMetadata(
+    seo,
+    { title: 'Case studies', description: 'Sample case studies and feasibility reports showing how Pro Solutors works. All sample content is fictional.', path: '/case-studies' },
+    site,
+  )
 }
 
 type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> }
@@ -24,6 +30,8 @@ function href(params: Record<string, string | undefined>) {
   return qs.size ? `/case-studies?${qs}` : '/case-studies'
 }
 
+const fieldClass = 'min-h-12 rounded-[4px] border border-line bg-bg px-4 text-ink'
+
 export default async function CaseStudiesPage({ searchParams }: Props) {
   const sp = await searchParams
   const solution = one(sp.solution)
@@ -31,63 +39,79 @@ export default async function CaseStudiesPage({ searchParams }: Props) {
   const q = one(sp.q)
   const page = Number(one(sp.page)) || 1
 
-  const [solutions, industries, result] = await Promise.all([getSolutions(), getIndustries(), searchCaseStudies({ solution, industry, q, page })])
+  const [solutions, industries, result, { content }] = await Promise.all([
+    getSolutions(),
+    getIndustries(),
+    searchCaseStudies({ solution, industry, q, page }),
+    getCaseStudiesPage(),
+  ])
   const names = Object.fromEntries(solutions.map((s) => [s.slug, s.name]))
+  const industryNames = Object.fromEntries(industries.map((i) => [i.slug, i.name]))
+  // Active chip inverts the band: light on navy, navy on white.
   const chip = (active: boolean) =>
     cn(
-      'inline-flex min-h-10 items-center rounded-full border-2 px-4 text-sm font-bold transition-colors',
-      active ? 'border-navy bg-navy text-white' : 'border-line text-heading hover:border-navy',
+      'inline-flex min-h-11 items-center rounded-[4px] border px-4 text-sm font-bold transition-colors',
+      active ? 'border-heading bg-heading text-bg' : 'border-line text-heading hover:border-accent',
     )
 
   return (
     <>
-      <PageBand eyebrow="Case studies" title="Sample work, shown in full">
-        <p>Every study here is an illustrative sample with fictional companies and figures.</p>
-        <Button href="#share" tone="navy" variant="secondary" className="mt-6">
-          Share your case study
-        </Button>
-      </PageBand>
+      {/* Navy hero */}
+      <HeroShell>
+        <HeroContainer>
+          <h1 className="text-[clamp(2.25rem,4.6vw,4rem)] font-extrabold leading-[1.02] !tracking-[-0.035em] text-white">
+            {content.hero.title} <span className="text-accent">{content.hero.accent}</span>
+          </h1>
+          <p className="mt-4 max-w-[36rem] text-lg text-[#c3d0dd]">{content.hero.intro}</p>
+        </HeroContainer>
+      </HeroShell>
 
-      <Section className="py-12 lg:py-16">
-        <Container>
-          <nav aria-label="Filter by solution" className="flex flex-wrap gap-2">
-            <Link href={href({ industry, q })} className={chip(!solution)} aria-current={!solution ? 'true' : undefined}>
-              All solutions
-            </Link>
-            {solutions.map((s) => (
-              <Link key={s.slug} href={href({ solution: s.slug, industry, q })} className={chip(solution === s.slug)} aria-current={solution === s.slug ? 'true' : undefined}>
-                {s.name}
-              </Link>
-            ))}
-          </nav>
-
+      {/* White results */}
+      <Band tone="light" className="py-12 lg:py-16">
+        <Container className={WIDE}>
           {/* DECISION: a plain GET form keeps filters in the URL with no client JS. */}
-          <form method="get" action="/case-studies" className="mt-6 flex flex-col gap-3 sm:flex-row">
-            {solution && <input type="hidden" name="solution" value={solution} />}
-            <label className="sr-only" htmlFor="q">
-              Search case studies
-            </label>
-            <input id="q" name="q" type="search" defaultValue={q} placeholder="Search by title, client or reference" className="min-h-12 flex-1 rounded-lg border border-line bg-card px-4 text-ink" />
-            <label className="sr-only" htmlFor="industry">
-              Industry
-            </label>
-            <select id="industry" name="industry" defaultValue={industry ?? ''} className="min-h-12 rounded-lg border border-line bg-card px-4 text-ink">
-              <option value="">All industries</option>
-              {industries.map((i) => (
-                <option key={i.slug} value={i.slug}>
-                  {i.name}
-                </option>
+          <div className="theme-dark rounded-[4px] border border-line bg-[#0a1626] p-4 sm:p-5">
+            <nav aria-label="Filter by solution" className="flex flex-wrap gap-2">
+              <Link href={href({ industry, q })} className={chip(!solution)} aria-current={!solution ? 'true' : undefined}>
+                All solutions
+              </Link>
+              {solutions.map((s) => (
+                <Link key={s.slug} href={href({ solution: s.slug, industry, q })} className={chip(solution === s.slug)} aria-current={solution === s.slug ? 'true' : undefined}>
+                  {s.name}
+                </Link>
               ))}
-            </select>
-            <Button type="submit">Apply</Button>
-          </form>
+            </nav>
+
+            <form method="get" action="/case-studies" className="mt-4 flex flex-col gap-3 sm:flex-row">
+              {solution && <input type="hidden" name="solution" value={solution} />}
+              <label className="sr-only" htmlFor="q">
+                Search case studies
+              </label>
+              <div className="relative flex-1">
+                <Search aria-hidden className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted" />
+                <input id="q" name="q" type="search" defaultValue={q} placeholder="Search by title, client or reference" className={cn(fieldClass, 'w-full pl-11')} />
+              </div>
+              <label className="sr-only" htmlFor="industry">
+                Industry
+              </label>
+              <select id="industry" name="industry" defaultValue={industry ?? ''} className={fieldClass}>
+                <option value="">All industries</option>
+                {industries.map((i) => (
+                  <option key={i.slug} value={i.slug}>
+                    {i.name}
+                  </option>
+                ))}
+              </select>
+              <Button type="submit">Apply</Button>
+            </form>
+          </div>
 
           <p className="mt-6 text-sm text-muted" aria-live="polite">
             {result.total} {result.total === 1 ? 'result' : 'results'}
           </p>
 
           {result.docs.length === 0 ? (
-            <div className="mt-6 rounded-card border border-dashed border-line p-10 text-center">
+            <div className="mt-6 rounded-[4px] border border-dashed border-line p-10 text-center">
               <p className="text-lg font-bold text-heading">No case studies match those filters.</p>
               <Button href="/case-studies" variant="secondary" className="mt-4">
                 Reset filters
@@ -97,7 +121,7 @@ export default async function CaseStudiesPage({ searchParams }: Props) {
             <ul className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {result.docs.map((c) => (
                 <li key={c.slug}>
-                  <CaseStudyCard study={c} solutionName={names[c.solution]} />
+                  <CaseCard study={c} solutionName={names[c.solution]} industryName={industryNames[c.industries[0]]} />
                 </li>
               ))}
             </ul>
@@ -113,31 +137,9 @@ export default async function CaseStudiesPage({ searchParams }: Props) {
             </nav>
           )}
         </Container>
-      </Section>
+      </Band>
 
-      <Section tone="alt" id="share" className="scroll-mt-[var(--header-h)]">
-        <Container className="grid items-start gap-10 lg:grid-cols-[1fr_1.3fr]">
-          <div>
-            <SectionHead
-              title="Share your case study"
-              lead="Delivered a project that shows what good engineering can achieve? Send it to us and we will help you turn it into a published case study."
-            />
-            <CheckList
-              items={[
-                'Every submission is read by an engineer before anything is published',
-                'Nothing goes live until you have approved the final version',
-                'Share only what you have the right to share, and remove anything confidential',
-              ]}
-            />
-          </div>
-          <div className={cardClass + ' hover:translate-y-0 hover:border-line'}>
-            <CaseStudyForm
-              solutions={solutions.map((s) => ({ value: s.slug, label: s.name }))}
-              industries={industries.map((i) => ({ value: i.slug, label: i.name }))}
-            />
-          </div>
-        </Container>
-      </Section>
+      <HomeCta cta={content.cta} secondaryHref="/sample-reports" tone="dark" />
     </>
   )
 }
