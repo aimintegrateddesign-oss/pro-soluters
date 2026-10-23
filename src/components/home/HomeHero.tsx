@@ -70,12 +70,12 @@ export function HomeHero({ hero, promiseText, image }: { hero: (typeof homePage)
         setHeld(false)
       }}
       onBlur={() => setHeld(false)}
-      className="relative isolate overflow-x-clip text-white"
+      className="relative isolate flex min-h-svh flex-col overflow-x-clip text-white"
       style={{ background: 'linear-gradient(105deg, #0b2442, #0a1626)' }}
     >
       <div aria-hidden className="bg-blueprint absolute inset-0 -z-10" />
 
-      <div className="mx-auto w-full max-w-[77.5rem] px-5 pb-10 pt-[calc(var(--header-h)+2rem)] lg:min-h-[min(100svh,760px)] lg:pb-14 lg:pt-[calc(var(--header-h)+3rem)]">
+      <div className="mx-auto flex w-full max-w-[77.5rem] flex-1 flex-col px-1 pb-4 pt-[calc(var(--header-h)+1.25rem)] lg:grid lg:min-h-svh lg:max-w-none lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:items-center lg:gap-12 lg:px-7 lg:pb-10 lg:pt-[calc(var(--header-h)+1.5rem)]">
         <div className="fade-up max-w-[34rem]">
           <p className="mb-5 flex items-center gap-2.5 text-[13px] font-bold text-accent">
             <span aria-hidden className="size-2 bg-accent" />
@@ -125,11 +125,10 @@ export function HomeHero({ hero, promiseText, image }: { hero: (typeof homePage)
             {promiseText}
           </p>
         </div>
-      </div>
 
-      {/* 3D stage. Below lg it sits under the copy; from lg it fills the right half of the hero. */}
+      {/* 3D stage. Below lg it sits under the copy; from lg it is the right column, inside the same container so both edges have equal spacing. */}
       <div
-        className="relative mx-5 mb-3 aspect-[4/5] sm:aspect-[5/4] lg:absolute lg:inset-y-0 lg:left-[47%] lg:right-0 lg:mx-0 lg:mb-0 lg:aspect-auto lg:pb-12 lg:pt-[calc(var(--header-h)+2.5rem)]"
+        className="relative mt-6 min-h-[17rem] flex-1 lg:m-0 lg:flex-none lg:h-[min(36rem,calc(100svh-var(--header-h)-5rem))]"
         style={{ perspective: 1700, perspectiveOrigin: '30% 30%' }}
       >
         <motion.div
@@ -195,9 +194,10 @@ export function HomeHero({ hero, promiseText, image }: { hero: (typeof homePage)
             </p>
           </motion.div>
         </motion.div>
-        <p className="absolute bottom-3 right-0 hidden text-[11px] text-[#8fa2b6] lg:block">{hero.figuresNote}</p>
+        <p className="absolute -bottom-6 right-0 hidden text-[11px] text-[#8fa2b6] lg:block">{hero.figuresNote}</p>
       </div>
-      <p className="px-5 pb-6 text-right text-[11px] text-[#8fa2b6] lg:hidden">{hero.figuresNote}</p>
+      </div>
+      <p className="px-1 pb-3 text-right text-[11px] text-[#8fa2b6] lg:hidden">{hero.figuresNote}</p>
     </section>
   )
 }
