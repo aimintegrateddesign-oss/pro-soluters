@@ -15,6 +15,8 @@
   --hero: #0f2a47;
   --heading: #0f2a47;
   --link: #0e7c75;
+  /* Fill for buttons and badges that carry white text: 5:1 or better, unlike the brighter accent teal. */
+  --btn: #0e7c75;
   --header-h: 72px;
   color-scheme: light;
 }
@@ -39,6 +41,7 @@
   --color-navy: var(--navy);
   --color-accent: var(--teal);
   --color-accent-strong: var(--link);
+  --color-btn: var(--btn);
   --color-bg: var(--bg);
   --color-alt: var(--alt);
   --color-tint: var(--tint);
@@ -51,6 +54,7 @@
   --color-on-navy-muted: #cfdbe7;
 
   --font-sans: var(--font-inter), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-display: var(--font-inter-tight), var(--font-inter), 'Helvetica Neue', Arial, sans-serif;
   --radius-card: 0.75rem;
   --container-content: 67.5rem;
 }
@@ -84,6 +88,54 @@
   }
 }
 
+/* Dark navy scope used by the home page, the home header and the footer. It always renders dark, even in an
+   OS light theme, so white text always sits on navy and the two never mix. Contrast: text on page 16:1, muted
+   on card 7:1, white on button teal 5:1. */
+.theme-dark {
+  --bg: #0a111c;
+  --alt: #0e1826;
+  --tint: #0f2a2b;
+  --text: #f2f6fa;
+  --mute: #a3b3c4;
+  --line: #24384d;
+  --card: #13202f;
+  --hero: #0a1626;
+  --heading: #f2f6fa;
+  --link: #2dd4c4;
+  --teal: #2dd4c4;
+  --btn: #0e827b;
+  color-scheme: dark;
+  color: var(--text);
+}
+/* White section scope: always light, even when the OS is in dark mode, so navy and white sections alternate. */
+.theme-light {
+  --bg: #ffffff;
+  --alt: #f3f6f8;
+  --text: #1c2a39;
+  --mute: #4a5d70;
+  --line: #d8e0e7;
+  --card: #ffffff;
+  --heading: #0f2a47;
+  --link: #0e7c75;
+  --teal: #14a39a;
+  --btn: #0e7c75;
+  color-scheme: light;
+  color: var(--text);
+}
+.theme-dark :is(h1, h2, h3),
+.theme-light :is(h1, h2, h3) {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Blueprint grid behind the hero and CTA. */
+@utility bg-blueprint {
+  background-image:
+    linear-gradient(rgb(45 212 196 / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(45 212 196 / 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
 /* Navy hero band with the teal dot grid from the approved design. */
 @utility bg-dot-grid {
   background-color: var(--hero);
@@ -109,6 +161,16 @@
   line-height: 1.35;
   font-weight: 700;
   color: var(--heading);
+}
+
+/* Scroll and pointer 3D effects render their starting transform on the server and React does not rewrite inline
+   styles on hydration, so reduced-motion users get the flat, finished state from CSS instead. */
+@media (prefers-reduced-motion: reduce) {
+  .rm-flat {
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
 }
 
 @utility fade-up {

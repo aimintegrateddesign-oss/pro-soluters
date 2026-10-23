@@ -58,12 +58,12 @@ type ButtonProps = {
   children: ReactNode
 } & Omit<ComponentProps<'button'>, 'className' | 'children'>
 
-// DECISION: the approved design uses white text on the teal button; kept as designed.
+// DECISION: the approved design uses white text on the teal button; the fill is --btn (5:1 with white) so it stays readable.
 export function Button({ variant = 'primary', tone = 'light', href, className, children, ...rest }: ButtonProps) {
   const styles = cn(
     'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-[22px] py-3 text-[15px] font-semibold leading-none transition',
     'disabled:cursor-not-allowed disabled:opacity-60',
-    variant === 'primary' && 'bg-accent text-white hover:brightness-110',
+    variant === 'primary' && 'bg-btn text-white hover:brightness-110',
     variant === 'secondary' && tone === 'navy' && 'border-[1.5px] border-white text-white hover:bg-white/10',
     variant === 'secondary' && tone === 'light' && 'border-[1.5px] border-heading text-heading hover:bg-alt',
     className,
@@ -86,7 +86,7 @@ export function NumberBadge({ children, className }: { children: ReactNode; clas
   return (
     <span
       aria-hidden
-      className={cn('inline-flex size-[34px] shrink-0 items-center justify-center rounded-full bg-accent font-bold text-white', className)}
+      className={cn('inline-flex size-[34px] shrink-0 items-center justify-center rounded-full bg-btn font-bold text-white', className)}
     >
       {children}
     </span>

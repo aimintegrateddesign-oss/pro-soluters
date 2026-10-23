@@ -149,3 +149,80 @@ export const legalPages: Record<string, { title: string; updated: string; sectio
     ],
   },
 }
+
+// Home hero: one stage per pillar. Figures come from the illustrative sample case studies
+// (PS-SAMPLE-001 to 003), so they are fictional and labelled as such on the page.
+export const heroStages = [
+  {
+    icon: 'search-check',
+    label: 'Solve',
+    text: 'Feasibility · Options · Cost',
+    kicker: 'Feasibility and options report',
+    title: 'Solve and Prove',
+    stat: 'Option C, 77/100',
+    statNote: 'Recommended in sample PS-SAMPLE-001',
+    offer: 'Feasibility Proof Report',
+    tile: { left: 11.8, top: 18.6 },
+  },
+  {
+    icon: 'trending-up',
+    label: 'Improve',
+    text: 'Operations · Roadmap · Innovation',
+    kicker: 'Operational and business improvement',
+    title: 'Improve and Innovate',
+    stat: '+33%',
+    statNote: 'Daily output in sample PS-SAMPLE-002',
+    offer: 'Innovation Roadmap Sprint',
+    tile: { left: 32.2, top: 9.8 },
+  },
+  {
+    icon: 'database',
+    label: 'Align',
+    text: 'Technical data · One source of truth',
+    kicker: 'A single, trusted source of truth',
+    title: 'Align Your Technical Data',
+    stat: '14 → 2',
+    statNote: 'Places data is kept, sample PS-SAMPLE-003',
+    offer: 'Technical Data Health Check',
+    tile: { left: 53.1, top: 14.3 },
+  },
+] as const
+
+export const footerColumns = [
+  {
+    title: 'Solutions',
+    links: [
+      { label: 'Improve and Innovate', href: '/solutions/improve-and-innovate' },
+      { label: 'Align Your Technical Data', href: '/solutions/align-your-technical-data' },
+      { label: 'Solve and Prove', href: '/solutions/solve-and-prove' },
+      { label: 'Which solution fits you?', href: '/solutions', muted: true },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'Who We Serve', href: '/who-we-serve' },
+      { label: 'Case Studies', href: '/case-studies' },
+      { label: 'Sample Report', href: '/sample-reports' },
+      { label: 'Share your case study', href: '/case-studies#share' },
+    ],
+  },
+  {
+    title: 'Disciplines',
+    links: [
+      { label: 'Civil and Mechanical', href: '/who-we-serve' },
+      { label: 'HVAC and Electrical', href: '/who-we-serve' },
+      { label: 'MEP', href: '/who-we-serve' },
+      { label: 'Mechatronics and Transportation, coming soon', href: '/who-we-serve', muted: true },
+    ],
+  },
+  {
+    title: 'For institutions',
+    links: [
+      { label: 'Audit-friendly reports', href: '/who-we-serve' },
+      { label: 'Tenders and RFPs', href: '/who-we-serve' },
+      { label: 'International payments', href: '/who-we-serve' },
+      { label: 'Capability Statement', href: '/who-we-serve', accent: true },
+    ],
+  },
+] as { title: string; links: { label: string; href: string; muted?: boolean; accent?: boolean }[] }[]
