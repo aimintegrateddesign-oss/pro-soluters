@@ -88,17 +88,11 @@ const homeCta: Cta = {
   secondaryLabel: 'See a sample report',
 }
 
-// Hero stages: figures come from the illustrative sample case studies (PS-SAMPLE-001 to 003), so they are
-// fictional and labelled as such on the page. Keep them in step with those case studies if you edit them.
+// The three solution pillars shown under the hero headline.
 export type HeroStage = {
   icon: 'search-check' | 'trending-up' | 'database'
   label: string
   text: string
-  kicker: string
-  title: string
-  stat: string
-  statNote: string
-  offer: string
 }
 
 export const homePage = {
@@ -110,37 +104,21 @@ export const homePage = {
       'Pro Solutors helps engineering consultants, contractors, research centres and government institutions around the world innovate, align their technical data, and choose solutions backed by feasibility analysis.',
     primaryCta: 'Submit your problem',
     secondaryCta: 'Explore our solutions',
-    figuresNote: 'Figures from illustrative sample studies',
     stages: [
       {
         icon: 'search-check',
         label: 'Solve',
         text: 'Feasibility · Options · Cost',
-        kicker: 'Feasibility and options report',
-        title: 'Solve and Prove',
-        stat: 'Option C, 77/100',
-        statNote: 'Recommended in sample PS-SAMPLE-001',
-        offer: 'Feasibility Proof Report',
       },
       {
         icon: 'trending-up',
         label: 'Improve',
         text: 'Operations · Roadmap · Innovation',
-        kicker: 'Operational and business improvement',
-        title: 'Improve and Innovate',
-        stat: '+33%',
-        statNote: 'Daily output in sample PS-SAMPLE-002',
-        offer: 'Innovation Roadmap Sprint',
       },
       {
         icon: 'database',
         label: 'Align',
         text: 'Technical data · One source of truth',
-        kicker: 'A single, trusted source of truth',
-        title: 'Align Your Technical Data',
-        stat: '14 → 2',
-        statNote: 'Places data is kept, sample PS-SAMPLE-003',
-        offer: 'Technical Data Health Check',
       },
     ] as HeroStage[],
   },

@@ -2330,20 +2330,11 @@ export interface HomePage {
     intro?: string | null;
     primaryCta?: string | null;
     secondaryCta?: string | null;
-    figuresNote?: string | null;
     stages?:
       | {
           icon: 'search-check' | 'trending-up' | 'database';
           label: string;
           text?: string | null;
-          kicker?: string | null;
-          title?: string | null;
-          /**
-           * Illustrative figure from a sample case study.
-           */
-          stat?: string | null;
-          statNote?: string | null;
-          offer?: string | null;
           id?: string | null;
         }[]
       | null;
@@ -2891,18 +2882,12 @@ export interface HomePageSelect<T extends boolean = true> {
         intro?: T;
         primaryCta?: T;
         secondaryCta?: T;
-        figuresNote?: T;
         stages?:
           | T
           | {
               icon?: T;
               label?: T;
               text?: T;
-              kicker?: T;
-              title?: T;
-              stat?: T;
-              statNote?: T;
-              offer?: T;
               id?: T;
             };
       };

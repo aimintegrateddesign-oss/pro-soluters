@@ -27,11 +27,7 @@ export default async function HomePage() {
     <SmoothScroll>
       {/* Sections alternate navy (theme-dark) and white (theme-light), whatever the OS colour scheme. */}
       <div className="overflow-x-clip">
-        <HomeHero
-          hero={home.hero}
-          promiseText={settings.promiseText}
-          image={{ src: '/images/hero.webp', alt: 'Engineer in a hard hat reviewing a 3D building model on a tablet at a rooftop plant' }}
-        />
+        <HomeHero hero={home.hero} promiseText={settings.promiseText} />
 
         <section className="theme-light bg-bg py-16 sm:py-20">
           <Container className="!max-w-[77.5rem]">

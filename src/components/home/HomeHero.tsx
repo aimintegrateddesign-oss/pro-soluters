@@ -1,203 +1,69 @@
-'use client'
-
 import { ClipboardCheck, Clock, Cog, Database } from 'lucide-react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
 
 import { Button } from '@/components/ds/primitives'
-import { useMediaQuery } from '@/components/motion/useMediaQuery'
-import { useTilt } from '@/components/motion/useTilt'
+import { HeroVideo } from '@/components/home/HeroVideo'
 import type { homePage } from '@/data/site'
 import { cn } from '@/lib/utils'
 
 const icons = { 'search-check': ClipboardCheck, 'trending-up': Cog, database: Database }
-const CYCLE_MS = 3800
-// Position of each floating tile on the photo, in percent. Layout tuning, so it stays in code.
-const TILES = [
-  { left: 11.8, top: 18.6 },
-  { left: 32.2, top: 9.8 },
-  { left: 53.1, top: 14.3 },
-]
 
 /**
- * Home hero. A tilting 3D plane (photo, three floating solution tiles, an info panel) reads scroll and pointer
- * position. Tiles and the pillar buttons under the headline are one control: both pick the active solution.
- * Resting state (no scroll, no pointer, reduced motion) is a flat, finished layout.
+ * Home hero: the background video (see HeroVideo) with the headline, the two calls to action and the three solution
+ * pillars centred on top. Text comes from the Home page global in Payload. Without the video (reduced motion, or the
+ * file failing to load) it is the plain navy gradient.
  */
-export function HomeHero({ hero, promiseText, image }: { hero: (typeof homePage)['hero']; promiseText: string; image: { src: string; alt: string } }) {
-  const heroStages = hero.stages
-  const heroRef = useRef<HTMLElement>(null)
-  const reduce = useReducedMotion()
-  const coarse = useMediaQuery('(hover: none)')
-  const k = coarse ? 0.5 : 1
-
-  const [active, setActive] = useState(0)
-  const [held, setHeld] = useState(false)
-  const [pinned, setPinned] = useState(false)
-
-  useEffect(() => {
-    if (held || pinned || reduce) return
-    const id = setInterval(() => setActive((a) => (a + 1) % heroStages.length), CYCLE_MS)
-    return () => clearInterval(id)
-  }, [held, pinned, reduce])
-
-  const choose = (i: number) => {
-    setActive(i)
-    setPinned(true)
-  }
-
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const h = useTransform(scrollYProgress, [0, 0.8], [0, 1])
-  const { mx, my, bind } = useTilt()
-  const rotateY = useTransform([mx, h], ([x, v]: number[]) => k * (-9 + x * 5 + v * 9))
-  const rotateX = useTransform([my, h], ([y, v]: number[]) => k * (3 - y * 3 - v * 4))
-  const z = useTransform(h, [0, 1], [0, -60])
-  const panelY = useTransform(h, [0, 1], [0, -40])
-
-  const stage = heroStages[active]
-
+export function HomeHero({ hero, promiseText }: { hero: (typeof homePage)['hero']; promiseText: string }) {
   return (
     <section
-      ref={heroRef}
-      {...bind}
-      onPointerEnter={(e) => {
-        if (e.pointerType !== 'touch') setHeld(true)
-      }}
-      onFocus={() => setHeld(true)}
-      onPointerLeave={() => {
-        bind.onPointerLeave()
-        setHeld(false)
-      }}
-      onBlur={() => setHeld(false)}
-      className="relative isolate flex min-h-svh flex-col overflow-x-clip text-white"
+      className="theme-dark relative isolate flex min-h-svh flex-col justify-center overflow-x-clip text-white"
       style={{ background: 'linear-gradient(105deg, #0b2442, #0a1626)' }}
     >
-      <div aria-hidden className="bg-blueprint absolute inset-0 -z-10" />
+      <HeroVideo src="/hero-video.mp4" />
 
-      <div className="mx-auto flex w-full max-w-[77.5rem] flex-1 flex-col px-1 pb-4 pt-[calc(var(--header-h)+1.25rem)] lg:grid lg:min-h-svh lg:max-w-none lg:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] lg:items-center lg:gap-12 lg:px-7 lg:pb-10 lg:pt-[calc(var(--header-h)+1.5rem)]">
-        <div className="fade-up max-w-[34rem]">
-          <p className="mb-5 flex items-center gap-2.5 text-[13px] font-bold text-accent">
-            <span aria-hidden className="size-2 bg-accent" />
+      <div className="mx-auto w-full max-w-[77.5rem] px-5 pb-12 pt-[calc(var(--header-h)+2rem)] sm:pb-16">
+        <div className="fade-up mx-auto flex max-w-[52rem] flex-col items-center text-center">
+          <p className="flex items-center gap-3 text-[13px] font-bold uppercase tracking-[0.14em] text-accent">
+            <span aria-hidden className="h-px w-8 bg-accent" />
             {hero.eyebrow}
+            <span aria-hidden className="h-px w-8 bg-accent" />
           </p>
-          <h1 className="text-[clamp(2.25rem,4.4vw,4rem)] font-extrabold leading-[1.02] !tracking-[-0.035em] text-white">
+
+          <h1 className="mt-5 max-w-[48rem] text-balance text-[clamp(2.25rem,4.8vw,4.5rem)] font-extrabold leading-[1.04] !tracking-[-0.035em] text-white">
             {hero.headline} <span className="text-accent">{hero.headlineAccent}</span>
           </h1>
-          <p className="mt-6 max-w-[30rem] text-[17px] leading-relaxed text-[#c3d0dd]">
-            {hero.intro}
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <Button href="/submit-a-problem" className="min-h-12 px-6 shadow-[0_8px_28px_-8px_rgba(45,212,196,0.55)]">
+
+          <p className="mt-5 max-w-[38rem] text-pretty text-[clamp(1rem,1.2vw,1.125rem)] leading-relaxed text-[#d5dfe9] sm:mt-6">{hero.intro}</p>
+
+          <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:justify-center">
+            <Button href="/submit-a-problem" className="min-h-12 w-full px-7 shadow-[0_8px_28px_-8px_rgba(45,212,196,0.55)] sm:w-auto">
               {hero.primaryCta}
             </Button>
-            <Button href="/solutions" tone="navy" variant="secondary" className="min-h-12 px-6 !border-line">
+            <Button href="/solutions" tone="navy" variant="secondary" className="min-h-12 w-full px-7 !border-white/30 sm:w-auto">
               {hero.secondaryCta}
             </Button>
           </div>
 
-          <ul className="mt-9 grid grid-cols-3 border-y border-line">
-            {heroStages.map((s, i) => {
+          <ul className="mt-10 grid w-full max-w-[46rem] grid-cols-1 border-t border-white/20 sm:mt-12 sm:grid-cols-3">
+            {hero.stages.map((s, i) => {
               const Icon = icons[s.icon]
-              const on = i === active
               return (
-                <li key={s.label} className={cn('border-line', i > 0 && 'border-l')}>
-                  <button
-                    type="button"
-                    aria-pressed={on}
-                    onClick={() => choose(i)}
-                    className={cn(
-                      'flex min-h-11 w-full flex-col items-start gap-1 border-t-2 px-3 py-3.5 text-left transition-colors sm:px-4',
-                      on ? 'border-accent bg-accent/10' : 'border-transparent hover:bg-white/5',
-                    )}
-                  >
-                    <Icon aria-hidden className="size-5 text-accent" />
-                    <span className="text-[15px] font-bold text-white">{s.label}</span>
-                    <span className="text-[12px] leading-snug text-[#a3b3c4]">{s.text}</span>
-                  </button>
+                <li key={s.label} className={cn('flex flex-col items-center py-3.5 sm:px-4 sm:py-5', i > 0 && 'border-t border-white/10 sm:border-l sm:border-t-0 sm:border-white/20')}>
+                  <span aria-hidden className="hidden size-9 items-center justify-center rounded-[4px] border border-accent/30 bg-accent/10 text-accent sm:flex">
+                    <Icon className="size-[18px]" />
+                  </span>
+                  <p className="text-[15px] font-bold text-white sm:mt-3">{s.label}</p>
+                  <p className="mt-0.5 max-w-[16rem] text-[13px] leading-snug text-[#c3d0dd]">{s.text}</p>
                 </li>
               )
             })}
           </ul>
 
-          <p className="mt-5 flex items-center gap-2.5 text-[13px] text-[#a3b3c4]">
+          <p className="flex w-full max-w-[46rem] items-center justify-center gap-2.5 border-t border-white/20 pt-4 text-[13px] text-[#c3d0dd]">
             <Clock aria-hidden className="size-4 shrink-0 text-accent" />
             {promiseText}
           </p>
         </div>
-
-      {/* 3D stage. Below lg it sits under the copy; from lg it is the right column, inside the same container so both edges have equal spacing. */}
-      <div
-        className="relative mt-6 min-h-[17rem] flex-1 lg:m-0 lg:flex-none lg:h-[min(36rem,calc(100svh-var(--header-h)-5rem))]"
-        style={{ perspective: 1700, perspectiveOrigin: '30% 30%' }}
-      >
-        <motion.div
-          suppressHydrationWarning className="rm-flat relative size-full"
-          style={reduce ? { transformStyle: 'preserve-3d' } : { rotateY, rotateX, z, transformStyle: 'preserve-3d' }}
-        >
-          <div
-            className="absolute inset-0 overflow-hidden"
-            style={{ maskImage: 'linear-gradient(90deg, transparent 0%, #000 22%)', WebkitMaskImage: 'linear-gradient(90deg, transparent 0%, #000 22%)' }}
-          >
-            <Image src={image.src} alt={image.alt} fill priority sizes="(min-width: 1024px) 53vw, 100vw" className="object-cover object-[78%_center]" />
-            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0a1626]/50 via-transparent to-transparent" />
-          </div>
-
-          <span aria-hidden className="absolute -top-3 left-[14%] hidden h-8 w-12 border-l border-t border-accent lg:block" />
-          <span aria-hidden className="absolute -bottom-3 right-3 hidden size-8 border-b border-r border-accent lg:block" />
-
-          {heroStages.map((s, i) => {
-            const Icon = icons[s.icon]
-            const on = i === active
-            return (
-              <motion.button
-                key={s.label}
-                type="button"
-                aria-pressed={on}
-                aria-label={`Show ${s.title}`}
-                onClick={() => choose(i)}
-                animate={reduce ? undefined : { z: on ? 95 : 36, scale: on ? 1.1 : 1 }}
-                transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
-                className={cn(
-                  'absolute flex aspect-square min-h-11 min-w-11 items-center justify-center rounded-[4px] border transition-[background-color,box-shadow,border-color] duration-[450ms]',
-                  on
-                    ? 'border-accent bg-btn text-white shadow-[0_0_28px_rgba(45,212,196,0.55)]'
-                    : 'border-accent/40 bg-[#0e1d30]/85 text-accent backdrop-blur-sm hover:border-accent',
-                )}
-                style={{ left: `${TILES[i].left}%`, top: `${TILES[i].top}%`, width: '11.4%' }}
-              >
-                <Icon aria-hidden className="size-[46%]" />
-              </motion.button>
-            )
-          })}
-
-          <motion.div
-            aria-live="polite"
-            suppressHydrationWarning className="rm-flat absolute bottom-[7%] left-[3%] w-[min(19rem,78%)] rounded-[4px] border border-accent/40 bg-[#0a1626]/95 p-4 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.6)]"
-            style={reduce ? undefined : { z: 120, y: panelY }}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <p className="text-[12px] font-semibold text-accent">{stage.kicker}</p>
-              <span aria-hidden className="mt-1.5 flex gap-1">
-                {heroStages.map((s, i) => (
-                  <span key={s.label} className={cn('h-0.5 w-3.5', i === active ? 'bg-accent' : 'bg-white/25')} />
-                ))}
-              </span>
-            </div>
-            <p className="mt-1 text-[19px] font-extrabold leading-tight text-white [font-family:var(--font-display)]">{stage.title}</p>
-            <div className="mt-3 flex items-baseline gap-3">
-              <span className="whitespace-nowrap text-2xl font-extrabold leading-none text-accent [font-family:var(--font-display)]">{stage.stat}</span>
-              <span className="text-[12px] leading-snug text-[#a3b3c4]">{stage.statNote}</span>
-            </div>
-            <p className="mt-3 border-t border-line pt-2.5 text-[12px] text-[#a3b3c4]">
-              Entry offer: <span className="font-semibold text-white">{stage.offer}</span>
-            </p>
-          </motion.div>
-        </motion.div>
-        <p className="absolute -bottom-6 right-0 hidden text-[11px] text-[#8fa2b6] lg:block">{hero.figuresNote}</p>
       </div>
-      </div>
-      <p className="px-1 pb-3 text-right text-[11px] text-[#8fa2b6] lg:hidden">{hero.figuresNote}</p>
     </section>
   )
 }
