@@ -63,5 +63,26 @@ export type Seo = { title?: string; description?: string; image?: string }
 export function readSeo(doc: unknown): Seo {
   const meta = isRec(doc) && isRec(doc.meta) ? doc.meta : {}
   const s = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : undefined)
-  return { title: s(meta.title), description: s(meta.description), image: s(meta.image) }
+  // ogImage is an upload; it is a populated Media record when the document was read with depth 1 or more.
+  const og = isRec(meta.ogImage) ? s(meta.ogImage.url) : undefined
+  return { title: s(meta.title), description: s(meta.description), image: og ?? s(meta.image) }
+}
+
+export type ImageRef = { src: string; alt: string }
+const isImage = (v: unknown): v is ImageRef => isRec(v) && typeof v.src === 'string' && typeof v.alt === 'string' && Object.keys(v).length === 2
+
+/**
+ * Wherever the defaults hold an image ({ src, alt }), swap in the Media record picked in the admin (read at depth 1).
+ * An empty slot keeps the built-in image. The result has the same shape as the defaults, ready for mergeContent.
+ */
+export function applyUploadedImages(defaults: unknown, doc: unknown): unknown {
+  if (!isRec(defaults) || !isRec(doc)) return doc
+  const out: Rec = { ...doc }
+  for (const [key, fallback] of Object.entries(defaults)) {
+    if (isImage(fallback)) {
+      const m = doc[key]
+      out[key] = isRec(m) && typeof m.url === 'string' && m.url ? { src: m.url, alt: (typeof m.alt === 'string' && m.alt.trim()) || fallback.alt } : fallback
+    } else if (isRec(fallback)) out[key] = applyUploadedImages(fallback, doc[key])
+  }
+  return out
 }

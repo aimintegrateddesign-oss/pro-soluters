@@ -18,8 +18,9 @@ export const Solutions: CollectionConfig = {
     { name: 'eyebrow', type: 'text', required: true },
     { name: 'order', type: 'number', required: true, defaultValue: 1 },
     { name: 'shortSummary', type: 'textarea', required: true },
-    { name: 'image', type: 'text', required: true, admin: { description: 'Path under /public, e.g. /images/solve-and-prove.svg' } },
-    { name: 'imageAlt', type: 'text', required: true },
+    { name: 'imageUpload', type: 'upload', relationTo: 'media', label: 'Image (upload)', admin: { description: 'Used on the site when set. Its alt text comes from the Media record unless you fill the alt below.' } },
+    { name: 'image', type: 'text', label: 'Image path (fallback)', admin: { description: 'Path under /public, e.g. /images/feasibility-analysis.webp. Used only when no image is uploaded.' } },
+    { name: 'imageAlt', type: 'text', label: 'Image alt text (optional with an upload)' },
     {
       name: 'icon',
       type: 'select',

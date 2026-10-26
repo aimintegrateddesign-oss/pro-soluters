@@ -16,6 +16,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata(seo, { title: `Pro Solutors | ${settings.tagline}`, description: settings.description, path: '/' }, site, { absoluteTitle: true })
 }
 
+const homeImage = (images: Awaited<ReturnType<typeof getHomePage>>['content']['solutions']['images'], slug: string) =>
+  images[slug.replace(/-(\w)/g, (_, ch: string) => ch.toUpperCase()) as keyof typeof images]
 const whyIcons = [LayoutGrid, RefreshCw, ShieldCheck]
 
 const cardBase = 'h-full rounded-[4px] border border-line border-t-[3px] border-t-btn bg-card p-6 shadow-[0_12px_30px_-18px_rgba(15,42,71,0.35)]'
@@ -59,7 +61,7 @@ export default async function HomePage() {
               <p className="mt-3 text-muted">{home.solutions.lead}</p>
             </div>
             {/* Alternating layout: image left, then right, then left. */}
-            <SolutionStack cards={solutions.map((s, i) => <SolutionRow key={s.slug} solution={s} flip={i % 2 === 1} />)} />
+            <SolutionStack cards={solutions.map((s, i) => <SolutionRow key={s.slug} solution={s} image={homeImage(home.solutions.images, s.slug)} flip={i % 2 === 1} />)} />
           </Container>
         </section>
 

@@ -66,6 +66,10 @@ export function validateSubmission(v: SubmissionFields): FieldErrors {
   if (!URGENCIES.some((o) => o.value === v.urgency)) e.urgency = 'Choose an urgency.'
   if (v.description.trim().length < 30) e.description = 'Please describe your problem in at least 30 characters.'
   if (v.description.length > 5000) e.description = 'Keep the description under 5,000 characters.'
+  if (v.name.length > 120) e.name = 'Keep the name under 120 characters.'
+  if (v.company.length > 160) e.company = 'Keep the organisation under 160 characters.'
+  if (v.country.length > 80) e.country = 'Keep the country under 80 characters.'
+  if (v.email.length > 254) e.email = 'Enter a valid email address.'
   if (!v.consent) e.consent = 'Please agree so we can contact you about this submission.'
   return e
 }

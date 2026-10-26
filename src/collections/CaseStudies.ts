@@ -43,8 +43,9 @@ export const CaseStudies: CollectionConfig = {
             { name: 'clientDescription', type: 'text' },
             { name: 'isSample', type: 'checkbox', defaultValue: true },
             { name: 'featured', type: 'checkbox', defaultValue: false },
-            { name: 'cover', type: 'text', admin: { description: 'Path under /public' } },
-            { name: 'coverAlt', type: 'text' },
+            { name: 'coverUpload', type: 'upload', relationTo: 'media', label: 'Cover (upload)', admin: { description: 'Used on the site when set.' } },
+            { name: 'cover', type: 'text', label: 'Cover path (fallback)', admin: { description: 'Path under /public. Used only when no cover is uploaded.' } },
+            { name: 'coverAlt', type: 'text', label: 'Cover alt text (optional with an upload)' },
             {
               // Filled by the public "Share your case study" form. Those entries are saved as drafts,
               // so nothing appears on the site until an editor completes and publishes it.

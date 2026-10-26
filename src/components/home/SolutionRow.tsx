@@ -7,26 +7,11 @@ import { cn } from '@/lib/utils'
 
 const icons = { 'search-check': SearchCheck, 'trending-up': TrendingUp, database: Database }
 
-// Illustrations for the home page cards, keyed by solution slug. Other pages keep using the image stored on the solution.
-const HOME_IMAGES: Record<string, { src: string; alt: string }> = {
-  'improve-and-innovate': {
-    src: '/images/home-improve-and-innovate.webp',
-    alt: 'Isometric illustration of a connected factory with machines, conveyors and a cloud, representing improved operations',
-  },
-  'align-your-technical-data': {
-    src: '/images/home-align-your-technical-data.webp',
-    alt: 'Isometric illustration of a glowing building model above layered technical drawings, representing aligned technical data',
-  },
-  'solve-and-prove': {
-    src: '/images/home-solve-and-prove.webp',
-    alt: 'Illustration comparing three chiller options with a scoring panel, representing a feasibility analysis',
-  },
-}
-
 /** One solution as a wide card. `flip` puts the image on the right from lg up, so rows alternate left and right. */
-export function SolutionRow({ solution, flip }: { solution: Solution; flip?: boolean }) {
+/** `image` is the home-page illustration from the Pages collection; without it the card uses the image stored on the solution. */
+export function SolutionRow({ solution, image: homeImage, flip }: { solution: Solution; image?: { src: string; alt: string }; flip?: boolean }) {
   const Icon = icons[solution.icon]
-  const image = HOME_IMAGES[solution.slug] ?? { src: solution.image, alt: solution.imageAlt }
+  const image = homeImage ?? { src: solution.image, alt: solution.imageAlt }
   return (
     <article
       className={cn(

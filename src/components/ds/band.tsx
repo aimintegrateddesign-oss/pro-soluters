@@ -27,7 +27,7 @@ export function Band({ tone, className, ...props }: ComponentProps<'section'> & 
 /** Navy hero wrapper with the blueprint grid. Children supply their own container. */
 export function HeroShell({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn('theme-dark relative isolate overflow-x-clip text-white', className)} style={{ background: 'linear-gradient(105deg, #0b2442, #0a1626)' }}>
+    <div className={cn('theme-dark relative isolate flex flex-col lg:min-h-svh justify-center overflow-x-clip text-white', className)} style={{ background: 'linear-gradient(105deg, #0b2442, #0a1626)' }}>
       <div aria-hidden className="bg-blueprint absolute inset-0 -z-10" />
       {children}
     </div>
@@ -35,7 +35,7 @@ export function HeroShell({ children, className }: { children: ReactNode; classN
 }
 
 export function HeroContainer({ children }: { children: ReactNode }) {
-  return <Container className={cn(WIDE, 'pb-12 pt-[calc(var(--header-h)+2rem)]')}>{children}</Container>
+  return <Container className={cn(WIDE, 'px-3 pb-6 pt-[calc(var(--header-h)+1rem)] lg:px-5 lg:pb-12 lg:pt-[calc(var(--header-h)+2rem)]')}>{children}</Container>
 }
 
 export function SectionTitle({ children, className }: { children: ReactNode; className?: string }) {

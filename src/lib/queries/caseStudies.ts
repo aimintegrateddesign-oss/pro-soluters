@@ -19,6 +19,7 @@ const s = (v?: string | null) => v ?? ''
 function mapCaseStudy(d: CaseStudyDoc): CaseStudy {
   const solution = d.solution as SolutionDoc
   const headings = texts(d.resultsHeadings)
+  const cover = typeof d.coverUpload === 'object' ? d.coverUpload : null
   return {
     slug: d.slug,
     title: d.title,
@@ -31,8 +32,8 @@ function mapCaseStudy(d: CaseStudyDoc): CaseStudy {
     clientDescription: s(d.clientDescription),
     isSample: d.isSample ?? true,
     featured: d.featured ?? false,
-    cover: s(d.cover),
-    coverAlt: s(d.coverAlt),
+    cover: cover?.url ?? s(d.cover),
+    coverAlt: d.coverAlt?.trim() || cover?.alt || '',
     duration: s(d.duration),
     outcome: s(d.outcome),
     kpis: (d.kpis ?? []).map((k) => ({ value: k.value, caption: k.caption })),

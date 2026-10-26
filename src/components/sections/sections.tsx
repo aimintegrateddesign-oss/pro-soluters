@@ -20,7 +20,7 @@ export function PageBand({
   className?: string
 }) {
   return (
-    <div className={cn('relative overflow-hidden bg-dot-grid text-white', className)}>
+    <div className={cn('relative flex flex-col lg:min-h-svh justify-center overflow-hidden bg-dot-grid text-white', className)}>
       {image && (
         <div className="absolute inset-y-0 right-0 hidden w-1/2 lg:block">
           <Image src={image.src} alt={image.alt} fill sizes="50vw" className="object-cover object-center" />

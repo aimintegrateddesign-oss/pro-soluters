@@ -11,6 +11,8 @@
  * All case-study content is fictional SAMPLE content (see src/seed/data/caseStudies.ts).
  */
 import 'dotenv/config'
+import { readdirSync } from 'node:fs'
+import path from 'node:path'
 import { getPayload } from 'payload'
 
 import config from '../payload.config'
@@ -29,35 +31,38 @@ const brand = ' | Pro Solutors'
 const globals = [
   ['site-settings', { ...siteSettings, ...seo(`Pro Solutors | ${siteSettings.tagline}`, siteSettings.description) }],
   ['navigation', navigation],
-  ['home-page', { ...homePage, ...seo(`Pro Solutors | ${siteSettings.tagline}`, siteSettings.description) }],
+] as const
+
+// [pageType, slug, title, content, seo]
+const pages = [
+  ['home', 'home', 'Home', homePage, seo(`Pro Solutors | ${siteSettings.tagline}`, siteSettings.description)],
   [
-    'case-studies-page',
-    { ...caseStudiesPage, ...seo(`Case studies${brand}`, 'Sample case studies and feasibility reports showing how Pro Solutors works. All sample content is fictional.') },
+    'caseStudies',
+    'case-studies',
+    'Case studies',
+    caseStudiesPage,
+    seo(`Case studies${brand}`, 'Sample case studies and feasibility reports showing how Pro Solutors works. All sample content is fictional.'),
   ],
   [
-    'solutions-page',
-    {
-      ...solutionsPage,
-      ...seo(`Solutions${brand}`, 'Improve and Innovate, Align Your Technical Data, and Solve and Prove: three ways Pro Solutors delivers decision-ready engineering.', '/images/solutions-banner.webp'),
-    },
+    'solutions',
+    'solutions',
+    'Solutions',
+    solutionsPage,
+    seo(`Solutions${brand}`, 'Improve and Innovate, Align Your Technical Data, and Solve and Prove: three ways Pro Solutors delivers decision-ready engineering.', '/images/solutions-banner.webp'),
   ],
   [
-    'who-we-serve-page',
-    {
-      ...whoWeServePage,
-      ...seo(
-        `Who We Serve & Domains${brand}`,
-        'Pro Solutors serves engineering consultants, contractors, research centres and government institutions across every major engineering discipline.',
-        '/images/og-who-we-serve.jpg',
-      ),
-    },
+    'whoWeServe',
+    'who-we-serve',
+    'Who we serve',
+    whoWeServePage,
+    seo(
+      `Who We Serve & Domains${brand}`,
+      'Pro Solutors serves engineering consultants, contractors, research centres and government institutions across every major engineering discipline.',
+      '/images/og-who-we-serve.jpg',
+    ),
   ],
-  [
-    'sample-report-page',
-    { ...sampleReportPage, ...seo(`Sample Report${brand}`, 'See what a Pro Solutors feasibility report looks like: an illustrative example for a fictional company.') },
-  ],
-  ['submit-page', { ...submitPage, ...seo(`Submit your problem${brand}`, siteSettings.promiseText) }],
-  ['legal-pages', legalPages],
+  ['sampleReport', 'sample-report', 'Sample report', sampleReportPage, seo(`Sample Report${brand}`, 'See what a Pro Solutors feasibility report looks like: an illustrative example for a fictional company.')],
+  ['submit', 'submit-a-problem', 'Submit your problem', submitPage, seo(`Submit your problem${brand}`, siteSettings.promiseText)],
 ] as const
 
 const rows = <K extends string>(key: K, items: string[]) => items.map((v) => ({ [key]: v }) as Record<K, string>)
@@ -80,6 +85,52 @@ async function seed() {
     }
   } else payload.logger.info('SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD not set: skipping admin user')
 
+  // 1b. Images: upload public/images into the Media collection (Vercel Blob when BLOB_READ_WRITE_TOKEN is set). Pages,
+  // solutions, case studies and SEO fields below point at these records. Alt text is taken from wherever the site defaults
+  // describe the image, so the Media records start with proper alt text.
+  const defaultAlt: Record<string, string> = {}
+  const collectAlt = (v: unknown): void => {
+    if (Array.isArray(v)) return v.forEach(collectAlt)
+    if (typeof v !== 'object' || v === null) return
+    const o = v as Record<string, unknown>
+    if (typeof o.src === 'string' && typeof o.alt === 'string') defaultAlt[path.basename(o.src)] = o.alt
+    Object.values(o).forEach(collectAlt)
+  }
+  collectAlt([homePage, solutionsPage, whoWeServePage, sampleReportPage])
+  for (const x of solutions) defaultAlt[path.basename(x.image)] ??= x.imageAlt
+  for (const x of caseStudies) defaultAlt[path.basename(x.cover)] ??= x.coverAlt
+
+  const imagesDir = path.resolve(process.cwd(), 'public/images')
+  const mime: Record<string, string> = { '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg' }
+  const mediaIds: Record<string, string> = {}
+  for (const file of readdirSync(imagesDir).filter((f) => mime[path.extname(f).toLowerCase()])) {
+    const alt = defaultAlt[file] ?? path.basename(file, path.extname(file)).replace(/[-_]+/g, ' ')
+    const found = (await payload.find({ collection: 'media', where: { filename: { equals: file } }, limit: 1, depth: 0, pagination: false })).docs[0]
+    if (found) {
+      if (found.alt !== alt) await payload.update({ collection: 'media', id: found.id, data: { alt }, depth: 0 })
+      mediaIds[file] = found.id
+      payload.logger.info(`media ${file}: exists`)
+      continue
+    }
+    mediaIds[file] = (await payload.create({ collection: 'media', data: { alt }, filePath: path.join(imagesDir, file), depth: 0 })).id
+    payload.logger.info(`media ${file}: uploaded`)
+  }
+  const mediaId = (src: string) => mediaIds[path.basename(src)]
+  // Content with every { src, alt } image replaced by the id of its Media record.
+  const mediaize = (v: unknown): unknown => {
+    if (Array.isArray(v)) return v.map(mediaize)
+    if (typeof v !== 'object' || v === null) return v
+    const o = v as Record<string, unknown>
+    if (typeof o.src === 'string' && typeof o.alt === 'string' && Object.keys(o).length === 2) return mediaId(o.src)
+    return Object.fromEntries(Object.entries(o).map(([k, x]) => [k, mediaize(x)]))
+  }
+  // Social share image: the SEO defaults hold a path in meta.image; the field stores a Media id in meta.ogImage.
+  const withOg = <T extends { meta?: { image?: string } }>(o: T) => {
+    if (!o.meta?.image) return o
+    const { image, ...rest } = o.meta
+    return { ...o, meta: { ...rest, ogImage: mediaId(image) } }
+  }
+
   // 2. Industries
   const industryIds: Record<string, string> = {}
   for (const i of industries) {
@@ -93,6 +144,8 @@ async function seed() {
   for (const s of solutions) {
     const data = {
       ...s,
+      imageUpload: mediaId(s.image),
+      meta: { ogImage: mediaId(s.image) },
       highlights: rows('text', s.highlights),
       problemStatement: rows('text', s.problemStatement),
       deliverables: rows('text', s.deliverables),
@@ -113,6 +166,8 @@ async function seed() {
     const data = {
       ...c,
       _status: 'published' as const,
+      coverUpload: mediaId(c.cover),
+      meta: { ogImage: mediaId(c.cover) },
       solution: solutionIds[c.solution],
       industries: c.industries.map((s) => industryIds[s]),
       resultsHeadings: rows('text', c.resultsHeadings),
@@ -134,17 +189,35 @@ async function seed() {
     }
   }
 
-  // 5. Page text and SEO (Payload globals)
+  // 5. Site settings and navigation (Payload globals)
   const force = process.env.SEED_FORCE_GLOBALS === 'true'
   for (const [slug, content] of globals) {
-    const current = (await payload.findGlobal({ slug, depth: 0 })) as { updatedAt?: string | null }
+    const current = (await payload.findGlobal({ slug, depth: 0 })) as { updatedAt?: string | null; meta?: { ogImage?: unknown } }
+    if (slug === 'site-settings' && current.updatedAt && !force && !current.meta?.ogImage) {
+      await payload.updateGlobal({ slug, data: { meta: { ogImage: mediaId(OG) } } as never, depth: 0 })
+      payload.logger.info('global site-settings: share image added')
+      continue
+    }
     if (current.updatedAt && !force) {
       payload.logger.info(`global ${slug}: already has content, skipped (SEED_FORCE_GLOBALS=true to reset)`)
       continue
     }
-    await payload.updateGlobal({ slug, data: toDoc(content) as never, depth: 0 })
+    await payload.updateGlobal({ slug, data: toDoc(withOg(content as never)) as never, depth: 0 })
     payload.logger.info(`global ${slug}: ${current.updatedAt ? 'reset' : 'created'}`)
   }
+
+  // 6. Pages (site-pages collection): page text and SEO, then the legal pages
+  const forcePages = process.env.SEED_FORCE_PAGES === 'true'
+  const upsertPage = async (pageType: string, slug: string, title: string, data: Record<string, unknown>) => {
+    const found = (await payload.find({ collection: 'site-pages', where: { slug: { equals: slug } }, limit: 1, depth: 0, pagination: false })).docs[0]
+    if (found && !force && !forcePages) return payload.logger.info(`page ${slug}: already exists, skipped (SEED_FORCE_PAGES=true to reset)`)
+    const doc = { title, slug, pageType, ...data } as never
+    if (found) await payload.update({ collection: 'site-pages', id: found.id, data: doc, depth: 0 })
+    else await payload.create({ collection: 'site-pages', data: doc, depth: 0 })
+    payload.logger.info(`page ${slug}: ${found ? 'reset' : 'created'}`)
+  }
+  for (const [pageType, slug, title, content, meta] of pages) await upsertPage(pageType, slug, title, { [pageType]: toDoc(mediaize(content)), ...withOg(meta) })
+  for (const p of legalPages.pages) await upsertPage('legal', p.slug, p.title, { legal: toDoc({ updated: p.updated, sections: p.sections }) })
 
   payload.logger.info('Seed complete.')
   process.exit(0)

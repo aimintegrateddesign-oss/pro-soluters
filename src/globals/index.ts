@@ -1,6 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
-import { area, ctaGroup, flag, group, heroGroup, lines, makeGlobal, rows, text } from './helpers'
+import { area, ctaGroup, imageField, definePage, flag, group, heroGroup, lines, makeGlobal, rows, text, type PageDef } from './helpers'
 
 const link = [text('label', 'Label', { required: true }), text('href', 'Link', { required: true, admin: { description: 'e.g. /solutions or https://example.com' } })]
 const sectionHead = (name: string, label: string) => group(name, label, [text('title', 'Heading'), area('lead', 'Lead line')])
@@ -37,8 +37,8 @@ export const Navigation = makeGlobal({
   ],
 })
 
-export const HomePage = makeGlobal({
-  slug: 'home-page',
+export const HomePage = definePage({
+  key: 'home',
   label: 'Home page',
   content: [
     group('hero', 'Hero', [
@@ -60,25 +60,29 @@ export const HomePage = makeGlobal({
       ),
     ]),
     group('why', 'Problems section', [text('title', 'Heading'), area('lead', 'Lead line'), rows('items', 'Cards', [text('title', 'Title', { required: true }), area('text', 'Text', { required: true })])]),
-    sectionHead('solutions', 'Solutions section heading'),
+    group('solutions', 'Solutions section', [
+      text('title', 'Heading'),
+      area('lead', 'Lead line'),
+      group('images', 'Card images', [imageField('improveAndInnovate', 'Improve and Innovate card'), imageField('alignYourTechnicalData', 'Align Your Technical Data card'), imageField('solveAndProve', 'Solve and Prove card')]),
+    ]),
     group('path', 'Path section', [text('title', 'Heading'), area('lead', 'Lead line'), rows('steps', 'Steps', [text('title', 'Title', { required: true }), area('text', 'Text', { required: true })])]),
     ctaGroup(),
   ],
 })
 
-export const CaseStudiesPage = makeGlobal({
-  slug: 'case-studies-page',
+export const CaseStudiesPage = definePage({
+  key: 'caseStudies',
   label: 'Case studies page',
   description: 'Heading and call to action of the case studies list. The studies themselves are in the Case studies collection.',
   content: [heroGroup(), ctaGroup()],
 })
 
-export const SolutionsPage = makeGlobal({
-  slug: 'solutions-page',
+export const SolutionsPage = definePage({
+  key: 'solutions',
   label: 'Solutions page',
   description: 'Text on the Solutions overview. The three solutions themselves are in the Solutions collection.',
   content: [
-    heroGroup(),
+    heroGroup(true),
     group('fit', 'Which solution fits you?', [
       text('title', 'Heading'),
       area('lead', 'Lead line'),
@@ -96,11 +100,11 @@ export const SolutionsPage = makeGlobal({
   ],
 })
 
-export const WhoWeServePage = makeGlobal({
-  slug: 'who-we-serve-page',
+export const WhoWeServePage = definePage({
+  key: 'whoWeServe',
   label: 'Who we serve page',
   content: [
-    heroGroup(),
+    heroGroup(true),
     group('audiences', 'Audiences', [
       text('title', 'Heading'),
       area('lead', 'Lead line'),
@@ -118,8 +122,8 @@ export const WhoWeServePage = makeGlobal({
   ],
 })
 
-export const SampleReportPage = makeGlobal({
-  slug: 'sample-report-page',
+export const SampleReportPage = definePage({
+  key: 'sampleReport',
   label: 'Sample report page',
   description: 'The fictional sample report. Keep figures in step with the sample case study PS-SAMPLE-001.',
   content: [
@@ -150,7 +154,7 @@ export const SampleReportPage = makeGlobal({
     group('conditions', 'Conditions card', [text('title', 'Title'), lines('items', 'Items')]),
     group('risks', 'Risks card', [text('title', 'Title'), lines('items', 'Items')]),
     group('assumptions', 'Assumptions card', [text('title', 'Title'), lines('items', 'Items')]),
-    group('example', 'Worked example card', [text('title', 'Title'), area('text', 'Text'), text('linkLabel', 'Link label')]),
+    group('example', 'Worked example card', [text('title', 'Title'), area('text', 'Text'), text('linkLabel', 'Link label'), imageField('image', 'Card image')]),
     group('feedback', 'Client feedback card', [text('title', 'Title'), area('text', 'Text'), text('buttonLabel', 'Button label')]),
     group('sheet', 'Hero report sheet', [
       text('reference', 'Reference'),
@@ -163,8 +167,8 @@ export const SampleReportPage = makeGlobal({
   ],
 })
 
-export const SubmitPage = makeGlobal({
-  slug: 'submit-page',
+export const SubmitPage = definePage({
+  key: 'submit',
   label: 'Submit page',
   description: 'Text around the Submit your problem form. The form fields and their options are part of the code.',
   content: [
@@ -174,19 +178,18 @@ export const SubmitPage = makeGlobal({
   ],
 })
 
-export const LegalPages = makeGlobal({
-  slug: 'legal-pages',
-  label: 'Legal pages',
-  description: 'Privacy policy, Terms of use and any other simple text page. The slug becomes the URL, e.g. privacy gives /privacy.',
-  seo: false,
+export const LegalPage = definePage({
+  key: 'legal',
+  tabs: false,
+  label: 'Legal page',
+  description: 'Privacy policy, Terms of use and any other simple text page. The page slug (above) becomes the URL, e.g. privacy gives /privacy.',
   content: [
-    rows('pages', 'Pages', [
-      text('slug', 'URL slug', { required: true, admin: { description: 'Lowercase, no spaces, e.g. privacy' } }),
-      text('title', 'Title', { required: true }),
-      { name: 'updated', type: 'date', label: 'Last updated', admin: { date: { pickerAppearance: 'dayOnly' } } },
-      rows('sections', 'Sections', [text('heading', 'Heading', { required: true }), area('text', 'Text', { required: true })]),
-    ]),
+    { name: 'updated', type: 'date', label: 'Last updated', admin: { date: { pickerAppearance: 'dayOnly' } } },
+    rows('sections', 'Sections', [text('heading', 'Heading', { required: true }), area('text', 'Text', { required: true })]),
   ],
 })
 
-export const siteGlobals: GlobalConfig[] = [SiteSettings, Navigation, HomePage, CaseStudiesPage, SolutionsPage, WhoWeServePage, SampleReportPage, SubmitPage, LegalPages]
+export const siteGlobals: GlobalConfig[] = [SiteSettings, Navigation]
+
+/** Editable page types, one group each in the `site-pages` collection. Legal is the only type that can have many documents. */
+export const pageDefs: PageDef[] = [HomePage, CaseStudiesPage, SolutionsPage, WhoWeServePage, SampleReportPage, SubmitPage, LegalPage]

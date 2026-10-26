@@ -161,8 +161,8 @@ export default async function SampleReportPage() {
           <Link href={CASE_STUDY} className={cn(ruleCard, 'group flex flex-col overflow-hidden p-0 transition hover:-translate-y-[3px] hover:border-accent motion-reduce:hover:translate-y-0')}>
             <span className="relative block aspect-video bg-hero">
               <Image
-                src="/images/case-cooling-plant.webp"
-                alt="Two engineers reviewing cooling plant options on a laptop, with Option C recommended"
+                src={content.example.image.src}
+                alt={content.example.image.alt}
                 fill
                 sizes="(min-width: 1024px) 600px, 100vw"
                 className="object-cover"

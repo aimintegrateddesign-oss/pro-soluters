@@ -134,6 +134,20 @@ export const homePage = {
   solutions: {
     title: 'Three solutions',
     lead: 'One dedicated approach for each kind of engineering challenge.',
+    images: {
+      improveAndInnovate: {
+        src: '/images/home-improve-and-innovate.webp',
+        alt: 'Isometric illustration of a connected factory with machines, conveyors and a cloud, representing improved operations',
+      },
+      alignYourTechnicalData: {
+        src: '/images/home-align-your-technical-data.webp',
+        alt: 'Isometric illustration of a glowing building model above layered technical drawings, representing aligned technical data',
+      },
+      solveAndProve: {
+        src: '/images/home-solve-and-prove.webp',
+        alt: 'Illustration comparing three chiller options with a scoring panel, representing a feasibility analysis',
+      },
+    },
   },
   path: {
     title: 'Start small, grow with confidence',
@@ -161,7 +175,8 @@ export const solutionsPage = {
     title: 'Three solutions, one purpose:',
     accent: 'decision-ready engineering.',
     intro: 'Research-led, practical and evidence-based. Choose the one that fits, or combine them.',
-  } as Hero,
+    image: { src: '/images/solutions-banner.webp', alt: 'Practical engineering solutions that solve problems, improve performance and align your data' },
+  } as Hero & { image: { src: string; alt: string } },
   fit: {
     title: 'Which solution fits you?',
     lead: 'A quick guide. Pick the sentence that sounds most like your team.',
@@ -216,7 +231,11 @@ export const whoWeServePage = {
     title: 'Built for engineering,',
     accent: 'across every discipline.',
     intro: 'We work only in engineering, for organisations worldwide.',
-  } as Hero,
+    image: {
+      src: '/images/who-we-serve.webp',
+      alt: 'Engineers, managers and clients around a table reviewing an engineering analysis, with five audience groups shown above',
+    },
+  } as Hero & { image: { src: string; alt: string } },
   audiences: {
     title: 'Who we serve',
     lead: 'Four audiences, each with a clear starting point. Select yours.',
@@ -335,6 +354,7 @@ export const sampleReportPage = {
     title: 'Read the full worked example',
     text: 'The complete case study adds the challenge, method, 10-year cost model, sensitivity test and risk register.',
     linkLabel: 'Open the full case study',
+    image: { src: '/images/case-cooling-plant.webp', alt: 'Two engineers reviewing cooling plant options on a laptop, with Option C recommended' },
   },
   feedback: {
     title: 'Client feedback',

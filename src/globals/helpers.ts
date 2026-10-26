@@ -22,8 +22,12 @@ export const rows = (name: string, label: string, fields: Field[], extra: Record
 /** Repeating list of plain text lines (stored as `{ text }` rows). */
 export const lines = (name: string, label: string): Field => rows(name, label, [{ name: 'text', type: 'text', required: true, label: 'Text' }])
 
+/** Image picked from the Media collection. The page falls back to its built-in image when this is empty. */
+export const imageField = (name: string, label: string): Field => ({ name, type: 'upload', relationTo: 'media', label })
+
 /** Heading in two parts (the second is shown in teal) plus an intro, used by most page heroes. */
-export const heroGroup = (): Field => group('hero', 'Hero', [text('title', 'Heading (first part)'), text('accent', 'Heading (teal part)'), area('intro', 'Intro')])
+export const heroGroup = (withImage = false): Field =>
+  group('hero', 'Hero', [text('title', 'Heading (first part)'), text('accent', 'Heading (teal part)'), area('intro', 'Intro'), ...(withImage ? [imageField('image', 'Banner image')] : [])])
 
 export const ctaGroup = (): Field =>
   group('cta', 'Closing call to action', [
@@ -39,7 +43,7 @@ export const seoGroup = (): Field =>
   group('meta', 'SEO', [
     text('title', 'Meta title', { admin: { description: 'Shown in the browser tab and search results. Aim for 50 to 60 characters.' }, maxLength: 70 }),
     area('description', 'Meta description', { admin: { description: 'Shown under the title in search results. Aim for 120 to 160 characters.' }, maxLength: 200 }),
-    text('image', 'Social share image', { admin: { description: 'Path under /public, e.g. /images/og-default.jpg (1200 x 630).' } }),
+    imageField('ogImage', 'Social share image'),
   ])
 
 // Content changes must reach every page that shows them (nav and footer are on all pages), so refresh the whole site.
@@ -82,3 +86,8 @@ export const makeGlobal = ({
     : content,
   hooks: { afterChange: [refresh] },
 })
+
+/** A page's editable fields. Pages are documents of the `site-pages` collection, one group per page type. */
+export type PageDef = { key: string; label: string; description?: string; content: Field[]; tabs?: boolean }
+
+export const definePage = (def: PageDef): PageDef => def

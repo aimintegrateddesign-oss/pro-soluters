@@ -48,13 +48,13 @@ export default async function SolutionsPage() {
             <p className="text-lg text-[#c3d0dd]">{content.hero.intro}</p>
           </div>
 
-          <div className="relative mt-10">
+          <div className="relative mx-auto mt-6 lg:mt-10 lg:w-[min(100%,max(24rem,calc((100svh-var(--header-h)-16rem)*1.9532)))]">
             <span aria-hidden className="absolute -left-3 -top-3 hidden size-8 border-l border-t border-accent lg:block" />
             <span aria-hidden className="absolute -bottom-3 -right-3 hidden size-8 border-b border-r border-accent lg:block" />
             <div className="relative aspect-[1752/897] overflow-hidden rounded-[4px] border border-line shadow-[0_30px_60px_-24px_rgba(0,0,0,0.8)]">
               <Image
-                src="/images/solutions-banner.webp"
-                alt="Practical engineering solutions that solve problems, improve performance and align your data"
+                src={content.hero.image.src}
+                alt={content.hero.image.alt}
                 fill
                 priority
                 sizes="(min-width: 1280px) 1240px, 100vw"
