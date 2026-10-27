@@ -26,6 +26,7 @@ export const navigation = {
   headerNav: [
     { label: 'Solutions', href: '/solutions' },
     { label: 'Who We Serve', href: '/who-we-serve' },
+    { label: 'About Us', href: '/about' },
     { label: 'Case Studies', href: '/case-studies' },
     { label: 'Sample Report', href: '/sample-reports' },
   ] as NavItem[],
@@ -50,6 +51,7 @@ export const navigation = {
     {
       title: 'Company',
       links: [
+        { label: 'About Us', href: '/about' },
         { label: 'Who We Serve', href: '/who-we-serve' },
         { label: 'Case Studies', href: '/case-studies' },
         { label: 'Sample Report', href: '/sample-reports' },
@@ -149,6 +151,22 @@ export const homePage = {
       },
     },
   },
+  about: {
+    enabled: true,
+    eyebrow: 'ABOUT PRO SOLUTORS',
+    heading: 'Engineering thinking. Business perspective. Practical solutions.',
+    description:
+      'Pro Solutors was founded by Zaid Mohiyuddin with a vision to bring engineering, research, business strategy and structured data together to solve complex organisational and technical challenges.',
+    secondaryDescription:
+      'With a multidisciplinary background spanning Civil Engineering, Engineering Management and Business Administration, Zaid established Pro Solutors around one principle: meaningful solutions must be technically sound, operationally practical and commercially viable.',
+    founderName: 'Zaid Mohiyuddin',
+    founderRole: 'Founder & Chief Executive Officer',
+    // Empty until a portrait is uploaded in Payload; the section then shows a branded placeholder.
+    founderImage: { src: '', alt: '' },
+    expertise: ['Civil Engineering', 'Engineering Management', 'Business Strategy', 'Innovation'],
+    ctaLabel: 'Meet Zaid & Our Team',
+    ctaLink: '/about',
+  },
   path: {
     title: 'Start small, grow with confidence',
     lead: 'A low-risk path from first conversation to long-term partnership.',
@@ -172,58 +190,216 @@ export const caseStudiesPage = {
 
 export const solutionsPage = {
   hero: {
+    eyebrow: 'SOLUTIONS',
     title: 'Three solutions, one purpose:',
     accent: 'decision-ready engineering.',
-    intro: 'Research-led, practical and evidence-based. Choose the one that fits, or combine them.',
-    image: { src: '/images/solutions-banner.webp', alt: 'Practical engineering solutions that solve problems, improve performance and align your data' },
-  } as Hero & { image: { src: string; alt: string } },
-  fit: {
-    title: 'Which solution fits you?',
-    lead: 'A quick guide. Pick the sentence that sounds most like your team.',
+    intro:
+      'Research-led, practical and evidence-based. Choose the solution that fits your challenge, or combine them when the problem crosses multiple areas.',
+    primaryLabel: 'Submit your problem',
+    secondaryLabel: 'Find my solution',
+    flow: ['Complex problem', 'Engineering analysis', 'Structured evidence', 'Decision'],
+    image: {
+      src: '/images/solutions-hero-review.webp',
+      alt: 'A multidisciplinary team of engineers reviewing technical drawings and an engineering analysis on a laptop around a meeting table',
+    },
+  },
+  navigator: {
     items: [
-      { quote: '“Our project data is inconsistent and we keep re-checking it.”', startWith: 'Align Your Technical Data' },
-      { quote: '“We need proof before we commit to this method or design.”', startWith: 'Solve and Prove' },
-      { quote: '“We want to improve, but don’t know where to begin.”', startWith: 'Improve and Innovate' },
-      { quote: '“I’m not sure.”', startWith: 'Free Problem Review' },
+      { number: '01', label: 'Improve', text: 'Improve operations and implement innovation.', cta: 'Explore Improve' },
+      { number: '02', label: 'Align', text: 'Create one trusted structure for technical information.', cta: 'Explore Align' },
+      { number: '03', label: 'Solve', text: 'Evaluate options and prove the right decision.', cta: 'Explore Solve' },
+    ],
+  },
+  improve: {
+    eyebrow: '01 — IMPROVE',
+    title: 'Improve and Innovate',
+    value:
+      'Find where your industry, systems and operations can improve, then build a practical roadmap for implementing meaningful innovation.',
+    sequence: ['Current state', 'Opportunities', 'Improvement roadmap'],
+    analyseTitle: 'What we analyse',
+    analyse: [
+      'Existing operations',
+      'Bottlenecks and inefficiencies',
+      'Process improvement opportunities',
+      'Technology opportunities',
+      'Innovation potential',
+      'Implementation constraints',
+    ],
+    receiveTitle: 'What you receive',
+    receive: [
+      'Improvement opportunity review',
+      'Practical recommendations',
+      'Implementation plan',
+      'Prioritised roadmap',
+      'Evidence to support investment decisions',
+    ],
+    offerName: 'Innovation Roadmap Sprint',
+    ctaLabel: 'Explore Improve',
+    ctaHref: '/solutions/improve-and-innovate',
+    image: {
+      src: '/images/solutions-improve-operations.webp',
+      alt: 'Two engineers reviewing a production flow dashboard on a screen in a precast concrete factory',
+    },
+  },
+  align: {
+    eyebrow: '02 — ALIGN',
+    title: 'Align Your Technical Data',
+    value:
+      'Bring fragmented technical information into one structured, reliable and accessible system so teams can work from the same source of truth.',
+    sequence: ['Fragmented information', 'Structure', 'One source of truth'],
+    analyseTitle: 'What we review',
+    analyse: [
+      'Drawings',
+      'Calculations',
+      'Schedules',
+      'Models',
+      'Technical files',
+      'Test results',
+      'Existing naming structures',
+      'Version inconsistencies',
+    ],
+    receiveTitle: 'What you receive',
+    receive: [
+      'Structured technical information model',
+      'Common naming and classification approach',
+      'Data alignment recommendations',
+      'Repository structure',
+      'Governance recommendations',
+      'Implementation roadmap',
+    ],
+    offerName: 'Technical Data Health Check',
+    ctaLabel: 'Explore Align',
+    ctaHref: '/solutions/align-your-technical-data',
+    image: {
+      src: '/images/solutions-align-data.webp',
+      alt: 'Technical drawings, schedules, a model and test results flowing into one structured database, shown on a laptop as a single organised project',
+    },
+  },
+  solve: {
+    eyebrow: '03 — SOLVE',
+    title: 'Solve and Prove',
+    value:
+      'Evaluate complex engineering and business challenges through technical analysis, feasibility studies and evidence-based comparison before committing to a decision.',
+    sequence: ['Problem', 'Options', 'Evidence', 'Decision'],
+    analyseTitle: 'What we evaluate',
+    analyse: [
+      'Problem definition',
+      'Technical feasibility',
+      'Alternative solutions',
+      'Cost',
+      'Risk',
+      'Implementation complexity',
+      'Operational impact',
+      'Commercial considerations',
+    ],
+    receiveTitle: 'What you receive',
+    receive: [
+      'Structured options comparison',
+      'Technical evidence',
+      'Risk assessment',
+      'Feasibility findings',
+      'Recommendation',
+      'Decision-ready report',
+    ],
+    offerName: 'Feasibility Proof Report',
+    ctaLabel: 'Explore Solve',
+    ctaHref: '/solutions/solve-and-prove',
+    image: {
+      src: '/images/solutions-solve-options.webp',
+      alt: 'Three engineering options compared side by side on scorecards, with the recommended option highlighted next to a feasibility study report',
+    },
+  },
+  finder: {
+    title: 'Which solution fits your challenge?',
+    lead: 'Choose the statement that best describes your situation.',
+    options: [
+      {
+        statement: 'Our technical information is inconsistent or scattered.',
+        resultTitle: 'Align Your Technical Data',
+        resultText: 'Bring drawings, calculations, schedules and models into one structured, trusted source so your teams stop re-checking each other.',
+        offer: 'Technical Data Health Check',
+        ctaLabel: 'Submit your problem',
+        ctaHref: '/submit-a-problem?solution=align-your-technical-data',
+        learnLabel: 'Explore Align',
+        learnHref: '/solutions/align-your-technical-data',
+      },
+      {
+        statement: 'We need evidence before making a major technical or business decision.',
+        resultTitle: 'Solve and Prove',
+        resultText: 'Compare the options on technical, cost and risk evidence, and receive a clear recommendation you can take to your board.',
+        offer: 'Feasibility Proof Report',
+        ctaLabel: 'Submit your problem',
+        ctaHref: '/submit-a-problem?solution=solve-and-prove',
+        learnLabel: 'Explore Solve',
+        learnHref: '/solutions/solve-and-prove',
+      },
+      {
+        statement: 'We want to improve operations or introduce innovation but do not know where to start.',
+        resultTitle: 'Improve and Innovate',
+        resultText: 'Find the improvement opportunities in your operations, rank them, and build a roadmap your own team can deliver.',
+        offer: 'Innovation Roadmap Sprint',
+        ctaLabel: 'Submit your problem',
+        ctaHref: '/submit-a-problem?solution=improve-and-innovate',
+        learnLabel: 'Explore Improve',
+        learnHref: '/solutions/improve-and-innovate',
+      },
+      {
+        statement: 'Our challenge involves more than one of these areas.',
+        resultTitle: 'Combined Solution',
+        resultText: 'Some challenges require more than one solution path. Pro Solutors can combine Improve, Align and Solve based on the problem.',
+        offer: '',
+        ctaLabel: 'Submit your problem',
+        ctaHref: '/submit-a-problem',
+        learnLabel: '',
+        learnHref: '',
+      },
+      {
+        statement: 'We are not sure yet.',
+        resultTitle: 'Start with a Problem Review',
+        resultText: 'Tell us what is happening. An engineer will read it and tell you clearly whether and how we can help.',
+        offer: '',
+        ctaLabel: 'Submit your problem',
+        ctaHref: '/submit-a-problem',
+        learnLabel: '',
+        learnHref: '',
+      },
     ],
   },
   how: {
     title: 'How we work',
-    lead: 'Human-led and confidential. Decisions are made after studying the practical case. Select a step to see what happens.',
+    lead: 'A structured process that turns a complex problem into a decision-ready outcome.',
     steps: [
       {
         title: 'Submit',
         description: 'Tell us the problem.',
-        detail: 'Describe your engineering problem in plain words. If your data is sensitive, ask for an NDA first.',
+        detail:
+          'Describe the problem in plain language and share only the information necessary to understand the challenge. If your information is sensitive, an NDA can be arranged before detailed material is shared.',
         youGet: 'Your problem, on record with an engineer',
       },
       {
         title: 'Review',
-        description: 'An engineer reads it and replies.',
-        detail: 'An engineer reads every submission and replies within 2 working days with a clear yes or no.',
+        description: 'We understand the challenge.',
+        detail: 'An engineer reads every submission, identifies the relevant disciplines and replies within 2 working days with the best starting point.',
         youGet: 'A clear yes or no, and a next step',
       },
       {
         title: 'Study',
-        description: 'Fixed-scope analysis of the real case.',
-        detail: 'We agree a defined problem and a defined deliverable, then analyse your real case.',
+        description: 'We analyse the real case.',
+        detail:
+          'We investigate the real case using technical analysis, structured research, data review and feasibility assessment as required, against a defined scope and deliverable.',
         youGet: 'A fixed-scope study with a fixed deliverable',
       },
       {
         title: 'Decide',
-        description: 'A report you can take to your board.',
-        detail: 'You receive a decision-ready report with the evidence, the options and a clear recommendation.',
+        description: 'You receive a clear recommendation.',
+        detail: 'You receive clear findings, evidence, recommendations and a decision-ready output you can take to your board.',
         youGet: 'A report you can take to your board',
       },
     ],
+    previewTitle: 'Feasibility report',
+    previewItems: ['Executive summary', 'Problem definition', 'Options comparison', 'Technical analysis', 'Risk assessment', 'Recommendation'],
+    previewLinkLabel: 'See a sample report',
   },
-  cta: {
-    eyebrow: 'Free problem review',
-    title: 'Not sure which solution you need?',
-    body: 'Start with a free problem review. Every submission is read by an engineer and answered within 2 working days.',
-    primaryLabel: 'Submit your problem',
-    secondaryLabel: 'Browse case studies',
-  } as Cta,
 }
 
 export const whoWeServePage = {
@@ -379,6 +555,110 @@ export const sampleReportPage = {
     body: siteSettings.promiseText,
     primaryLabel: 'Submit your problem',
     secondaryLabel: 'Read about Solve and Prove',
+  } as Cta,
+}
+
+export type TeamMember = {
+  name: string
+  role: string
+  discipline: string
+  linkedin: string
+  /** Populated Media record from Payload; empty means the initials placeholder (or the founder portrait for the founder). */
+  photo?: { url?: string | null; alt?: string | null } | null
+}
+
+export const aboutPage = {
+  hero: {
+    eyebrow: 'ABOUT PRO SOLUTORS',
+    title: 'Engineering insight. Business thinking. Better decisions.',
+    intro:
+      'Pro Solutors is a multidisciplinary problem-solving organisation that brings engineering, research, structured data and business strategy together to help organisations understand complex challenges and make practical, evidence-based decisions.',
+    secondLine: 'We focus on solutions that are technically sound, operationally practical and commercially viable.',
+  },
+  founder: {
+    eyebrow: 'OUR FOUNDER',
+    name: 'Zaid Mohiyuddin',
+    role: 'Founder & Chief Executive Officer',
+    descriptor: ['Civil Engineer', 'Engineering Management Professional', 'MBA Graduate', 'Entrepreneur'],
+    paragraphs: [
+      'Zaid Mohiyuddin is a Civil Engineer, Engineering Management professional, and MBA graduate with a multidisciplinary academic background combining technical engineering knowledge, strategic management, and business administration.',
+      'He completed his Master of Engineering Management and Master of Business Administration (MBA) at the University of Technology Sydney (UTS), Australia, equipping him with an integrated perspective on engineering, business strategy, organisational performance, and innovation.',
+    ],
+    // Optional. Leave empty to hide the LinkedIn button.
+    linkedin: '',
+    // Optional portrait. When empty the page uses the founder image from the Home page About section, then the placeholder.
+    image: { src: '', alt: '' },
+  },
+  journey: {
+    title: 'A multidisciplinary foundation',
+    paragraphs: [
+      'His academic journey shaped the belief that meaningful progress requires more than technical knowledge alone. It requires understanding how engineering systems, organisational processes, commercial objectives and human expertise work together.',
+      'This integrated perspective became the foundation of Pro Solutors and its commitment to developing solutions that are technically sound, operationally practical and commercially viable.',
+    ],
+    steps: ['Civil Engineering', 'Engineering Management', 'Business Administration', 'Pro Solutors'],
+  },
+  why: {
+    title: 'Why Pro Solutors exists',
+    paragraphs: [
+      'As the Founder and CEO of Pro Solutors, Zaid aims to build an international problem-solving organisation that bridges the gap between engineering, business strategy, data management and innovation.',
+      'The goal is to help organisations overcome complex challenges through structured research, technical analysis, feasibility studies and practical, evidence-based solutions.',
+    ],
+    disciplines: ['Engineering', 'Research', 'Data', 'Business Strategy'],
+  },
+  focus: {
+    title: 'What we focus on',
+    items: [
+      {
+        number: '01',
+        label: 'Improve',
+        title: 'Improve industries through innovation',
+        text: 'Identify opportunities to improve systems, processes and operations, and develop practical strategies that help organisations implement meaningful innovation.',
+      },
+      {
+        number: '02',
+        label: 'Align',
+        title: 'Structure and align technical information',
+        text: 'Transform fragmented technical knowledge and business information into organised, reliable and accessible systems that support better decisions.',
+      },
+      {
+        number: '03',
+        label: 'Solve',
+        title: 'Evaluate and solve complex challenges',
+        text: 'Use structured research, technical analysis, feasibility studies and strategic reporting to evaluate engineering and business problems and identify practical solutions.',
+      },
+    ],
+  },
+  philosophy: {
+    eyebrow: 'OUR PHILOSOPHY',
+    statement: 'Understand the problem. Challenge conventional thinking. Engineer a better solution.',
+    support: 'Every meaningful solution begins with understanding the real problem before deciding how to solve it.',
+  },
+  team: {
+    title: 'The people behind the solutions',
+    intro: 'Pro Solutors brings together multidisciplinary expertise in engineering, research, analysis and strategic problem solving.',
+    members: [
+      {
+        name: 'Zaid Mohiyuddin',
+        role: 'Founder & Chief Executive Officer',
+        discipline: 'Civil Engineering · Engineering Management · Business Strategy',
+        linkedin: '',
+      },
+    ] as TeamMember[],
+  },
+  vision: {
+    eyebrow: 'GLOBAL VISION',
+    title: 'Built for problems without borders',
+    paragraphs: [
+      'With an international outlook shaped by postgraduate education in Australia and a foundation in civil engineering, Zaid aspires to connect professionals, researchers and industry specialists across geographical boundaries to address challenges that demand multidisciplinary thinking.',
+      'The long-term vision is to establish Pro Solutors as a globally connected problem-solving partner, transforming complex challenges into structured solutions that create measurable value for businesses, industries and communities.',
+    ],
+  },
+  cta: {
+    eyebrow: 'Work with us',
+    title: 'Have a complex problem worth solving?',
+    body: 'Bring us the challenge. We will help define the problem, evaluate the options and identify the most practical path forward.',
+    primaryLabel: 'Submit your problem',
+    secondaryLabel: 'Explore our solutions',
   } as Cta,
 }
 

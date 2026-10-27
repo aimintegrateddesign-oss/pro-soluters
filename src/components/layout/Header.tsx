@@ -73,7 +73,7 @@ export function Header({ nav }: { nav: NavItem[] }) {
         solid ? 'border-b border-white/10 bg-hero/95 backdrop-blur' : 'border-b border-transparent bg-gradient-to-b from-hero/70 to-transparent',
       )}
     >
-      <div className={cn('mx-auto grid h-[var(--header-h)] w-full grid-cols-[1fr_auto] items-center gap-6 px-5 lg:grid-cols-[1fr_auto_1fr]', pathname === '/' ? 'max-w-[77.5rem]' : 'max-w-content')}>
+      <div className={cn('mx-auto grid h-[var(--header-h)] w-full max-w-[77.5rem] grid-cols-[1fr_auto] items-center gap-6 px-5 lg:grid-cols-[1fr_auto_1fr]')}>
         <Logo />
         <nav aria-label="Main" className="hidden items-center gap-9 lg:flex">
           {nav.map((item) => (

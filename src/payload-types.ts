@@ -1063,7 +1063,7 @@ export interface SitePage {
   /**
    * Each page type can exist once, except Legal page.
    */
-  pageType: 'home' | 'caseStudies' | 'solutions' | 'whoWeServe' | 'sampleReport' | 'submit' | 'legal';
+  pageType: 'home' | 'about' | 'caseStudies' | 'solutions' | 'whoWeServe' | 'sampleReport' | 'submit' | 'legal';
   /**
    * Lowercase, no spaces. For a legal page this is the URL, e.g. privacy gives /privacy.
    */
@@ -1105,12 +1105,150 @@ export interface SitePage {
         solveAndProve?: (string | null) | Media;
       };
     };
+    about?: {
+      enabled?: boolean | null;
+      eyebrow?: string | null;
+      heading?: string | null;
+      description?: string | null;
+      secondaryDescription?: string | null;
+      founderName?: string | null;
+      founderRole?: string | null;
+      /**
+       * Upload a professional portrait of the founder. Recommended portrait ratio: 4:5. If no image is uploaded, the website shows a branded placeholder.
+       */
+      founderImage?: (string | null) | Media;
+      expertise?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      ctaLabel?: string | null;
+      /**
+       * Use an internal route such as /about.
+       */
+      ctaLink?: string | null;
+    };
     path?: {
       title?: string | null;
       lead?: string | null;
       steps?:
         | {
             title: string;
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    cta?: {
+      eyebrow?: string | null;
+      title?: string | null;
+      body?: string | null;
+      primaryLabel?: string | null;
+      secondaryLabel?: string | null;
+    };
+  };
+  /**
+   * The About Us page (/about). The founder portrait falls back to the image on the Home page About section.
+   */
+  about?: {
+    hero?: {
+      eyebrow?: string | null;
+      title?: string | null;
+      intro?: string | null;
+      secondLine?: string | null;
+    };
+    founder?: {
+      eyebrow?: string | null;
+      name?: string | null;
+      role?: string | null;
+      descriptor?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      paragraphs?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      /**
+       * Optional. Leave empty to hide the LinkedIn button.
+       */
+      linkedin?: string | null;
+      /**
+       * Optional, portrait 4:5. If empty, the image from the Home page About section is used, then a placeholder.
+       */
+      image?: (string | null) | Media;
+    };
+    journey?: {
+      title?: string | null;
+      paragraphs?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      steps?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    why?: {
+      title?: string | null;
+      paragraphs?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      disciplines?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    focus?: {
+      title?: string | null;
+      items?:
+        | {
+            number: string;
+            label: string;
+            title: string;
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    philosophy?: {
+      eyebrow?: string | null;
+      statement?: string | null;
+      support?: string | null;
+    };
+    team?: {
+      title?: string | null;
+      intro?: string | null;
+      members?:
+        | {
+            name: string;
+            role: string;
+            discipline?: string | null;
+            linkedin?: string | null;
+            photo?: (string | null) | Media;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    vision?: {
+      eyebrow?: string | null;
+      title?: string | null;
+      paragraphs?:
+        | {
             text: string;
             id?: string | null;
           }[]
@@ -1146,21 +1284,140 @@ export interface SitePage {
    */
   solutions?: {
     hero?: {
+      eyebrow?: string | null;
       title?: string | null;
       accent?: string | null;
       intro?: string | null;
+      primaryLabel?: string | null;
+      secondaryLabel?: string | null;
+      flow?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
       image?: (string | null) | Media;
     };
-    fit?: {
-      title?: string | null;
-      lead?: string | null;
+    navigator?: {
       items?:
         | {
-            quote: string;
-            /**
-             * The exact name of a solution, or "Free Problem Review".
-             */
-            startWith: string;
+            number: string;
+            label: string;
+            text: string;
+            cta: string;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    improve?: {
+      eyebrow?: string | null;
+      title?: string | null;
+      value?: string | null;
+      sequence?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      analyseTitle?: string | null;
+      analyse?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      receiveTitle?: string | null;
+      receive?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      offerName?: string | null;
+      ctaLabel?: string | null;
+      /**
+       * e.g. /solutions/improve-and-innovate
+       */
+      ctaHref?: string | null;
+      image?: (string | null) | Media;
+    };
+    align?: {
+      eyebrow?: string | null;
+      title?: string | null;
+      value?: string | null;
+      sequence?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      analyseTitle?: string | null;
+      analyse?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      receiveTitle?: string | null;
+      receive?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      offerName?: string | null;
+      ctaLabel?: string | null;
+      /**
+       * e.g. /solutions/improve-and-innovate
+       */
+      ctaHref?: string | null;
+      image?: (string | null) | Media;
+    };
+    solve?: {
+      eyebrow?: string | null;
+      title?: string | null;
+      value?: string | null;
+      sequence?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      analyseTitle?: string | null;
+      analyse?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      receiveTitle?: string | null;
+      receive?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      offerName?: string | null;
+      ctaLabel?: string | null;
+      /**
+       * e.g. /solutions/improve-and-innovate
+       */
+      ctaHref?: string | null;
+      image?: (string | null) | Media;
+    };
+    finder?: {
+      title?: string | null;
+      lead?: string | null;
+      options?:
+        | {
+            statement: string;
+            resultTitle: string;
+            resultText?: string | null;
+            offer?: string | null;
+            ctaLabel?: string | null;
+            ctaHref?: string | null;
+            learnLabel?: string | null;
+            learnHref?: string | null;
             id?: string | null;
           }[]
         | null;
@@ -1177,13 +1434,14 @@ export interface SitePage {
             id?: string | null;
           }[]
         | null;
-    };
-    cta?: {
-      eyebrow?: string | null;
-      title?: string | null;
-      body?: string | null;
-      primaryLabel?: string | null;
-      secondaryLabel?: string | null;
+      previewTitle?: string | null;
+      previewItems?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
+      previewLinkLabel?: string | null;
     };
   };
   whoWeServe?: {
@@ -2281,6 +2539,26 @@ export interface SitePagesSelect<T extends boolean = true> {
                     solveAndProve?: T;
                   };
             };
+        about?:
+          | T
+          | {
+              enabled?: T;
+              eyebrow?: T;
+              heading?: T;
+              description?: T;
+              secondaryDescription?: T;
+              founderName?: T;
+              founderRole?: T;
+              founderImage?: T;
+              expertise?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              ctaLabel?: T;
+              ctaLink?: T;
+            };
         path?:
           | T
           | {
@@ -2290,6 +2568,131 @@ export interface SitePagesSelect<T extends boolean = true> {
                 | T
                 | {
                     title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+            };
+        cta?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              body?: T;
+              primaryLabel?: T;
+              secondaryLabel?: T;
+            };
+      };
+  about?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              intro?: T;
+              secondLine?: T;
+            };
+        founder?:
+          | T
+          | {
+              eyebrow?: T;
+              name?: T;
+              role?: T;
+              descriptor?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              paragraphs?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              linkedin?: T;
+              image?: T;
+            };
+        journey?:
+          | T
+          | {
+              title?: T;
+              paragraphs?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              steps?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+            };
+        why?:
+          | T
+          | {
+              title?: T;
+              paragraphs?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              disciplines?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+            };
+        focus?:
+          | T
+          | {
+              title?: T;
+              items?:
+                | T
+                | {
+                    number?: T;
+                    label?: T;
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+            };
+        philosophy?:
+          | T
+          | {
+              eyebrow?: T;
+              statement?: T;
+              support?: T;
+            };
+        team?:
+          | T
+          | {
+              title?: T;
+              intro?: T;
+              members?:
+                | T
+                | {
+                    name?: T;
+                    role?: T;
+                    discipline?: T;
+                    linkedin?: T;
+                    photo?: T;
+                    id?: T;
+                  };
+            };
+        vision?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              paragraphs?:
+                | T
+                | {
                     text?: T;
                     id?: T;
                   };
@@ -2330,21 +2733,142 @@ export interface SitePagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              eyebrow?: T;
               title?: T;
               accent?: T;
               intro?: T;
+              primaryLabel?: T;
+              secondaryLabel?: T;
+              flow?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
               image?: T;
             };
-        fit?:
+        navigator?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    number?: T;
+                    label?: T;
+                    text?: T;
+                    cta?: T;
+                    id?: T;
+                  };
+            };
+        improve?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              value?: T;
+              sequence?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              analyseTitle?: T;
+              analyse?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              receiveTitle?: T;
+              receive?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              offerName?: T;
+              ctaLabel?: T;
+              ctaHref?: T;
+              image?: T;
+            };
+        align?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              value?: T;
+              sequence?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              analyseTitle?: T;
+              analyse?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              receiveTitle?: T;
+              receive?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              offerName?: T;
+              ctaLabel?: T;
+              ctaHref?: T;
+              image?: T;
+            };
+        solve?:
+          | T
+          | {
+              eyebrow?: T;
+              title?: T;
+              value?: T;
+              sequence?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              analyseTitle?: T;
+              analyse?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              receiveTitle?: T;
+              receive?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              offerName?: T;
+              ctaLabel?: T;
+              ctaHref?: T;
+              image?: T;
+            };
+        finder?:
           | T
           | {
               title?: T;
               lead?: T;
-              items?:
+              options?:
                 | T
                 | {
-                    quote?: T;
-                    startWith?: T;
+                    statement?: T;
+                    resultTitle?: T;
+                    resultText?: T;
+                    offer?: T;
+                    ctaLabel?: T;
+                    ctaHref?: T;
+                    learnLabel?: T;
+                    learnHref?: T;
                     id?: T;
                   };
             };
@@ -2362,15 +2886,14 @@ export interface SitePagesSelect<T extends boolean = true> {
                     youGet?: T;
                     id?: T;
                   };
-            };
-        cta?:
-          | T
-          | {
-              eyebrow?: T;
-              title?: T;
-              body?: T;
-              primaryLabel?: T;
-              secondaryLabel?: T;
+              previewTitle?: T;
+              previewItems?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              previewLinkLabel?: T;
             };
       };
   whoWeServe?:

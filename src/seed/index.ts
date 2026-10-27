@@ -20,7 +20,7 @@ import { caseStudies } from './data/caseStudies'
 import { industries } from './data/industries'
 import { solutions } from './data/solutions'
 import { toDoc } from '../lib/content-merge'
-import { caseStudiesPage, homePage, legalPages, navigation, sampleReportPage, siteSettings, solutionsPage, submitPage, whoWeServePage } from '../data/site'
+import { aboutPage, caseStudiesPage, homePage, legalPages, navigation, sampleReportPage, siteSettings, solutionsPage, submitPage, whoWeServePage } from '../data/site'
 
 // SEO defaults seeded into each page global. Inner-page titles carry the brand suffix themselves because a title set in
 // Payload is used exactly as written.
@@ -37,6 +37,16 @@ const globals = [
 const pages = [
   ['home', 'home', 'Home', homePage, seo(`Pro Solutors | ${siteSettings.tagline}`, siteSettings.description)],
   [
+    'about',
+    'about',
+    'About Us',
+    aboutPage,
+    seo(
+      'About Pro Solutors | Engineering, Research & Strategic Problem Solving',
+      'Learn about Pro Solutors, its founder Zaid Mohiyuddin, multidisciplinary approach, team, philosophy and vision for solving complex engineering and business challenges.',
+    ),
+  ],
+  [
     'caseStudies',
     'case-studies',
     'Case studies',
@@ -48,7 +58,7 @@ const pages = [
     'solutions',
     'Solutions',
     solutionsPage,
-    seo(`Solutions${brand}`, 'Improve and Innovate, Align Your Technical Data, and Solve and Prove: three ways Pro Solutors delivers decision-ready engineering.', '/images/solutions-banner.webp'),
+    seo('Engineering Solutions | Improve, Align & Solve | Pro Solutors', "Explore Pro Solutors' three engineering solution paths: improve operations and innovation, align technical data, and solve complex challenges through feasibility analysis and evidence-based recommendations.", '/images/solutions-banner.webp'),
   ],
   [
     'whoWeServe',
@@ -218,6 +228,75 @@ async function seed() {
   }
   for (const [pageType, slug, title, content, meta] of pages) await upsertPage(pageType, slug, title, { [pageType]: toDoc(mediaize(content)), ...withOg(meta) })
   for (const p of legalPages.pages) await upsertPage('legal', p.slug, p.title, { legal: toDoc({ updated: p.updated, sections: p.sections }) })
+
+  // 6b. Homepage "About Pro Solutors" section. A home page created before this section existed gets it added here, and
+  // nothing else on the page is touched; once the section exists in the database it is never overwritten (edit it in the admin).
+  const homeDoc = (await payload.find({ collection: 'site-pages', where: { slug: { equals: 'home' } }, limit: 1, depth: 0, pagination: false })).docs[0] as
+    | (Record<string, any> & { id: string })
+    | undefined
+  if (homeDoc && !homeDoc.home?.about?.heading) {
+    await payload.update({ collection: 'site-pages', id: homeDoc.id, data: { home: { ...homeDoc.home, about: toDoc(mediaize(homePage.about)) } } as never, depth: 0 })
+    payload.logger.info('page home: About section added')
+  } else payload.logger.info('page home: About section already present, skipped')
+
+  // 6b2. Redesigned Solutions page. A Solutions page saved with the earlier structure (no "navigator" group) is rewritten once
+  // with the new content and SEO; its social share image is kept. A page that already has the new structure is never touched.
+  const solutionsDoc = (await payload.find({ collection: 'site-pages', where: { slug: { equals: 'solutions' } }, limit: 1, depth: 0, pagination: false })).docs[0] as
+    | (Record<string, any> & { id: string })
+    | undefined
+  if (solutionsDoc && !solutionsDoc.solutions?.navigator?.items?.length) {
+    await payload.update({
+      collection: 'site-pages',
+      id: solutionsDoc.id,
+      data: {
+        solutions: toDoc(mediaize(solutionsPage)),
+        meta: {
+          ...solutionsDoc.meta,
+          title: 'Engineering Solutions | Improve, Align & Solve | Pro Solutors',
+          description:
+            "Explore Pro Solutors' three engineering solution paths: improve operations and innovation, align technical data, and solve complex challenges through feasibility analysis and evidence-based recommendations.",
+        },
+      } as never,
+      depth: 0,
+    })
+    payload.logger.info('page solutions: redesigned content applied')
+  } else payload.logger.info('page solutions: already on the redesigned structure, skipped')
+
+  // 6b3. Photos for the Align and Solve chapters. Added only where the chapter has no image yet, so an image chosen in the admin is kept.
+  if (solutionsDoc?.solutions?.navigator?.items?.length) {
+    const sol = solutionsDoc.solutions as Record<string, Record<string, unknown>>
+    const patch: Record<string, unknown> = {}
+    for (const key of ['align', 'solve'] as const) {
+      const id = mediaId(solutionsPage[key].image.src)
+      if (!sol[key]?.image && id) patch[key] = { ...sol[key], image: id }
+    }
+    if (Object.keys(patch).length) {
+      await payload.update({ collection: 'site-pages', id: solutionsDoc.id, data: { solutions: { ...sol, ...patch } } as never, depth: 0 })
+      payload.logger.info(`page solutions: images added for ${Object.keys(patch).join(', ')}`)
+    }
+  }
+
+  // 6c. "About Us" link in the navigation. A navigation saved before the About page existed gets the link added here (after
+  // "Who We Serve" in the header, first in the footer's Company column). Nothing else is touched, and it is added only once.
+  const nav = (await payload.findGlobal({ slug: 'navigation', depth: 0 })) as unknown as {
+    updatedAt?: string | null
+    headerNav?: { label: string; href: string }[]
+    footerColumns?: { title: string; links?: { label: string; href: string; muted?: boolean | null; accent?: boolean | null }[] }[]
+  }
+  const clean = <T extends object>(rows: T[]) => rows.map((r) => Object.fromEntries(Object.entries(r).filter(([k, v]) => k !== 'id' && v !== null)))
+  if (nav.updatedAt && nav.headerNav && !nav.headerNav.some((i) => i.href === '/about')) {
+    const at = nav.headerNav.findIndex((i) => i.href === '/who-we-serve')
+    const headerNav = clean(nav.headerNav)
+    headerNav.splice(at >= 0 ? at + 1 : headerNav.length, 0, { label: 'About Us', href: '/about' })
+    const footerColumns = (nav.footerColumns ?? []).map((c) => ({
+      title: c.title,
+      links: clean(c.links ?? []),
+    }))
+    const company = footerColumns.find((c) => c.title === 'Company')
+    if (company && !company.links.some((l) => l.href === '/about')) company.links.unshift({ label: 'About Us', href: '/about' })
+    await payload.updateGlobal({ slug: 'navigation', data: { headerNav, footerColumns } as never, depth: 0 })
+    payload.logger.info('navigation: About Us link added')
+  } else payload.logger.info('navigation: About Us link already present, skipped')
 
   payload.logger.info('Seed complete.')
   process.exit(0)

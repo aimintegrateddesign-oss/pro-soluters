@@ -1,6 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
-import { area, ctaGroup, imageField, definePage, flag, group, heroGroup, lines, makeGlobal, rows, text, type PageDef } from './helpers'
+import { area, ctaGroup, paragraphs, imageField, definePage, flag, group, heroGroup, lines, makeGlobal, rows, text, type PageDef } from './helpers'
 
 const link = [text('label', 'Label', { required: true }), text('href', 'Link', { required: true, admin: { description: 'e.g. /solutions or https://example.com' } })]
 const sectionHead = (name: string, label: string) => group(name, label, [text('title', 'Heading'), area('lead', 'Lead line')])
@@ -65,7 +65,58 @@ export const HomePage = definePage({
       area('lead', 'Lead line'),
       group('images', 'Card images', [imageField('improveAndInnovate', 'Improve and Innovate card'), imageField('alignYourTechnicalData', 'Align Your Technical Data card'), imageField('solveAndProve', 'Solve and Prove card')]),
     ]),
+    group('about', 'Homepage — About Pro Solutors', [
+      { name: 'enabled', type: 'checkbox', label: 'Show this section', defaultValue: true },
+      text('eyebrow', 'Small label'),
+      text('heading', 'Heading'),
+      area('description', 'First paragraph'),
+      area('secondaryDescription', 'Second paragraph'),
+      text('founderName', 'Founder name'),
+      text('founderRole', 'Founder job title'),
+      { name: 'founderImage', type: 'upload', relationTo: 'media', label: 'Founder image', admin: { description: 'Upload a professional portrait of the founder. Recommended portrait ratio: 4:5. If no image is uploaded, the website shows a branded placeholder.' } },
+      lines('expertise', 'Expertise tags'),
+      text('ctaLabel', 'Button label'),
+      text('ctaLink', 'Button link', { admin: { description: 'Use an internal route such as /about.' } }),
+    ]),
     group('path', 'Path section', [text('title', 'Heading'), area('lead', 'Lead line'), rows('steps', 'Steps', [text('title', 'Title', { required: true }), area('text', 'Text', { required: true })])]),
+    ctaGroup(),
+  ],
+})
+
+export const AboutPage = definePage({
+  key: 'about',
+  label: 'About Us page',
+  description: 'The About Us page (/about). The founder portrait falls back to the image on the Home page About section.',
+  content: [
+    group('hero', 'Hero', [text('eyebrow', 'Small label'), text('title', 'Heading'), area('intro', 'Intro'), area('secondLine', 'Second line')]),
+    group('founder', 'Founder', [
+      text('eyebrow', 'Small label'),
+      text('name', 'Name'),
+      text('role', 'Job title'),
+      lines('descriptor', 'Professional descriptor (one item per line)'),
+      paragraphs('paragraphs', 'Biography'),
+      text('linkedin', 'LinkedIn URL', { admin: { description: 'Optional. Leave empty to hide the LinkedIn button.' } }),
+      { name: 'image', type: 'upload', relationTo: 'media', label: 'Portrait', admin: { description: 'Optional, portrait 4:5. If empty, the image from the Home page About section is used, then a placeholder.' } },
+    ]),
+    group('journey', 'Multidisciplinary journey', [text('title', 'Heading'), paragraphs('paragraphs', 'Paragraphs'), lines('steps', 'Steps (in order)')]),
+    group('why', 'Why Pro Solutors exists', [text('title', 'Heading'), paragraphs('paragraphs', 'Paragraphs'), lines('disciplines', 'Connected disciplines')]),
+    group('focus', 'Focus areas', [
+      text('title', 'Heading'),
+      rows('items', 'Focus areas', [text('number', 'Number', { required: true }), text('label', 'Label (Improve, Align or Solve)', { required: true }), text('title', 'Title', { required: true }), area('text', 'Description', { required: true })], { maxRows: 3 }),
+    ]),
+    group('philosophy', 'Philosophy', [text('eyebrow', 'Small label'), text('statement', 'Statement (one sentence per line on the page)'), area('support', 'Supporting line')]),
+    group('team', 'Team', [
+      text('title', 'Heading'),
+      area('intro', 'Intro'),
+      rows('members', 'Team members', [
+        text('name', 'Name', { required: true }),
+        text('role', 'Role', { required: true }),
+        text('discipline', 'Discipline / expertise'),
+        text('linkedin', 'LinkedIn URL (optional)'),
+        { name: 'photo', type: 'upload', relationTo: 'media', label: 'Photo (optional)' },
+      ]),
+    ]),
+    group('vision', 'Global vision', [text('eyebrow', 'Small label'), text('title', 'Heading'), paragraphs('paragraphs', 'Paragraphs')]),
     ctaGroup(),
   ],
 })
@@ -82,21 +133,83 @@ export const SolutionsPage = definePage({
   label: 'Solutions page',
   description: 'Text on the Solutions overview. The three solutions themselves are in the Solutions collection.',
   content: [
-    heroGroup(true),
-    group('fit', 'Which solution fits you?', [
+    group('hero', 'Hero', [
+      text('eyebrow', 'Small label'),
+      text('title', 'Heading (first part)'),
+      text('accent', 'Heading (teal part)'),
+      area('intro', 'Intro'),
+      text('primaryLabel', 'Main button label'),
+      text('secondaryLabel', 'Second button label (scrolls to the finder)'),
+      lines('flow', 'Visual flow (four labels)'),
+      imageField('image', 'Hero image'),
+    ]),
+    group('navigator', 'Solution navigator', [
+      rows('items', 'Cards (in order: Improve, Align, Solve)', [text('number', 'Number', { required: true }), text('label', 'Label', { required: true }), text('text', 'Description', { required: true }), text('cta', 'Link text', { required: true })], { minRows: 3, maxRows: 3 }),
+    ]),
+    group('improve', 'Improve and Innovate', [
+      text('eyebrow', 'Small label'),
+      text('title', 'Heading'),
+      area('value', 'Value proposition'),
+      lines('sequence', 'Visual sequence (labels under the visual)'),
+      text('analyseTitle', 'Analysis list heading'),
+      lines('analyse', 'What we analyse'),
+      text('receiveTitle', 'Deliverables list heading'),
+      lines('receive', 'What you receive'),
+      text('offerName', 'Entry offer name'),
+      text('ctaLabel', 'Button label'),
+      text('ctaHref', 'Button link', { admin: { description: 'e.g. /solutions/improve-and-innovate' } }),
+      imageField('image', 'Photo'),
+    ]),
+    group('align', 'Align Your Technical Data', [
+      text('eyebrow', 'Small label'),
+      text('title', 'Heading'),
+      area('value', 'Value proposition'),
+      lines('sequence', 'Visual sequence (labels under the visual)'),
+      text('analyseTitle', 'Analysis list heading'),
+      lines('analyse', 'What we analyse'),
+      text('receiveTitle', 'Deliverables list heading'),
+      lines('receive', 'What you receive'),
+      text('offerName', 'Entry offer name'),
+      text('ctaLabel', 'Button label'),
+      text('ctaHref', 'Button link', { admin: { description: 'e.g. /solutions/improve-and-innovate' } }),
+      imageField('image', 'Photo'),
+    ]),
+    group('solve', 'Solve and Prove', [
+      text('eyebrow', 'Small label'),
+      text('title', 'Heading'),
+      area('value', 'Value proposition'),
+      lines('sequence', 'Visual sequence (labels under the visual)'),
+      text('analyseTitle', 'Analysis list heading'),
+      lines('analyse', 'What we analyse'),
+      text('receiveTitle', 'Deliverables list heading'),
+      lines('receive', 'What you receive'),
+      text('offerName', 'Entry offer name'),
+      text('ctaLabel', 'Button label'),
+      text('ctaHref', 'Button link', { admin: { description: 'e.g. /solutions/improve-and-innovate' } }),
+      imageField('image', 'Photo'),
+    ]),
+    group('finder', 'Which solution fits your challenge?', [
       text('title', 'Heading'),
       area('lead', 'Lead line'),
-      rows('items', 'Sentences', [
-        text('quote', 'What the visitor says', { required: true }),
-        text('startWith', 'Start with', { required: true, admin: { description: 'The exact name of a solution, or "Free Problem Review".' } }),
+      rows('options', 'Challenge options', [
+        text('statement', 'What the visitor says', { required: true }),
+        text('resultTitle', 'Recommendation title', { required: true }),
+        area('resultText', 'Recommendation text'),
+        text('offer', 'Entry offer (optional)'),
+        text('ctaLabel', 'Main button label'),
+        text('ctaHref', 'Main button link'),
+        text('learnLabel', 'Second link label (optional)'),
+        text('learnHref', 'Second link'),
       ]),
     ]),
     group('how', 'How we work', [
       text('title', 'Heading'),
       area('lead', 'Lead line'),
       rows('steps', 'Steps', [text('title', 'Title', { required: true }), text('description', 'Short description', { required: true }), area('detail', 'Detail'), text('youGet', 'You get')]),
+      text('previewTitle', 'Report preview title'),
+      lines('previewItems', 'Report preview contents'),
+      text('previewLinkLabel', 'Report preview link label'),
     ]),
-    ctaGroup(),
   ],
 })
 
@@ -192,4 +305,4 @@ export const LegalPage = definePage({
 export const siteGlobals: GlobalConfig[] = [SiteSettings, Navigation]
 
 /** Editable page types, one group each in the `site-pages` collection. Legal is the only type that can have many documents. */
-export const pageDefs: PageDef[] = [HomePage, CaseStudiesPage, SolutionsPage, WhoWeServePage, SampleReportPage, SubmitPage, LegalPage]
+export const pageDefs: PageDef[] = [HomePage, AboutPage, CaseStudiesPage, SolutionsPage, WhoWeServePage, SampleReportPage, SubmitPage, LegalPage]

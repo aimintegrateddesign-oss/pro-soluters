@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { LayoutGrid, RefreshCw, ShieldCheck } from 'lucide-react'
 
 import { Container } from '@/components/ds/primitives'
+import { AboutPreview } from '@/components/home/AboutPreview'
 import { HomeCta } from '@/components/home/HomeCta'
 import { HomeHero } from '@/components/home/HomeHero'
 import { SolutionRow } from '@/components/home/SolutionRow'
@@ -65,7 +66,10 @@ export default async function HomePage() {
           </Container>
         </section>
 
-        <section className="theme-light bg-alt py-16 sm:py-20">
+        <AboutPreview about={home.about} />
+
+        {/* About is white, so this section is navy to keep the alternation; the closing CTA band is then white. */}
+        <section className="theme-dark bg-bg py-16 sm:py-20">
           <Container className="!max-w-[77.5rem]">
             <div className="mb-10">
               <h2 className="text-[clamp(1.9rem,3.6vw,3rem)] font-extrabold leading-[1.05] text-heading">{home.path.title}</h2>
@@ -89,7 +93,7 @@ export default async function HomePage() {
           </Container>
         </section>
 
-        <HomeCta cta={home.cta} secondaryHref="/sample-reports" />
+        <HomeCta tone="light" cta={home.cta} secondaryHref="/sample-reports" />
       </div>
     </SmoothScroll>
   )

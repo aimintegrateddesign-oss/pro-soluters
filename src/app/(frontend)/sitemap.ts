@@ -12,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '',
     '/solutions',
     '/case-studies',
+    '/about',
     '/who-we-serve',
     '/sample-reports',
     '/submit-a-problem',

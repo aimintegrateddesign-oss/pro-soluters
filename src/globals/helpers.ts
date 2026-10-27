@@ -22,6 +22,9 @@ export const rows = (name: string, label: string, fields: Field[], extra: Record
 /** Repeating list of plain text lines (stored as `{ text }` rows). */
 export const lines = (name: string, label: string): Field => rows(name, label, [{ name: 'text', type: 'text', required: true, label: 'Text' }])
 
+/** Paragraphs of body text (stored as `{ text }` rows). */
+export const paragraphs = (name: string, label: string): Field => rows(name, label, [{ name: 'text', type: 'textarea', required: true, label: 'Paragraph' }])
+
 /** Image picked from the Media collection. The page falls back to its built-in image when this is empty. */
 export const imageField = (name: string, label: string): Field => ({ name, type: 'upload', relationTo: 'media', label })
 
@@ -42,7 +45,7 @@ export const ctaGroup = (): Field =>
 export const seoGroup = (): Field =>
   group('meta', 'SEO', [
     text('title', 'Meta title', { admin: { description: 'Shown in the browser tab and search results. Aim for 50 to 60 characters.' }, maxLength: 70 }),
-    area('description', 'Meta description', { admin: { description: 'Shown under the title in search results. Aim for 120 to 160 characters.' }, maxLength: 200 }),
+    area('description', 'Meta description', { admin: { description: 'Shown under the title in search results. Aim for 120 to 160 characters.' }, maxLength: 320 }),
     imageField('ogImage', 'Social share image'),
   ])
 

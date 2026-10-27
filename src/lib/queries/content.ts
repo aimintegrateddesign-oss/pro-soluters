@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { cache } from 'react'
 
 import {
+  aboutPage,
   caseStudiesPage,
   homePage,
   legalPages,
@@ -18,7 +19,7 @@ import type { Config } from '@/payload-types'
 import { isOffline } from './offline'
 
 type GlobalSlug = keyof Config['globals']
-type PageKey = 'home' | 'caseStudies' | 'solutions' | 'whoWeServe' | 'sampleReport' | 'submit'
+type PageKey = 'home' | 'about' | 'caseStudies' | 'solutions' | 'whoWeServe' | 'sampleReport' | 'submit'
 
 /** Page copy plus its SEO overrides. */
 export type Page<T> = { content: T; seo: Seo }
@@ -61,6 +62,7 @@ function pageLoader<T>(key: PageKey, defaults: T) {
 export const getSiteSettings = loader('site-settings', siteSettings)
 export const getNavigation = loader('navigation', navigation)
 export const getHomePage = pageLoader('home', homePage)
+export const getAboutPage = pageLoader('about', aboutPage)
 export const getCaseStudiesPage = pageLoader('caseStudies', caseStudiesPage)
 export const getSolutionsPage = pageLoader('solutions', solutionsPage)
 export const getWhoWeServePage = pageLoader('whoWeServe', whoWeServePage)
