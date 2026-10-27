@@ -1446,9 +1446,19 @@ export interface SitePage {
   };
   whoWeServe?: {
     hero?: {
+      eyebrow?: string | null;
       title?: string | null;
       accent?: string | null;
       intro?: string | null;
+      support?: string | null;
+      primaryLabel?: string | null;
+      secondaryLabel?: string | null;
+      labels?:
+        | {
+            text: string;
+            id?: string | null;
+          }[]
+        | null;
       image?: (string | null) | Media;
     };
     audiences?: {
@@ -1459,13 +1469,16 @@ export interface SitePage {
             code: string;
             title: string;
             text: string;
+            challenge?: string | null;
             lead?: string | null;
             start?: string | null;
             id?: string | null;
           }[]
         | null;
+      cardCta?: string | null;
     };
     domains?: {
+      eyebrow?: string | null;
       title?: string | null;
       lead?: string | null;
       items?:
@@ -1475,8 +1488,13 @@ export interface SitePage {
             id?: string | null;
           }[]
         | null;
+      /**
+       * Optional. If empty, the built-in engineering illustration is shown.
+       */
+      image?: (string | null) | Media;
     };
     reassurance?: {
+      eyebrow?: string | null;
       title?: string | null;
       lead?: string | null;
       items?:
@@ -1485,6 +1503,12 @@ export interface SitePage {
             id?: string | null;
           }[]
         | null;
+      ctaLabel?: string | null;
+      ctaHref?: string | null;
+      /**
+       * Optional. If empty, the built-in capability statement mockup is shown.
+       */
+      image?: (string | null) | Media;
     };
     cta?: {
       eyebrow?: string | null;
@@ -2902,9 +2926,19 @@ export interface SitePagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              eyebrow?: T;
               title?: T;
               accent?: T;
               intro?: T;
+              support?: T;
+              primaryLabel?: T;
+              secondaryLabel?: T;
+              labels?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
               image?: T;
             };
         audiences?:
@@ -2918,14 +2952,17 @@ export interface SitePagesSelect<T extends boolean = true> {
                     code?: T;
                     title?: T;
                     text?: T;
+                    challenge?: T;
                     lead?: T;
                     start?: T;
                     id?: T;
                   };
+              cardCta?: T;
             };
         domains?:
           | T
           | {
+              eyebrow?: T;
               title?: T;
               lead?: T;
               items?:
@@ -2935,10 +2972,12 @@ export interface SitePagesSelect<T extends boolean = true> {
                     note?: T;
                     id?: T;
                   };
+              image?: T;
             };
         reassurance?:
           | T
           | {
+              eyebrow?: T;
               title?: T;
               lead?: T;
               items?:
@@ -2947,6 +2986,9 @@ export interface SitePagesSelect<T extends boolean = true> {
                     text?: T;
                     id?: T;
                   };
+              ctaLabel?: T;
+              ctaHref?: T;
+              image?: T;
             };
         cta?:
           | T

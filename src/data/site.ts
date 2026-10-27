@@ -404,51 +404,63 @@ export const solutionsPage = {
 
 export const whoWeServePage = {
   hero: {
+    eyebrow: 'WHO WE SERVE',
     title: 'Built for engineering,',
     accent: 'across every discipline.',
     intro: 'We work only in engineering, for organisations worldwide.',
+    support:
+      'From consultants and contractors to research teams and public institutions, Pro Solutors helps engineering organisations solve complex problems through structured analysis, aligned information and evidence-based decisions.',
+    primaryLabel: 'Submit your problem',
+    secondaryLabel: 'Explore solutions',
+    labels: ['Engineering Consultants', 'Contractors', 'Research & R&D', 'Public Institutions'],
     image: {
-      src: '/images/who-we-serve.webp',
-      alt: 'Engineers, managers and clients around a table reviewing an engineering analysis, with five audience groups shown above',
+      src: '/images/who-we-serve-hero.webp',
+      alt: 'Engineers at work across disciplines: a technician with a wrench, a manufacturing line, wind and solar energy, site engineers reading drawings and an engineer at a CAD workstation',
     },
-  } as Hero & { image: { src: string; alt: string } },
+  },
   audiences: {
     title: 'Who we serve',
-    lead: 'Four audiences, each with a clear starting point. Select yours.',
+    lead: 'Four audiences, each with a clear starting point.',
     items: [
       {
         code: 'EC',
         title: 'Engineering Consultants',
-        text: 'Design and advisory firms. Stop losing time to searching and re-checking project data.',
+        text: 'Design and advisory firms.',
+        challenge: 'Losing time to searching and re-checking project data.',
         lead: 'Align Your Technical Data',
         start: 'Technical Data Health Check',
       },
       {
         code: 'CO',
         title: 'Contractors',
-        text: 'General, MEP and specialist contractors. Cut cost and schedule risk with proven methods.',
+        text: 'General, MEP and specialist contractors.',
+        challenge: 'Cost and schedule risk that proven methods can reduce.',
         lead: 'Solve and Prove',
         start: 'Feasibility Proof Report',
       },
       {
-        code: 'RD',
+        code: 'R&D',
         title: 'Research Centres & R&D',
-        text: 'Universities, labs and institutes. Turn scattered research into feasible results.',
+        text: 'Universities, labs and institutes.',
+        challenge: 'Scattered research that needs to become feasible results.',
         lead: 'Improve and Innovate',
         start: 'Innovation Roadmap Sprint',
       },
       {
-        code: 'GP',
+        code: 'PI',
         title: 'Government & Public Institutions',
-        text: 'Authorities, municipalities and regulators. Decide with evidence and audit-friendly documentation.',
+        text: 'Authorities, municipalities and regulators.',
+        challenge: 'Deciding with evidence and audit-friendly documentation.',
         lead: 'Align Your Technical Data + Solve and Prove',
         start: 'Independent Feasibility Review or Data Audit',
       },
     ],
+    cardCta: 'Start with this',
   },
   domains: {
-    title: 'Engineering domains',
-    lead: 'Practical support in every major discipline.',
+    eyebrow: 'ENGINEERING DOMAINS',
+    title: 'Practical support across major engineering disciplines.',
+    lead: 'One engineering approach, applied to the discipline in front of you.',
     items: [
       { name: 'Civil', note: '' },
       { name: 'Mechanical', note: '' },
@@ -459,9 +471,15 @@ export const whoWeServePage = {
       { name: 'Transportation', note: 'Coming soon' },
       { name: 'Other disciplines', note: '' },
     ],
+    // Optional. Clear it in Payload to fall back to the built-in illustration.
+    image: {
+      src: '/images/who-we-serve-domains.webp',
+      alt: 'Multidisciplinary engineering systems around a central hub: a structural frame, mechanical gear assembly, HVAC ductwork, electrical transmission, piping, rail and bridge, robotics and electronics, and layered city infrastructure',
+    },
   },
   reassurance: {
-    title: 'Reassurance for institutional buyers',
+    eyebrow: 'FOR INSTITUTIONAL BUYERS',
+    title: 'Procurement should not make engineering harder.',
     lead: 'For authorities, municipalities, regulators and procurement teams.',
     items: [
       'Independent, confidential and NDA-ready. NDA first on request.',
@@ -470,6 +488,10 @@ export const whoWeServePage = {
       'Willing to respond to tenders and requests for proposal.',
       'One-page Capability Statement available on request.',
     ],
+    ctaLabel: 'Submit your problem',
+    ctaHref: '/submit-a-problem',
+    // Optional. Leave empty to show the built-in document mockup.
+    image: { src: '', alt: '' },
   },
   cta: {
     eyebrow: 'Any discipline',

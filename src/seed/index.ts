@@ -276,6 +276,16 @@ async function seed() {
     }
   }
 
+  // 6b4. Redesigned Who We Serve page. A page saved with the earlier structure (no hero supporting line) is rewritten once with
+  // the new content; its other settings (SEO, social image) are kept. A page already on the new structure is never touched.
+  const wwsDoc = (await payload.find({ collection: 'site-pages', where: { slug: { equals: 'who-we-serve' } }, limit: 1, depth: 0, pagination: false })).docs[0] as
+    | (Record<string, any> & { id: string })
+    | undefined
+  if (wwsDoc && !wwsDoc.whoWeServe?.hero?.support) {
+    await payload.update({ collection: 'site-pages', id: wwsDoc.id, data: { whoWeServe: toDoc(mediaize(whoWeServePage)) } as never, depth: 0 })
+    payload.logger.info('page who-we-serve: redesigned content applied')
+  } else payload.logger.info('page who-we-serve: already on the redesigned structure, skipped')
+
   // 6c. "About Us" link in the navigation. A navigation saved before the About page existed gets the link added here (after
   // "Who We Serve" in the header, first in the footer's Company column). Nothing else is touched, and it is added only once.
   const nav = (await payload.findGlobal({ slug: 'navigation', depth: 0 })) as unknown as {
