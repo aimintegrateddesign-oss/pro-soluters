@@ -1267,9 +1267,14 @@ export interface SitePage {
    */
   caseStudies?: {
     hero?: {
+      eyebrow?: string | null;
       title?: string | null;
       accent?: string | null;
       intro?: string | null;
+      disclosure?: string | null;
+      primaryLabel?: string | null;
+      secondaryLabel?: string | null;
+      image?: (string | null) | Media;
     };
     cta?: {
       eyebrow?: string | null;
@@ -2737,9 +2742,14 @@ export interface SitePagesSelect<T extends boolean = true> {
         hero?:
           | T
           | {
+              eyebrow?: T;
               title?: T;
               accent?: T;
               intro?: T;
+              disclosure?: T;
+              primaryLabel?: T;
+              secondaryLabel?: T;
+              image?: T;
             };
         cta?:
           | T

@@ -125,7 +125,19 @@ export const CaseStudiesPage = definePage({
   key: 'caseStudies',
   label: 'Case studies page',
   description: 'Heading and call to action of the case studies list. The studies themselves are in the Case studies collection.',
-  content: [heroGroup(), ctaGroup()],
+  content: [
+    group('hero', 'Hero', [
+      text('eyebrow', 'Small label'),
+      text('title', 'Heading (first part)'),
+      text('accent', 'Heading (teal part)'),
+      area('intro', 'Supporting copy'),
+      area('disclosure', 'Sample disclosure'),
+      text('primaryLabel', 'Main button label (scrolls to the results)'),
+      text('secondaryLabel', 'Second button label (sample report)'),
+      imageField('image', 'Hero image'),
+    ]),
+    ctaGroup(),
+  ],
 })
 
 export const SolutionsPage = definePage({

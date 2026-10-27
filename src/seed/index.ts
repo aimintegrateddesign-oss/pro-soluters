@@ -286,6 +286,21 @@ async function seed() {
     payload.logger.info('page who-we-serve: redesigned content applied')
   } else payload.logger.info('page who-we-serve: already on the redesigned structure, skipped')
 
+  // 6b5. Redesigned Case studies page hero. A page saved with the earlier hero (no disclosure field) gets the new hero once; its
+  // call to action and SEO are kept. A page already on the new hero is never touched.
+  const csDoc = (await payload.find({ collection: 'site-pages', where: { slug: { equals: 'case-studies' } }, limit: 1, depth: 0, pagination: false })).docs[0] as
+    | (Record<string, any> & { id: string })
+    | undefined
+  if (csDoc && !csDoc.caseStudies?.hero?.disclosure) {
+    await payload.update({
+      collection: 'site-pages',
+      id: csDoc.id,
+      data: { caseStudies: { ...csDoc.caseStudies, hero: (toDoc(mediaize(caseStudiesPage)) as Record<string, unknown>).hero } } as never,
+      depth: 0,
+    })
+    payload.logger.info('page case-studies: new hero applied')
+  } else payload.logger.info('page case-studies: hero already redesigned, skipped')
+
   // 6c. "About Us" link in the navigation. A navigation saved before the About page existed gets the link added here (after
   // "Who We Serve" in the header, first in the footer's Company column). Nothing else is touched, and it is added only once.
   const nav = (await payload.findGlobal({ slug: 'navigation', depth: 0 })) as unknown as {

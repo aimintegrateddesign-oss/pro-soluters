@@ -195,6 +195,46 @@ export function CaseCard({
   )
 }
 
+/**
+ * Case-study card for the listing: taxonomy, title, context line and the two headline metrics, no photograph.
+ * (CaseCard above keeps the image layout used on the solution pages.)
+ */
+export function CaseMetricCard({ study, solutionName, industryName }: { study: CaseStudy; solutionName: string; industryName?: string }) {
+  return (
+    <Link
+      href={`/case-studies/${study.slug}`}
+      className="group flex h-full flex-col rounded-[4px] border border-line border-t-[3px] border-t-btn bg-card p-6 shadow-[0_1px_2px_rgba(10,22,38,0.06)] transition duration-200 hover:border-accent hover:shadow-[0_18px_36px_-22px_rgba(10,22,38,0.5)]"
+    >
+      <div className="flex items-start justify-between gap-3 text-[11px] font-bold uppercase tracking-[0.1em]">
+        <span className="text-accent-strong">{solutionName}</span>
+        {industryName && <span className="text-right text-muted">{industryName}</span>}
+      </div>
+      <h3 className="mt-3 text-balance text-xl font-bold leading-snug text-heading">{study.title}</h3>
+      {study.subtitle && <p className="mt-2 text-[15px] leading-snug text-muted">{study.subtitle}</p>}
+
+      <dl className="my-6 grid grid-cols-2 gap-x-4 gap-y-5 border-y border-line py-5">
+        {study.kpis.slice(0, 2).map((k) => (
+          <div key={k.caption}>
+            <dd className="text-[1.6rem] font-extrabold leading-none text-heading [font-family:var(--font-display)]">{k.value}</dd>
+            <dt className="mt-2 text-[11px] font-bold uppercase leading-snug tracking-[0.06em] text-muted">{k.caption}</dt>
+          </div>
+        ))}
+      </dl>
+
+      <div className="mt-auto flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <p className="font-mono text-xs font-bold tracking-wide text-muted">{study.referenceCode}</p>
+          {study.isSample && <p className="mt-1 text-[12px] text-muted">Illustrative sample · Fictional company</p>}
+        </div>
+        <span aria-hidden className="flex size-9 shrink-0 items-center justify-center rounded-[4px] border border-line text-accent-strong transition-all group-hover:border-accent group-hover:bg-accent/10">
+          <ArrowRight className="size-4 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" />
+        </span>
+        <span className="sr-only">Read the case study</span>
+      </div>
+    </Link>
+  )
+}
+
 const W = 800
 const H = 340
 const PAD = { top: 28, right: 16, bottom: 44, left: 52 }

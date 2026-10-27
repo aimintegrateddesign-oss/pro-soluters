@@ -181,10 +181,19 @@ export const homePage = {
 
 export const caseStudiesPage = {
   hero: {
+    eyebrow: 'CASE STUDIES',
     title: 'Sample work,',
-    accent: 'shown in full',
-    intro: 'Every study here is an illustrative sample with fictional companies and figures.',
-  } as Hero,
+    accent: 'shown in full.',
+    intro:
+      'See how complex engineering problems are structured, analysed and translated into clear recommendations, measurable outcomes and decision-ready evidence.',
+    disclosure: 'Every case study shown here is an illustrative sample using fictional companies and figures.',
+    primaryLabel: 'Explore case studies',
+    secondaryLabel: 'See sample report',
+    image: {
+      src: '/images/case-studies-hero.webp',
+      alt: 'Engineering professionals reviewing a technical case-study report with charts and project analysis',
+    },
+  },
   cta: homeCta,
 }
 
