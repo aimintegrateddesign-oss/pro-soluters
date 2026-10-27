@@ -177,15 +177,24 @@ export default async function SampleReportPage() {
             </span>
           </Link>
 
-          <div className={cn(ruleCard, 'flex flex-col p-6 sm:p-8')}>
-            <span aria-hidden className="flex size-10 items-center justify-center rounded-[4px] border border-accent/30 bg-accent/10 text-accent-strong">
-              <MessageSquareQuote className="size-5" />
-            </span>
-            <h2 className="mt-5 text-xl font-extrabold text-heading">{content.feedback.title}</h2>
-            <p className="mt-3 text-[15px] text-muted">{content.feedback.text}</p>
-            <Button href="/submit-a-problem" variant="secondary" className="mt-auto self-start">
-              {content.feedback.buttonLabel}
-            </Button>
+          <div className={cn(ruleCard, 'flex flex-col overflow-hidden p-0', !content.feedback.image.src && 'lg:self-start')}>
+            {content.feedback.image.src && (
+              <div className="relative aspect-[16/7] bg-hero">
+                <Image src={content.feedback.image.src} alt={content.feedback.image.alt} fill sizes="(min-width: 1024px) 600px, 100vw" className="object-cover object-[50%_28%]" />
+              </div>
+            )}
+            <div className="flex flex-1 flex-col p-6 sm:p-8">
+              <div className="flex items-center gap-3">
+                <span aria-hidden className="flex size-10 shrink-0 items-center justify-center rounded-[4px] border border-accent/30 bg-accent/10 text-accent-strong">
+                  <MessageSquareQuote className="size-5" />
+                </span>
+                <h2 className="text-xl font-extrabold text-heading">{content.feedback.title}</h2>
+              </div>
+              <p className="mt-4 text-[15px] leading-relaxed text-muted">{content.feedback.text}</p>
+              <Button href="/submit-a-problem" variant="secondary" className={cn('mt-6 self-start', content.feedback.image.src && 'lg:mt-auto')}>
+                {content.feedback.buttonLabel}
+              </Button>
+            </div>
           </div>
         </Container>
       </Band>

@@ -1602,6 +1602,7 @@ export interface SitePage {
       title?: string | null;
       text?: string | null;
       buttonLabel?: string | null;
+      image?: (string | null) | Media;
     };
     sheet?: {
       reference?: string | null;
@@ -3103,6 +3104,7 @@ export interface SitePagesSelect<T extends boolean = true> {
               title?: T;
               text?: T;
               buttonLabel?: T;
+              image?: T;
             };
         sheet?:
           | T

@@ -306,7 +306,7 @@ export const SampleReportPage = definePage({
     group('risks', 'Risks card', [text('title', 'Title'), lines('items', 'Items')]),
     group('assumptions', 'Assumptions card', [text('title', 'Title'), lines('items', 'Items')]),
     group('example', 'Worked example card', [text('title', 'Title'), area('text', 'Text'), text('linkLabel', 'Link label'), imageField('image', 'Card image')]),
-    group('feedback', 'Client feedback card', [text('title', 'Title'), area('text', 'Text'), text('buttonLabel', 'Button label')]),
+    group('feedback', 'Client feedback card', [text('title', 'Title'), area('text', 'Text'), text('buttonLabel', 'Button label'), imageField('image', 'Photo (optional, wide, no text in the image)')]),
     group('sheet', 'Hero report sheet', [
       text('reference', 'Reference'),
       text('title', 'Title'),

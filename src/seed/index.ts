@@ -301,6 +301,16 @@ async function seed() {
     payload.logger.info('page case-studies: new hero applied')
   } else payload.logger.info('page case-studies: hero already redesigned, skipped')
 
+  // 6b6. Sample report worked-example photo and the optional feedback photo field. Applied once, only while the page still uses the
+  // earlier photo, so an image chosen in the admin is kept.
+  const srDoc = (await payload.find({ collection: 'site-pages', where: { slug: { equals: 'sample-report' } }, limit: 1, depth: 1, pagination: false })).docs[0] as
+    | (Record<string, any> & { id: string })
+    | undefined
+  if (srDoc?.sampleReport?.example?.image?.filename === 'case-cooling-plant.webp') {
+    await payload.update({ collection: 'site-pages', id: srDoc.id, data: { sampleReport: { ...srDoc.sampleReport, example: { ...srDoc.sampleReport.example, image: mediaId(sampleReportPage.example.image.src) } } } as never, depth: 0 })
+    payload.logger.info('page sample-report: worked-example photo replaced')
+  }
+
   // 6c. "About Us" link in the navigation. A navigation saved before the About page existed gets the link added here (after
   // "Who We Serve" in the header, first in the footer's Company column). Nothing else is touched, and it is added only once.
   const nav = (await payload.findGlobal({ slug: 'navigation', depth: 0 })) as unknown as {

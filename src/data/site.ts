@@ -561,12 +561,14 @@ export const sampleReportPage = {
     title: 'Read the full worked example',
     text: 'The complete case study adds the challenge, method, 10-year cost model, sensitivity test and risk register.',
     linkLabel: 'Open the full case study',
-    image: { src: '/images/case-cooling-plant.webp', alt: 'Two engineers reviewing cooling plant options on a laptop, with Option C recommended' },
+    image: { src: '/images/sample-worked-example.webp', alt: 'Engineers reviewing a cooling plant technical study and project drawings' },
   },
   feedback: {
     title: 'Client feedback',
     text: 'We are running our first pilot projects. Feedback will be published here only when it is real, in a client’s own words and with their written permission.',
     buttonLabel: 'Become a founding client',
+    // Optional collaboration photo. Clear it in Payload to show the card without one.
+    image: { src: '/images/sample-client-collaboration.webp', alt: 'Engineering consultant and client reviewing project information together' },
   },
   // Mini report in the hero. Scores are the weighted scores from case study PS-SAMPLE-001.
   sheet: {
