@@ -62,7 +62,7 @@ export function HeroVideo({ src }: { src: string }) {
         className={cn('absolute inset-0 -z-10 transition-opacity duration-1000', ready ? 'opacity-100' : 'opacity-0')}
         style={{
           background:
-            'linear-gradient(180deg, rgba(10,22,38,0.5) 0%, rgba(10,22,38,0) 20%, rgba(10,22,38,0) 80%, rgba(10,22,38,0.65) 100%), radial-gradient(ellipse 75% 70% at 50% 50%, rgba(10,22,38,0.84) 0%, rgba(10,22,38,0.76) 55%, rgba(10,22,38,0.6) 100%)',
+            'linear-gradient(180deg, rgba(10,22,38,0.4) 0%, rgba(10,22,38,0) 18%, rgba(10,22,38,0) 82%, rgba(10,22,38,0.5) 100%), radial-gradient(ellipse 75% 70% at 50% 50%, rgba(10,22,38,0.66) 0%, rgba(10,22,38,0.56) 55%, rgba(10,22,38,0.4) 100%)',
         }}
       />
     </>
