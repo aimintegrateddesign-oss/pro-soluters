@@ -1230,20 +1230,6 @@ export interface SitePage {
       statement?: string | null;
       support?: string | null;
     };
-    team?: {
-      title?: string | null;
-      intro?: string | null;
-      members?:
-        | {
-            name: string;
-            role: string;
-            discipline?: string | null;
-            linkedin?: string | null;
-            photo?: (string | null) | Media;
-            id?: string | null;
-          }[]
-        | null;
-    };
     vision?: {
       eyebrow?: string | null;
       title?: string | null;
@@ -2698,22 +2684,6 @@ export interface SitePagesSelect<T extends boolean = true> {
               eyebrow?: T;
               statement?: T;
               support?: T;
-            };
-        team?:
-          | T
-          | {
-              title?: T;
-              intro?: T;
-              members?:
-                | T
-                | {
-                    name?: T;
-                    role?: T;
-                    discipline?: T;
-                    linkedin?: T;
-                    photo?: T;
-                    id?: T;
-                  };
             };
         vision?:
           | T

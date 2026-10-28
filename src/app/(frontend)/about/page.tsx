@@ -1,10 +1,9 @@
 import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react'
-import Image from 'next/image'
 import type { Metadata } from 'next'
 
 import { Band, HeroContainer, HeroShell, SectionTitle, WIDE, otherTone, ruleCard, toneAt } from '@/components/ds/band'
 import { Container } from '@/components/ds/primitives'
-import { FounderPortrait, initials } from '@/components/home/FounderPortrait'
+import { FounderPortrait } from '@/components/home/FounderPortrait'
 import { HomeCta } from '@/components/home/HomeCta'
 import { getAboutPage, getHomePage, getSiteSettings, pageMetadata } from '@/lib/queries/content'
 import { cn } from '@/lib/utils'
@@ -16,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
     {
       title: 'About Pro Solutors | Engineering, Research & Strategic Problem Solving',
       description:
-        'Learn about Pro Solutors, its founder Zaid Mohiyuddin, multidisciplinary approach, team, philosophy and vision for solving complex engineering and business challenges.',
+        'Learn about Pro Solutors, its founder Zaid Mohiyuddin, multidisciplinary approach, philosophy and vision for solving complex engineering and business challenges.',
       path: '/about',
     },
     site,
@@ -39,7 +38,7 @@ const isUrl = (v: string) => /^https?:\/\//i.test(v.trim())
 
 export default async function AboutPage() {
   const [{ content }, { content: home }] = await Promise.all([getAboutPage(), getHomePage()])
-  const { hero, founder, journey, why, focus, philosophy, team, vision } = content
+  const { hero, founder, journey, why, focus, philosophy, vision } = content
 
   // Portrait: this page's own upload, else the one from the Home page About section, else the placeholder.
   const portrait = founder.image.src ? founder.image : home.about.founderImage
@@ -195,52 +194,8 @@ export default async function AboutPage() {
         </Container>
       </Band>
 
-      {/* Team */}
-      <Band tone={toneAt(5)}>
-        <Container className={WIDE}>
-          <SectionTitle>{team.title}</SectionTitle>
-          <p className="mt-4 max-w-[40rem] text-[17px] leading-relaxed text-muted">{team.intro}</p>
-          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {team.members.map((m) => {
-              // The founder reuses the portrait above unless a photo is set on the member.
-              const photo = m.photo?.url ? { src: m.photo.url, alt: m.photo.alt || `${m.name}, ${m.role} at Pro Solutors` } : m.name === founder.name && portrait.src ? { src: portrait.src, alt: portrait.alt || `${m.name}, ${m.role} at Pro Solutors` } : null
-              return (
-                <li key={m.name} className={cn(ruleCard, 'overflow-hidden p-0')}>
-                  <div className="relative aspect-[4/3] bg-hero">
-                    {photo ? (
-                      <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 380px, (min-width: 640px) 45vw, 92vw" className="object-cover object-top" />
-                    ) : (
-                      <div aria-hidden className="theme-dark bg-blueprint absolute inset-0 flex items-center justify-center bg-[#0b2038]">
-                        <span className="text-5xl font-extrabold text-white/90 [font-family:var(--font-display)]">{initials(m.name)}</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-lg font-bold text-heading">{m.name}</h3>
-                    <p className="mt-0.5 text-[15px] font-semibold text-accent-strong">{m.role}</p>
-                    {m.discipline && <p className="mt-2 text-[14px] leading-snug text-muted">{m.discipline}</p>}
-                    {isUrl(m.linkedin) && (
-                      <a
-                        href={m.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-[14px] font-semibold text-accent-strong hover:underline"
-                      >
-                        LinkedIn
-                        <ArrowUpRight aria-hidden className="size-4" />
-                        <span className="sr-only">for {m.name} (opens in a new tab)</span>
-                      </a>
-                    )}
-                  </div>
-                </li>
-              )
-            })}
-          </ul>
-        </Container>
-      </Band>
-
       {/* Global vision */}
-      <Band tone={toneAt(6)}>
+      <Band tone={toneAt(5)}>
         <Container className={cn(WIDE, 'grid items-start gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20')}>
           <div>
             <Eyebrow>{vision.eyebrow}</Eyebrow>
@@ -256,7 +211,7 @@ export default async function AboutPage() {
         </Container>
       </Band>
 
-      <HomeCta tone={otherTone(toneAt(6))} cta={content.cta} secondaryHref="/solutions" />
+      <HomeCta tone={otherTone(toneAt(5))} cta={content.cta} secondaryHref="/solutions" />
     </>
   )
 }

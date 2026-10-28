@@ -105,17 +105,6 @@ export const AboutPage = definePage({
       rows('items', 'Focus areas', [text('number', 'Number', { required: true }), text('label', 'Label (Improve, Align or Solve)', { required: true }), text('title', 'Title', { required: true }), area('text', 'Description', { required: true })], { maxRows: 3 }),
     ]),
     group('philosophy', 'Philosophy', [text('eyebrow', 'Small label'), text('statement', 'Statement (one sentence per line on the page)'), area('support', 'Supporting line')]),
-    group('team', 'Team', [
-      text('title', 'Heading'),
-      area('intro', 'Intro'),
-      rows('members', 'Team members', [
-        text('name', 'Name', { required: true }),
-        text('role', 'Role', { required: true }),
-        text('discipline', 'Discipline / expertise'),
-        text('linkedin', 'LinkedIn URL (optional)'),
-        { name: 'photo', type: 'upload', relationTo: 'media', label: 'Photo (optional)' },
-      ]),
-    ]),
     group('vision', 'Global vision', [text('eyebrow', 'Small label'), text('title', 'Heading'), paragraphs('paragraphs', 'Paragraphs')]),
     ctaGroup(),
   ],

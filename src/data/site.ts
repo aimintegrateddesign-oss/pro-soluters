@@ -164,7 +164,7 @@ export const homePage = {
     // Portrait of the founder. Clear it in Payload to show a branded placeholder instead.
     founderImage: { src: '/images/founder-zaid-mohiyuddin.webp', alt: 'Zaid Mohiyuddin, Founder and CEO of Pro Solutors' },
     expertise: ['Civil Engineering', 'Engineering Management', 'Business Strategy', 'Innovation'],
-    ctaLabel: 'Meet Zaid & Our Team',
+    ctaLabel: 'Meet Zaid',
     ctaLink: '/about',
   },
   path: {
@@ -591,15 +591,6 @@ export const sampleReportPage = {
   } as Cta,
 }
 
-export type TeamMember = {
-  name: string
-  role: string
-  discipline: string
-  linkedin: string
-  /** Populated Media record from Payload; empty means the initials placeholder (or the founder portrait for the founder). */
-  photo?: { url?: string | null; alt?: string | null } | null
-}
-
 export const aboutPage = {
   hero: {
     eyebrow: 'ABOUT PRO SOLUTORS',
@@ -665,18 +656,6 @@ export const aboutPage = {
     eyebrow: 'OUR PHILOSOPHY',
     statement: 'Understand the problem. Challenge conventional thinking. Engineer a better solution.',
     support: 'Every meaningful solution begins with understanding the real problem before deciding how to solve it.',
-  },
-  team: {
-    title: 'The people behind the solutions',
-    intro: 'Pro Solutors brings together multidisciplinary expertise in engineering, research, analysis and strategic problem solving.',
-    members: [
-      {
-        name: 'Zaid Mohiyuddin',
-        role: 'Founder & Chief Executive Officer',
-        discipline: 'Civil Engineering · Engineering Management · Business Strategy',
-        linkedin: '',
-      },
-    ] as TeamMember[],
   },
   vision: {
     eyebrow: 'GLOBAL VISION',

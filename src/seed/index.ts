@@ -43,7 +43,7 @@ const pages = [
     aboutPage,
     seo(
       'About Pro Solutors | Engineering, Research & Strategic Problem Solving',
-      'Learn about Pro Solutors, its founder Zaid Mohiyuddin, multidisciplinary approach, team, philosophy and vision for solving complex engineering and business challenges.',
+      'Learn about Pro Solutors, its founder Zaid Mohiyuddin, multidisciplinary approach, philosophy and vision for solving complex engineering and business challenges.',
     ),
   ],
   [
