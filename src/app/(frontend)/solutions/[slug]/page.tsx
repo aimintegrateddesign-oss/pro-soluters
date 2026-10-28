@@ -50,10 +50,10 @@ export default async function SolutionPage({ params }: Props) {
     ...(studies.length > 0
       ? [
           (tone: Tone) => (
-            <Band key="cases" tone={tone}>
+            <Band key="cases" tone={tone} className="py-12 sm:py-14">
               <Container className={WIDE}>
                 <SectionTitle>Related case studies</SectionTitle>
-                <ul className="mt-10 grid gap-6">
+                <ul className="mt-8 grid gap-6">
                   {studies.map((c) => (
                     <li key={c.slug}>
                       <CaseCard wide study={c} solutionName={solution.name} industryName={industryNames[c.industries[0]]} />

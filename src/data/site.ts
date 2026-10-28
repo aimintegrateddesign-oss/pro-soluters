@@ -161,8 +161,8 @@ export const homePage = {
       'With a multidisciplinary background spanning Civil Engineering, Engineering Management and Business Administration, Zaid established Pro Solutors around one principle: meaningful solutions must be technically sound, operationally practical and commercially viable.',
     founderName: 'Zaid Mohiyuddin',
     founderRole: 'Founder & Chief Executive Officer',
-    // Empty until a portrait is uploaded in Payload; the section then shows a branded placeholder.
-    founderImage: { src: '', alt: '' },
+    // Portrait of the founder. Clear it in Payload to show a branded placeholder instead.
+    founderImage: { src: '/images/founder-zaid-mohiyuddin.webp', alt: 'Zaid Mohiyuddin, Founder and CEO of Pro Solutors' },
     expertise: ['Civil Engineering', 'Engineering Management', 'Business Strategy', 'Innovation'],
     ctaLabel: 'Meet Zaid & Our Team',
     ctaLink: '/about',

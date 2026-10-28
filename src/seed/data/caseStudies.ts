@@ -14,8 +14,8 @@ export const caseStudies: CaseStudy[] = [
     clientDescription: 'fictional mid-size MEP contractor',
     isSample: true,
     featured: true,
-    cover: '/images/case-cooling-plant.webp',
-    coverAlt: 'Two engineers reviewing cooling plant options on a laptop, with Option C recommended',
+    cover: '/images/case-cover-cooling-plant.webp',
+    coverAlt: 'Two engineers with a tablet reviewing plant equipment and process pipework on site',
     duration: 'Options study with a 5-week decision window',
     outcome:
       'Option C (water-cooled chillers with cooling towers) has the lowest 10-year cost and the highest score, subject to a roof check and a secure water supply.',
@@ -98,8 +98,8 @@ export const caseStudies: CaseStudy[] = [
     clientDescription: 'fictional precast concrete manufacturer',
     isSample: true,
     featured: true,
-    cover: '/images/case-production-flow.webp',
-    coverAlt: 'Engineers reviewing a production flow dashboard in a precast concrete factory',
+    cover: '/images/case-cover-production-flow.webp',
+    coverAlt: 'A production hall with a raised assembly platform where teams review process flow and planning boards',
     duration: '2 weeks of review, 9 months of phased implementation with the client team',
     outcome: 'Output up by a third, rework cut by more than half, on-time delivery from 71% to 92%.',
     kpis: [
@@ -191,8 +191,8 @@ export const caseStudies: CaseStudy[] = [
     clientDescription: 'fictional multi-discipline design consultancy',
     isSample: true,
     featured: true,
-    cover: '/images/case-technical-data.webp',
-    coverAlt: 'Two engineers comparing scattered data with one aligned, structured project data source',
+    cover: '/images/case-cover-technical-data.webp',
+    coverAlt: 'Three engineers reviewing process diagrams and drawings on screens and paper in a plant laboratory',
     duration: '3 weeks of audit and design, then 6 months of piloting and roll-out with the client team',
     outcome: 'Search and reconciliation time cut by 72%, data mismatches cut by three quarters, one structure for every project.',
     kpis: [

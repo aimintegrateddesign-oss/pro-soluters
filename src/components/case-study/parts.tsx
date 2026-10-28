@@ -154,41 +154,41 @@ export function CaseCard({
     <Link
       href={`/case-studies/${study.slug}`}
       className={cn(
-        'group flex h-full flex-col overflow-hidden rounded-[4px] border border-line border-t-[3px] border-t-btn bg-card shadow-[0_12px_30px_-20px_rgba(10,22,38,0.45)] transition duration-200 hover:-translate-y-[3px] hover:border-accent motion-reduce:hover:translate-y-0',
+        'group flex h-full flex-col overflow-hidden rounded-[4px] border border-line border-t-[3px] border-t-btn bg-card shadow-[0_12px_30px_-20px_rgba(10,22,38,0.45)] transition duration-200 hover:border-accent hover:shadow-[0_22px_44px_-24px_rgba(10,22,38,0.6)]',
         wide && 'md:flex-row',
       )}
     >
-      <div className={cn('relative aspect-video overflow-hidden bg-hero', wide && 'md:aspect-auto md:w-[42%] md:shrink-0')}>
+      <div className={cn('relative aspect-video overflow-hidden bg-hero', wide && 'md:aspect-auto md:min-h-[17rem] md:w-[44%] md:shrink-0')}>
         <Image
           src={study.cover}
           alt={study.coverAlt}
           fill
-          sizes="(min-width: 1024px) 450px, (min-width: 640px) 50vw, 100vw"
+          sizes="(min-width: 1024px) 520px, (min-width: 640px) 50vw, 100vw"
           className="object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none"
         />
       </div>
-      <div className={cn('flex flex-1 flex-col p-5', wide && 'md:p-7')}>
-        <div className="flex items-start justify-between gap-3 text-[12px]">
-          <span className="font-bold text-accent-strong">{solutionName}</span>
-          {industryName && <span className="text-right text-muted">{industryName}</span>}
+      <div className={cn('flex flex-1 flex-col p-5', wide && 'md:justify-center md:p-8')}>
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-[11px] font-bold uppercase tracking-[0.1em]">
+          <span className="text-accent-strong">{solutionName}</span>
+          {industryName && <span className="text-muted">{industryName}</span>}
         </div>
-        <h3 className="mt-2 text-xl font-bold leading-snug text-heading">{study.title}</h3>
-        <dl className="mb-5 mt-4 grid grid-cols-2 gap-x-4 gap-y-3">
+        <h3 className={cn('mt-3 text-balance text-xl font-bold leading-snug text-heading', wide && 'md:text-2xl')}>{study.title}</h3>
+        <dl className="my-5 grid grid-cols-2 gap-x-4 gap-y-3 border-y border-line py-4">
           {study.kpis.slice(0, 2).map((k) => (
             <div key={k.caption}>
-              <dd className="text-lg font-extrabold leading-tight text-heading">{k.value}</dd>
-              <dt className="mt-0.5 text-xs leading-snug text-muted">{k.caption}</dt>
+              <dd className="text-[1.5rem] font-extrabold leading-none text-heading [font-family:var(--font-display)]">{k.value}</dd>
+              <dt className="mt-1.5 text-[11px] font-bold uppercase leading-snug tracking-[0.06em] text-muted">{k.caption}</dt>
             </div>
           ))}
         </dl>
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4">
-          <span className="whitespace-nowrap font-mono text-xs font-bold tracking-wide text-muted">{study.referenceCode}</span>
-          {study.isSample && <SampleBadge className="px-3 py-0.5 text-[11px]" />}
-          {wide && (
-            <span className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-accent-strong">
-              Read the case study <ArrowRight aria-hidden className="size-4" />
-            </span>
-          )}
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <div>
+            <p className="font-mono text-xs font-bold tracking-wide text-muted">{study.referenceCode}</p>
+            {study.isSample && <p className="mt-0.5 text-[12px] text-muted">Illustrative sample · Fictional company</p>}
+          </div>
+          <span className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-accent-strong">
+            Read the case study <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" />
+          </span>
         </div>
       </div>
     </Link>
