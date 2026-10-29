@@ -82,7 +82,7 @@ export default async function WhoWeServePage() {
       </HeroShell>
 
       {/* Audiences */}
-      <Band tone="light" className="!bg-alt" aria-labelledby="audiences-title">
+      <Band tone="light" aria-labelledby="audiences-title">
         <Container className={WIDE}>
           <h2 id="audiences-title" className={h2}>
             {audiences.title}

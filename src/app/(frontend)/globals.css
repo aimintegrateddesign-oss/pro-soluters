@@ -200,3 +200,14 @@
     transform: none;
   }
 }
+
+/* Small arrows on call-to-action links nudge forward to invite a click. */
+@keyframes arrow-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
