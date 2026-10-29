@@ -73,6 +73,7 @@ export default async function SolutionsPage() {
       </HeroShell>
 
       {/* Navigator */}
+      {/* Bands alternate white and navy after the navy hero: navigator white, Improve navy, Align white, Solve navy, finder white, process navy, CTA white. */}
       <Band tone="light" aria-label="The three solutions" className="py-10 sm:py-14">
         <Container className={WIDE}>
           <ul className="grid gap-4 md:grid-cols-3">
@@ -80,7 +81,7 @@ export default async function SolutionsPage() {
               <li key={n.label}>
                 <a
                   href={anchors[i]}
-                  className="group flex h-full flex-col rounded-[4px] border border-line border-t-[3px] border-t-btn bg-card p-5 transition hover:-translate-y-[3px] hover:border-accent motion-reduce:hover:translate-y-0"
+                  className="group flex h-full flex-col rounded-[4px] border border-line bg-card p-5 transition hover:-translate-y-[3px] hover:border-accent motion-reduce:hover:translate-y-0"
                 >
                   <span className="flex items-baseline gap-3">
                     <span aria-hidden className="text-[1.75rem] font-extrabold leading-none text-accent [font-family:var(--font-display)]">
@@ -100,12 +101,12 @@ export default async function SolutionsPage() {
         </Container>
       </Band>
 
-      <SolutionSection id="improve" tone="light" className="!bg-alt" block={improve} visual={<PhotoVisual image={improve.image} sequence={improve.sequence} aspect="aspect-[3/2]" />} />
+      <SolutionSection id="improve" tone="dark" block={improve} visual={<PhotoVisual image={improve.image} sequence={improve.sequence} aspect="aspect-[3/2]" />} />
       <SolutionSection id="align" tone="light" block={align} flip visual={<PhotoVisual image={align.image} sequence={align.sequence} />} />
-      <SolutionSection id="solve" tone="light" className="!bg-alt" block={solve} visual={<PhotoVisual image={solve.image} sequence={solve.sequence} />} />
+      <SolutionSection id="solve" tone="dark" block={solve} visual={<PhotoVisual image={solve.image} sequence={solve.sequence} />} />
 
       {/* Finder */}
-      <Band tone="dark" id="find-your-solution" aria-labelledby="finder-title" className="scroll-mt-[var(--header-h)]">
+      <Band tone="light" id="find-your-solution" aria-labelledby="finder-title" className="scroll-mt-[var(--header-h)]">
         <Container className={WIDE}>
           <SectionTitle>
             <span id="finder-title">{finder.title}</span>
@@ -116,7 +117,7 @@ export default async function SolutionsPage() {
       </Band>
 
       {/* How we work */}
-      <Band tone="light" aria-labelledby="how-title">
+      <Band tone="dark" aria-labelledby="how-title">
         <Container className={WIDE}>
           <SectionTitle>
             <span id="how-title">{how.title}</span>
@@ -126,7 +127,7 @@ export default async function SolutionsPage() {
         </Container>
       </Band>
 
-      <HomeCta cta={home.cta} secondaryHref="/sample-reports" />
+      <HomeCta cta={home.cta} secondaryHref="/sample-reports" tone="light" />
     </>
   )
 }

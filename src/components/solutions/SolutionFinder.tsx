@@ -44,7 +44,7 @@ export function SolutionFinder({ options }: { options: FinderOption[] }) {
         ))}
       </div>
 
-      <div aria-live="polite" className="rounded-[4px] border border-line border-t-[3px] border-t-btn bg-card p-6 sm:p-8">
+      <div aria-live="polite" className="rounded-[4px] border border-line bg-card p-6 sm:p-8">
         {/* Keyed so each recommendation fades in. */}
         <div key={active} className="animate-[finder-in_300ms_ease-out_both] motion-reduce:animate-none">
           <p className="text-[13px] font-bold uppercase tracking-[0.1em] text-accent-strong">Best starting point</p>

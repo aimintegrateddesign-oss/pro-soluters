@@ -66,7 +66,7 @@ export function ProcessTimeline({
           })}
         </ol>
 
-        <div aria-live="polite" className="mt-8 rounded-[4px] border border-line border-t-[3px] border-t-btn bg-card p-6">
+        <div aria-live="polite" className="mt-8 rounded-[4px] border border-line bg-card p-6">
           <div key={active} className="animate-[finder-in_300ms_ease-out_both] motion-reduce:animate-none">
             <p className="text-[12px] font-bold text-accent-strong">
               Step {active + 1} of {steps.length}
