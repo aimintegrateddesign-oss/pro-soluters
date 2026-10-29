@@ -39,7 +39,13 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }]
+    // Built-in images and the hero video change rarely: let browsers and the CDN keep them for a day and refresh in the background.
+    const staticCache = [{ key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' }]
+    return [
+      { source: '/:path*', headers: securityHeaders },
+      { source: '/images/:path*', headers: staticCache },
+      { source: '/hero-video.mp4', headers: staticCache },
+    ]
   },
   // Temporarily required on Windows until Next.js fixes Turbopack Sass resolution.
   // See: https://github.com/vercel/next.js/issues/86431
@@ -47,6 +53,9 @@ const nextConfig: NextConfig = {
     loadPaths: ['./node_modules/@payloadcms/ui/dist/scss/'],
   },
   images: {
+    minimumCacheTTL: 31536000,
+    // Fewer breakpoints means fewer image variants to generate and cache (the default list has eight, up to 3840 px).
+    deviceSizes: [640, 828, 1080, 1440, 1920],
     localPatterns: [
       {
         pathname: '/api/media/file/**',

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Inter_Tight } from 'next/font/google'
+import { preconnect } from 'react-dom'
 import type { ReactNode } from 'react'
 
 import { Footer } from '@/components/layout/Footer'
@@ -33,6 +34,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
+  // Open the connection to the media host (Vercel Blob) while the HTML is still arriving, so the first CMS image does not also pay for TLS.
+  const blobId = process.env.BLOB_STORE_ID?.replace(/^store_/i, '').toLowerCase()
+  if (blobId) preconnect(`https://${blobId}.public.blob.vercel-storage.com`)
   const [{ content: settings }, { content: nav }] = await Promise.all([getSiteSettings(), getNavigation()])
 
   const organizationJsonLd = {

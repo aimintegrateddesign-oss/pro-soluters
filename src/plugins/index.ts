@@ -29,7 +29,10 @@ export const plugins: Plugin[] = [
   // Media falls back to public/media. clientUploads sends files straight from the browser, past Vercel's 4.5 MB body limit.
   vercelBlobStorage({
     enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
-    collections: { media: true },
+    // Media URLs point straight at the Blob CDN instead of /api/media/file/*, which made every image wait for Payload to start,
+    // query MongoDB and re-download the file from Blob (about 0.6 s warm, 10 s cold) before the optimizer could begin.
+    // Media here is public, so Payload's access control on file reads is not needed.
+    collections: { media: { disablePayloadAccessControl: true } },
     token: process.env.BLOB_READ_WRITE_TOKEN || '',
     clientUploads: true,
   }),
