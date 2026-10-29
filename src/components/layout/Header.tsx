@@ -70,7 +70,9 @@ export function Header({ nav }: { nav: NavItem[] }) {
       className={cn(
         'fixed inset-x-0 top-0 z-40 transition-colors duration-300',
         pathname === '/' && 'theme-dark',
-        solid ? 'border-b border-white/10 bg-hero/95 backdrop-blur' : 'border-b border-transparent bg-gradient-to-b from-hero/70 to-transparent',
+        solid ? 'bg-hero/95 backdrop-blur' : 'bg-gradient-to-b from-hero/70 to-transparent',
+        // The home hero runs straight under the header, so there is no dividing line there; other pages keep the thin line.
+        pathname !== '/' && 'border-b border-white/10',
       )}
     >
       <div className={cn('mx-auto grid h-[var(--header-h)] w-full max-w-[77.5rem] grid-cols-[1fr_auto] items-center gap-6 px-5 lg:grid-cols-[1fr_auto_1fr]')}>

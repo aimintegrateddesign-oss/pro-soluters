@@ -55,6 +55,9 @@ export const navigation = {
         { label: 'Who We Serve', href: '/who-we-serve' },
         { label: 'Case Studies', href: '/case-studies' },
         { label: 'Sample Report', href: '/sample-reports' },
+        { label: 'Blog', href: '#' },
+        { label: 'Privacy policy', href: '/privacy' },
+        { label: 'Terms of use', href: '/terms' },
       ],
     },
     {
@@ -126,7 +129,7 @@ export const homePage = {
   },
   why: {
     title: 'Why engineering organisations call us',
-    lead: 'Three problems we see again and again.',
+    lead: 'Three problems we see again and again. Engineering teams rarely lack skill. They lose time, money and confidence when information is scattered, root causes go unexamined and big decisions are made without evidence. Pro Solutors exists to fix exactly that.',
     items: [
       { title: 'Scattered technical data', text: 'Drawings, calculations and models live in different places and never quite agree.' },
       { title: 'Problems that keep coming back', text: 'The same issues return because the root cause was never analysed.' },
@@ -162,7 +165,7 @@ export const homePage = {
     founderName: 'Zaid Mohiyuddin',
     founderRole: 'Founder & Chief Executive Officer',
     // Portrait of the founder. Clear it in Payload to show a branded placeholder instead.
-    founderImage: { src: '/images/founder-zaid-mohiyuddin.webp', alt: 'Zaid Mohiyuddin, Founder and CEO of Pro Solutors' },
+    founderImage: { src: '/images/founder-zaid-mohiyuddin-2.webp', alt: 'Zaid Mohiyuddin, Founder and CEO of Pro Solutors' },
     expertise: ['Civil Engineering', 'Engineering Management', 'Business Strategy', 'Innovation'],
     ctaLabel: 'Meet Zaid',
     ctaLink: '/about',

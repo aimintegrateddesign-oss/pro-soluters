@@ -29,7 +29,7 @@ export function FounderPortrait({
 }) {
   const hasImage = Boolean(image?.src)
   return (
-    <div className={cn('relative aspect-[4/5] overflow-hidden rounded-[4px] border border-line border-t-[3px] border-t-btn bg-alt', className)}>
+    <div className={cn('relative aspect-[10/11] overflow-hidden rounded-[4px] border border-line bg-alt', className)}>
       {hasImage ? (
         <Image src={image!.src} alt={image!.alt || `${name}, ${role}`} fill sizes={sizes} className="object-cover" />
       ) : (

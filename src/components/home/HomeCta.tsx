@@ -1,4 +1,4 @@
-import { Check, Clock, ShieldCheck } from 'lucide-react'
+import { Check } from 'lucide-react'
 
 import { Button } from '@/components/ds/primitives'
 import type { Cta } from '@/data/site'
@@ -32,10 +32,6 @@ export function HomeCta({
       <div className="theme-dark mx-auto max-w-[77.5rem] rounded-[4px] border border-line border-t-2 border-t-accent bg-[#0b2038] px-6 py-10 sm:px-10 sm:py-12 lg:px-14">
         <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
           <div>
-            <p className="mb-4 flex items-center gap-2.5 text-[13px] font-bold text-accent">
-              <span aria-hidden className="size-2 bg-accent" />
-              {cta.eyebrow}
-            </p>
             <h2 className="text-balance text-[clamp(1.9rem,3.6vw,3rem)] font-extrabold leading-[1.05] text-white">{cta.title}</h2>
             <p className="mt-4 max-w-[30rem] text-[17px] leading-relaxed text-[#c3d0dd]">{cta.body}</p>
 
@@ -50,16 +46,6 @@ export function HomeCta({
               )}
             </div>
 
-            <ul className="mt-7 flex flex-col gap-2 text-[14px] text-[#c3d0dd] sm:flex-row sm:flex-wrap sm:gap-x-6">
-              <li className="flex items-center gap-2">
-                <Clock aria-hidden className="size-4 shrink-0 text-accent" />
-                Clear reply within 2 working days
-              </li>
-              <li className="flex items-center gap-2">
-                <ShieldCheck aria-hidden className="size-4 shrink-0 text-accent" />
-                NDA first on request, before details
-              </li>
-            </ul>
           </div>
 
           <div className="w-full max-w-[26rem] justify-self-center overflow-hidden rounded-[4px] bg-[#f4f8fb] text-[#0a1626] lg:justify-self-end">
