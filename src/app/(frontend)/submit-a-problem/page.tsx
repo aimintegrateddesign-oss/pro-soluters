@@ -1,4 +1,4 @@
-import { Mail } from 'lucide-react'
+import { Clock, Mail, ShieldCheck, UserCheck } from 'lucide-react'
 import type { Metadata } from 'next'
 
 import { Band, HeroContainer, HeroShell, WIDE } from '@/components/ds/band'
@@ -13,6 +13,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata(seo, { title: 'Submit your problem', description: settings.promiseText, path: '/submit-a-problem' }, site)
 }
 
+// Commitments already stated elsewhere on the site, repeated here at the moment of decision.
+const trust = [
+  { icon: UserCheck, text: 'Read by an engineer' },
+  { icon: Clock, text: 'Clear reply within 2 working days' },
+  { icon: ShieldCheck, text: 'NDA available before you share details' },
+]
+
 type Props = { searchParams: Promise<{ solution?: string }> }
 
 // Navy cards sitting on the white band, like the rest of the redesigned pages.
@@ -25,12 +32,23 @@ export default async function SubmitPage({ searchParams }: Props) {
 
   return (
     <>
-      <HeroShell>
+      {/* Compact hero: the form is the point of this page, so it starts close to the top of the screen. */}
+      <HeroShell className="lg:min-h-0 lg:justify-start">
         <HeroContainer>
-          <h1 className="text-[clamp(2.25rem,5vw,4.5rem)] font-extrabold leading-[1.02] !tracking-[-0.035em] text-white">
-            {content.hero.title} <span className="text-accent">{content.hero.accent}</span>
-          </h1>
-          <p className="mt-4 max-w-[40rem] text-lg text-[#c3d0dd]">{content.hero.intro}</p>
+          <div className="pt-3 lg:pt-6">
+            <h1 className="text-balance text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-[1.04] !tracking-[-0.035em] text-white">
+              {content.hero.title} <span className="text-accent">{content.hero.accent}</span>
+            </h1>
+            <p className="mt-4 max-w-[40rem] text-pretty text-lg leading-relaxed text-[#d5dfe9]">{content.hero.intro}</p>
+            <ul className="mt-6 flex flex-col gap-2 text-[14px] text-[#c3d0dd] sm:flex-row sm:flex-wrap sm:gap-x-7">
+              {trust.map(({ icon: Icon, text }) => (
+                <li key={text} className="flex items-center gap-2">
+                  <Icon aria-hidden className="size-4 shrink-0 text-accent" />
+                  {text}
+                </li>
+              ))}
+            </ul>
+          </div>
         </HeroContainer>
       </HeroShell>
 
