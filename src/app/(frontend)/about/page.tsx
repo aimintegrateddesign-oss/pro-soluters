@@ -1,4 +1,5 @@
-import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, ImageIcon } from 'lucide-react'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 
 import { Band, HeroContainer, HeroShell, SectionTitle, WIDE, otherTone, ruleCard, toneAt } from '@/components/ds/band'
@@ -49,14 +50,28 @@ export default async function AboutPage() {
     <>
       <HeroShell>
         <HeroContainer>
-          <div className="max-w-[52rem]">
-            <p className="flex items-center gap-3 text-[13px] font-bold uppercase tracking-[0.14em] text-accent">
-              <span aria-hidden className="h-px w-8 bg-accent" />
-              {hero.eyebrow}
-            </p>
-            <h1 className="mt-5 text-balance text-[clamp(2.25rem,5vw,4.5rem)] font-extrabold leading-[1.04] !tracking-[-0.035em] text-white">{hero.title}</h1>
-            <p className="mt-6 max-w-[40rem] text-pretty text-lg leading-relaxed text-[#d5dfe9]">{hero.intro}</p>
-            {hero.secondLine && <p className="mt-4 max-w-[40rem] text-pretty text-[16px] leading-relaxed text-[#a3b3c4]">{hero.secondLine}</p>}
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,11fr)_minmax(0,9fr)] lg:gap-14">
+            <div>
+              <p className="flex items-center gap-3 text-[13px] font-bold uppercase tracking-[0.14em] text-accent">
+                <span aria-hidden className="h-px w-8 bg-accent" />
+                {hero.eyebrow}
+              </p>
+              <h1 className="mt-5 text-balance text-[clamp(2.25rem,5vw,4.5rem)] font-extrabold leading-[1.04] !tracking-[-0.035em] text-white">{hero.title}</h1>
+              <p className="mt-6 max-w-[40rem] text-pretty text-lg leading-relaxed text-[#d5dfe9]">{hero.intro}</p>
+              {hero.secondLine && <p className="mt-4 max-w-[40rem] text-pretty text-[16px] leading-relaxed text-[#a3b3c4]">{hero.secondLine}</p>}
+            </div>
+            {hero.image.src ? (
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[4px] border border-line shadow-[0_30px_60px_-24px_rgba(0,0,0,0.8)]">
+                <Image src={hero.image.src} alt={hero.image.alt} fill priority sizes="(min-width: 1024px) 500px, 92vw" className="object-cover" />
+              </div>
+            ) : (
+              // Placeholder until a hero image is uploaded in Payload (Pages > About Us > Hero > Hero image).
+              <div aria-hidden className="bg-blueprint flex aspect-[4/3] flex-col items-center justify-center rounded-[4px] border border-line bg-[#0b2038] text-center shadow-[0_30px_60px_-24px_rgba(0,0,0,0.8)]">
+                <ImageIcon className="size-10 text-accent/70" strokeWidth={1.4} />
+                <span className="mt-4 text-[12px] font-bold uppercase tracking-[0.16em] text-accent">Hero image</span>
+                <span className="mt-1 text-[13px] text-[#a3b3c4]">Image coming soon</span>
+              </div>
+            )}
           </div>
         </HeroContainer>
       </HeroShell>
@@ -69,9 +84,11 @@ export default async function AboutPage() {
             <Eyebrow>{founder.eyebrow}</Eyebrow>
             <h2 className="mt-4 text-[clamp(1.9rem,3.6vw,3rem)] font-extrabold leading-[1.05] text-heading">{founder.name}</h2>
             <p className="mt-2 text-lg font-semibold text-accent-strong">{founder.role}</p>
-            <ul aria-label="Professional background" className="mt-4 space-y-1 text-[15px] font-semibold text-heading">
+            <ul aria-label="Professional background" className="mt-5 flex flex-wrap gap-2">
               {founder.descriptor.map((d) => (
-                <li key={d}>{d}</li>
+                <li key={d} className="rounded-[4px] border border-line bg-card px-3 py-1.5 text-[13px] font-semibold text-heading">
+                  {d}
+                </li>
               ))}
             </ul>
             <div className="mt-6 space-y-4 border-t border-line pt-6">
@@ -180,7 +197,7 @@ export default async function AboutPage() {
       </Band>
 
       {/* Philosophy */}
-      <Band tone={toneAt(4)} className="!bg-tint py-20 sm:py-28">
+      <Band tone={toneAt(4)} className="py-20 sm:py-28">
         <Container className={WIDE}>
           <Eyebrow>{philosophy.eyebrow}</Eyebrow>
           <h2 className="mt-6 max-w-[62rem] text-[clamp(2rem,5.6vw,4.75rem)] font-extrabold leading-[1.04] !tracking-[-0.03em] text-heading">

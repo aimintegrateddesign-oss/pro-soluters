@@ -1157,6 +1157,10 @@ export interface SitePage {
       title?: string | null;
       intro?: string | null;
       secondLine?: string | null;
+      /**
+       * Optional, landscape 4:3. If empty, a placeholder panel is shown.
+       */
+      image?: (string | null) | Media;
     };
     founder?: {
       eyebrow?: string | null;
@@ -2608,6 +2612,7 @@ export interface SitePagesSelect<T extends boolean = true> {
               title?: T;
               intro?: T;
               secondLine?: T;
+              image?: T;
             };
         founder?:
           | T

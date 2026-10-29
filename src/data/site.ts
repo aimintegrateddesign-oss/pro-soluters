@@ -601,6 +601,8 @@ export const aboutPage = {
     intro:
       'Pro Solutors is a multidisciplinary problem-solving organisation that brings engineering, research, structured data and business strategy together to help organisations understand complex challenges and make practical, evidence-based decisions.',
     secondLine: 'We focus on solutions that are technically sound, operationally practical and commercially viable.',
+    // Optional. Until an image is uploaded in Payload, the hero shows a placeholder panel.
+    image: { src: '', alt: '' },
   },
   founder: {
     eyebrow: 'OUR FOUNDER',

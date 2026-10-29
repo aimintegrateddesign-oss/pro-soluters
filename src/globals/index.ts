@@ -88,7 +88,13 @@ export const AboutPage = definePage({
   label: 'About Us page',
   description: 'The About Us page (/about). The founder portrait falls back to the image on the Home page About section.',
   content: [
-    group('hero', 'Hero', [text('eyebrow', 'Small label'), text('title', 'Heading'), area('intro', 'Intro'), area('secondLine', 'Second line')]),
+    group('hero', 'Hero', [
+      text('eyebrow', 'Small label'),
+      text('title', 'Heading'),
+      area('intro', 'Intro'),
+      area('secondLine', 'Second line'),
+      { name: 'image', type: 'upload', relationTo: 'media', label: 'Hero image', admin: { description: 'Optional, landscape 4:3. If empty, a placeholder panel is shown.' } },
+    ]),
     group('founder', 'Founder', [
       text('eyebrow', 'Small label'),
       text('name', 'Name'),
