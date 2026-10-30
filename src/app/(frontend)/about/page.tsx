@@ -6,6 +6,7 @@ import { Band, HeroContainer, HeroShell, SectionTitle, WIDE, otherTone, ruleCard
 import { Container } from '@/components/ds/primitives'
 import { FounderPortrait } from '@/components/home/FounderPortrait'
 import { HomeCta } from '@/components/home/HomeCta'
+import { StepReveal } from '@/components/motion/StepReveal'
 import { getAboutPage, getHomePage, getSiteSettings, pageMetadata } from '@/lib/queries/content'
 import { cn } from '@/lib/utils'
 
@@ -130,12 +131,12 @@ export default async function AboutPage() {
               const last = i === journey.steps.length - 1
               return (
                 <li key={step} className="contents">
-                  <div className={cn('flex-1 rounded-[4px] border px-5 py-4 text-[16px] font-bold', last ? 'border-btn bg-btn text-white' : 'border-line bg-card text-heading')}>
+                  <StepReveal index={i} className={cn('flex-1 rounded-[4px] border px-5 py-4 text-[16px] font-bold', last ? 'border-btn bg-btn text-white' : 'border-line bg-card text-heading')}>
                     <span aria-hidden className={cn('mb-1 block text-[12px] font-bold', last ? 'text-white/80' : 'text-accent')}>
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     {step}
-                  </div>
+                  </StepReveal>
                   {!last && (
                     <>
                       <ArrowDown aria-hidden className="mx-auto size-5 shrink-0 text-accent md:hidden" />
