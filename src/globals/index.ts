@@ -8,12 +8,14 @@ const sectionHead = (name: string, label: string) => group(name, label, [text('t
 export const SiteSettings = makeGlobal({
   slug: 'site-settings',
   label: 'Site settings',
-  description: 'Company-wide text: tagline, contact email, the promise line and the sample disclaimer. The SEO tab is the site default.',
+  description: 'Company-wide text: tagline, contact details, the promise line and the sample disclaimer. The SEO tab is the site default.',
   content: [
     text('tagline', 'Tagline'),
     area('description', 'Site description'),
     area('promiseText', 'Promise line', { admin: { description: 'Shown in the hero, on the Submit page and in call-to-action panels.' } }),
     text('notificationEmail', 'Contact email'),
+    text('phone', 'Contact phone'),
+    text('address', 'Contact address'),
     area('sampleDisclaimerText', 'Sample disclaimer', { admin: { description: 'Shown on sample case studies and reports.' } }),
   ],
 })

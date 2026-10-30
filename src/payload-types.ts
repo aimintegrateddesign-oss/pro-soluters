@@ -3492,7 +3492,7 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
- * Company-wide text: tagline, contact email, the promise line and the sample disclaimer. The SEO tab is the site default.
+ * Company-wide text: tagline, contact details, the promise line and the sample disclaimer. The SEO tab is the site default.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -3506,6 +3506,8 @@ export interface SiteSetting {
    */
   promiseText?: string | null;
   notificationEmail?: string | null;
+  phone?: string | null;
+  address?: string | null;
   /**
    * Shown on sample case studies and reports.
    */
@@ -3635,6 +3637,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   description?: T;
   promiseText?: T;
   notificationEmail?: T;
+  phone?: T;
+  address?: T;
   sampleDisclaimerText?: T;
   meta?:
     | T

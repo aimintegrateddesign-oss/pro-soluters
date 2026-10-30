@@ -68,6 +68,8 @@ export type CaseStudy = {
 export type SiteSettings = {
   promiseText: string
   notificationEmail: string
+  phone: string
+  address: string
   sampleDisclaimerText: string
   tagline: string
   description: string

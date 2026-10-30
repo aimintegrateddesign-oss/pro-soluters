@@ -15,7 +15,9 @@ export const siteSettings: SiteSettings = {
   description:
     'Pro Solutors helps engineering consultants, contractors, research centres and government institutions innovate, align their technical data, and choose solutions backed by feasibility analysis.',
   promiseText: 'Every submission is read by an engineer and answered within 2 working days.',
-  notificationEmail: 'hello@prosolutors.com',
+  notificationEmail: 'zaidmohiyuddin21@gmail.com',
+  phone: '+61 459 258 322',
+  address: '49 Sweeney Ave, Plumpton, Sydney',
   sampleDisclaimerText:
     'This is an illustrative sample. The company, project and all figures are fictional and are not real client data or real client results. It shows the structure and standard of our reports.',
 }

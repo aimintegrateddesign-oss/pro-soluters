@@ -164,7 +164,7 @@ export default async function AboutPage() {
           </div>
           <ul className="grid grid-cols-2 gap-3">
             {why.disciplines.map((d, i) => (
-              <li key={d} className={cn(ruleCard, 'p-4')}>
+              <li key={d} className={cn(ruleCard, 'border-t border-t-line p-4')}>
                 <span aria-hidden className="text-[12px] font-bold text-accent-strong">
                   {String(i + 1).padStart(2, '0')}
                 </span>
