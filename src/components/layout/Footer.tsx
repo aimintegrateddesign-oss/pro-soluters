@@ -21,7 +21,7 @@ export function Footer({ settings, navigation: nav }: { settings: SiteSettings; 
   const copyrightLeft = copyrightParts?.[1] ?? nav.footer.copyright
   const copyrightRight = copyrightParts?.[2] ?? ''
   return (
-    <footer className="theme-dark bg-blueprint relative overflow-hidden border-t border-accent/40 bg-[#050e19] text-ink">
+    <footer className="theme-dark relative overflow-hidden border-t border-accent/40 bg-[#050e19] text-ink">
       <div className="mx-auto w-full max-w-[90rem] px-5 pt-10">
         <div className="grid gap-10 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>
