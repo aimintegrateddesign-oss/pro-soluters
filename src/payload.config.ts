@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
 import { CaseStudies } from './collections/CaseStudies'
+import { Countries } from './collections/Countries'
 import { Industries } from './collections/Industries'
 import { Solutions } from './collections/Solutions'
 import { SitePages } from './collections/SitePages'
@@ -71,7 +72,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users, Solutions, Industries, CaseStudies, Submissions, SitePages],
+  collections: [Pages, Posts, Media, Categories, Users, Solutions, Industries, CaseStudies, Submissions, SitePages, Countries],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer, ...siteGlobals],
   plugins,

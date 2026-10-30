@@ -5,6 +5,7 @@ import { Band, HeroContainer, HeroShell, WIDE } from '@/components/ds/band'
 import { Container } from '@/components/ds/primitives'
 import { SubmitProblemForm } from '@/components/forms/SubmitProblemForm'
 import { getSiteSettings, getSubmitPage, pageMetadata } from '@/lib/queries/content'
+import { getCountries } from '@/lib/queries/countries'
 import { SOLUTION_OPTIONS } from '@/lib/validation/submission'
 import { cn } from '@/lib/utils'
 
@@ -27,7 +28,7 @@ const card = 'theme-dark rounded-[4px] border border-line border-t-[3px] border-
 
 export default async function SubmitPage({ searchParams }: Props) {
   const { solution } = await searchParams
-  const [{ content }, { content: settings }] = await Promise.all([getSubmitPage(), getSiteSettings()])
+  const [{ content }, { content: settings }, countries] = await Promise.all([getSubmitPage(), getSiteSettings(), getCountries()])
   const defaultSolution = SOLUTION_OPTIONS.some((o) => o.value === solution) ? solution! : 'not-sure'
 
   return (
@@ -55,7 +56,7 @@ export default async function SubmitPage({ searchParams }: Props) {
       <Band tone="light" className="py-10 sm:py-14">
         <Container className={cn(WIDE, 'grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]')}>
           <div className={cn(card, 'p-6 sm:p-8')}>
-            <SubmitProblemForm defaultSolution={defaultSolution} />
+            <SubmitProblemForm defaultSolution={defaultSolution} countries={countries} />
           </div>
 
           <aside className="space-y-4 lg:sticky lg:top-24">

@@ -38,7 +38,7 @@ function render(element: ReactNode) {
 }
 
 const cardClass = 'flex-1 rounded-[4px] border border-line bg-card px-5 py-4'
-const show = (index = 0) => createElement(StepReveal, { index, className: cardClass }, createElement('span', null, 'Civil Engineering'))
+const show = (index = 0) => createElement(StepReveal, { index, className: cardClass, children: createElement('span', null, 'Civil Engineering') })
 
 beforeEach(() => {
   preferences.inView = false
@@ -89,7 +89,7 @@ describe('journey card reveal', () => {
 
   it('staggers all four cards in order while keeping each as a direct flex item', () => {
     preferences.inView = true
-    const cards = [0, 1, 2, 3].map((index) => createElement(StepReveal, { index, className: cardClass, key: index }, 'Step ' + (index + 1)))
+    const cards = [0, 1, 2, 3].map((index) => createElement(StepReveal, { index, className: cardClass, key: index, children: 'Step ' + (index + 1) }))
     const view = render(createElement(Fragment, null, ...cards))
 
     expect(view.container.children).toHaveLength(4)

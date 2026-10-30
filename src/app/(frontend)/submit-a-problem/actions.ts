@@ -4,7 +4,9 @@ import { createHash } from 'node:crypto'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
+import { findCountryByName } from '@/data/countries'
 import { getPayloadClient } from '@/lib/payload'
+import { getCountries } from '@/lib/queries/countries'
 import { validateSubmission, type FieldErrors, type SubmissionFields } from '@/lib/validation/submission'
 
 export type SubmitState = { ok: false; fieldErrors: FieldErrors; formError?: string; values?: Partial<SubmissionFields> } | null
@@ -29,7 +31,10 @@ export async function submitProblem(_prev: SubmitState, fd: FormData): Promise<S
     consent: fd.get('consent') === 'on',
   }
 
-  const fieldErrors = validateSubmission(values)
+  const countries = await getCountries()
+  const country = findCountryByName(values.country, countries)
+  if (country) values.country = country.name
+  const fieldErrors = validateSubmission(values, countries)
   if (Object.keys(fieldErrors).length > 0) return { ok: false, fieldErrors, values }
 
   try {

@@ -14,6 +14,7 @@ import 'dotenv/config'
 import { readdirSync } from 'node:fs'
 import path from 'node:path'
 import { getPayload } from 'payload'
+import { seedCountries } from './countries'
 
 import config from '../payload.config'
 import { caseStudies } from './data/caseStudies'
@@ -80,6 +81,8 @@ const rows = <K extends string>(key: K, items: string[]) => items.map((v) => ({ 
 async function seed() {
   console.log('[seed] connecting to database...')
   const payload = await getPayload({ config })
+  const countrySeed = await seedCountries(payload)
+  payload.logger.info('Countries: ' + countrySeed.created + ' created; ' + countrySeed.skipped + ' existing records preserved.')
 
   const exists = async (collection: 'solutions' | 'industries' | 'case-studies' | 'users', where: Parameters<typeof payload.find>[0]['where']) =>
     (await payload.find({ collection, where, limit: 1, depth: 0, pagination: false })).docs[0]
