@@ -9,6 +9,8 @@ import { Logo } from './Logo'
 
 // The footer is always navy (theme-dark), so its text contrast holds on every page and in either OS theme.
 export function Footer({ settings, navigation: nav }: { settings: SiteSettings; navigation: typeof navigation }) {
+  // Retired columns may still be present in saved CMS navigation.
+  const footerColumns = nav.footerColumns.filter(({ title }) => !['disciplines', 'for institutions'].includes(title.trim().toLowerCase()))
   const contact = [
     { label: 'Email an engineer', value: settings.notificationEmail, href: `mailto:${settings.notificationEmail}` },
     { label: 'Response time', value: nav.footer.responseTime },
@@ -20,8 +22,8 @@ export function Footer({ settings, navigation: nav }: { settings: SiteSettings; 
   const copyrightRight = copyrightParts?.[2] ?? ''
   return (
     <footer className="theme-dark bg-blueprint relative overflow-hidden border-t border-accent/40 bg-[#050e19] text-ink">
-      <div className="mx-auto w-full max-w-[77.5rem] px-5 pt-10">
-        <div className="grid gap-10 py-12 lg:grid-cols-[minmax(0,2.6fr)_minmax(0,8.4fr)]">
+      <div className="mx-auto w-full max-w-[90rem] px-5 pt-10">
+        <div className="grid gap-10 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div>
             <Logo variant="full" />
             <p className="mt-5 max-w-[26rem] text-[15px] leading-relaxed text-muted">{nav.footer.blurb}</p>
@@ -31,8 +33,8 @@ export function Footer({ settings, navigation: nav }: { settings: SiteSettings; 
             </Button>
           </div>
 
-          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-[repeat(4,minmax(0,1fr))_minmax(0,1.45fr)]">
-            {nav.footerColumns.map((col) => (
+          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3">
+            {footerColumns.map((col) => (
               <div key={col.title}>
                 <h2 className="border-b border-line pb-2 text-[13px] font-bold text-accent [font-family:var(--font-sans)] !tracking-normal">{col.title}</h2>
                 <ul className="mt-3 space-y-2.5">

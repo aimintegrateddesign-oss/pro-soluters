@@ -60,24 +60,6 @@ export const navigation = {
         { label: 'Terms of use', href: '/terms' },
       ],
     },
-    {
-      title: 'Disciplines',
-      links: [
-        { label: 'Civil and Mechanical', href: '/who-we-serve' },
-        { label: 'HVAC and Electrical', href: '/who-we-serve' },
-        { label: 'MEP', href: '/who-we-serve' },
-        { label: 'Mechatronics and Transportation, coming soon', href: '/who-we-serve', muted: true },
-      ],
-    },
-    {
-      title: 'For institutions',
-      links: [
-        { label: 'Audit-friendly reports', href: '/who-we-serve' },
-        { label: 'Tenders and RFPs', href: '/who-we-serve' },
-        { label: 'International payments', href: '/who-we-serve' },
-        { label: 'Capability Statement', href: '/who-we-serve', accent: true },
-      ],
-    },
   ] as { title: string; links: { label: string; href: string; muted?: boolean; accent?: boolean }[] }[],
   legalLinks: [
     { label: 'Privacy policy', href: '/privacy' },
