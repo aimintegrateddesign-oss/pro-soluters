@@ -15,7 +15,7 @@ export function Logo({ className, variant = 'header' }: { className?: string; va
         height={full ? 776 : 120}
         priority={!full}
         sizes={full ? '240px' : '180px'}
-        className={cn('w-auto', full ? 'h-24' : 'h-8 sm:h-10')}
+        className={cn('w-auto', full ? 'h-28' : 'h-8 sm:h-10')}
       />
     </Link>
   )

@@ -27,7 +27,10 @@ export function Footer({ settings, navigation: nav }: { settings: SiteSettings; 
       <div className="mx-auto w-full max-w-[90rem] px-5 pt-10">
         <div className="grid grid-cols-1 gap-10 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div className="min-w-0">
-            <Logo variant="full" />
+            {/* Same max width as the blurb, so the logo sits centred over the text beneath it. */}
+            <div className="flex max-w-[26rem] justify-center">
+              <Logo variant="full" />
+            </div>
             <p className="mt-5 max-w-[26rem] text-[15px] leading-relaxed text-muted">{nav.footer.blurb}</p>
             <Button href="/submit-a-problem" className="mt-6">
               Submit your problem
