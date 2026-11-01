@@ -6,6 +6,7 @@ import { Band, HeroContainer, HeroShell, WIDE, otherTone } from '@/components/ds
 import { Button, Container } from '@/components/ds/primitives'
 import { HomeCta } from '@/components/home/HomeCta'
 import { AudienceGrid } from '@/components/who-we-serve/AudienceGrid'
+import { DomainGrid } from '@/components/who-we-serve/DomainGrid'
 import { CapabilityMockup, DomainsVisual } from '@/components/who-we-serve/visuals'
 import { getWhoWeServePage, pageMetadata } from '@/lib/queries/content'
 import { cn } from '@/lib/utils'
@@ -92,44 +93,8 @@ export default async function WhoWeServePage() {
         </Container>
       </Band>
 
-      {/* Domains */}
-      <Band tone="light" aria-labelledby="domains-title">
-        <Container className={cn(WIDE, 'grid items-center gap-12 lg:grid-cols-[minmax(0,9fr)_minmax(0,11fr)] lg:gap-20')}>
-          <div>
-            <p className={eyebrow}>
-              <span aria-hidden className="h-px w-8 bg-btn" />
-              {domains.eyebrow}
-            </p>
-            <h2 id="domains-title" className={cn(h2, 'mt-4')}>
-              {domains.title}
-            </h2>
-            <p className="mt-4 max-w-[30rem] text-[17px] leading-relaxed text-muted">{domains.lead}</p>
-            <ul className="mt-8 grid grid-cols-2 gap-3">
-              {domains.items.map((d, i) => (
-                <li key={d.name} className="flex items-center gap-3 rounded-[4px] border border-line border-l-[3px] border-l-btn bg-card px-4 py-3">
-                  <span aria-hidden className="text-[11px] font-bold text-accent-strong">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <span className="font-bold leading-tight text-heading">
-                    {d.name}
-                    {d.note && <small className="block text-[11px] font-normal text-muted">{d.note}</small>}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          {domains.image.src ? (
-            <div className="relative aspect-square w-full max-w-[34rem] justify-self-center overflow-hidden rounded-[4px] border border-line lg:justify-self-end">
-              <Image src={domains.image.src} alt={domains.image.alt} fill sizes="(min-width: 1024px) 540px, 92vw" className="object-cover" />
-            </div>
-          ) : (
-            <DomainsVisual className="lg:justify-self-end" />
-          )}
-        </Container>
-      </Band>
-
       {/* Institutional buyers */}
-      <Band tone="light" className="!bg-tint" aria-labelledby="buyers-title">
+      <Band tone="dark" className="!bg-navy" aria-labelledby="buyers-title">
         <Container className={cn(WIDE, 'grid items-center gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-20')}>
           <div className="order-last lg:order-first">
             {reassurance.image.src ? (
@@ -163,6 +128,30 @@ export default async function WhoWeServePage() {
               </Button>
             )}
           </div>
+        </Container>
+      </Band>
+
+      {/* Domains */}
+      <Band tone="light" aria-labelledby="domains-title">
+        <Container className={cn(WIDE, 'grid items-center gap-12 lg:grid-cols-[minmax(0,9fr)_minmax(0,11fr)] lg:gap-20')}>
+          <div>
+            <p className={eyebrow}>
+              <span aria-hidden className="h-px w-8 bg-btn" />
+              {domains.eyebrow}
+            </p>
+            <h2 id="domains-title" className={cn(h2, 'mt-4')}>
+              {domains.title}
+            </h2>
+            <p className="mt-4 max-w-[30rem] text-[17px] leading-relaxed text-muted">{domains.lead}</p>
+            <DomainGrid domains={domains.items} />
+          </div>
+          {domains.image.src ? (
+            <div className="relative aspect-square w-full max-w-[34rem] justify-self-center overflow-hidden rounded-[4px] border border-line lg:justify-self-end">
+              <Image src={domains.image.src} alt={domains.image.alt} fill sizes="(min-width: 1024px) 540px, 92vw" className="object-cover" />
+            </div>
+          ) : (
+            <DomainsVisual className="lg:justify-self-end" />
+          )}
         </Container>
       </Band>
 

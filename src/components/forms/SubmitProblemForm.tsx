@@ -5,6 +5,8 @@ import { Loader2 } from 'lucide-react'
 
 import { submitProblem, type SubmitState } from '@/app/(frontend)/submit-a-problem/actions'
 import { Button } from '@/components/ds/primitives'
+import { CountryCombobox } from '@/components/forms/CountryCombobox'
+import type { CountryOption } from '@/data/countries'
 import {
   DISCIPLINES,
   ORG_TYPES,
@@ -82,7 +84,7 @@ function Segmented({
   )
 }
 
-export function SubmitProblemForm({ defaultSolution }: { defaultSolution: string }) {
+export function SubmitProblemForm({ defaultSolution, countries }: { defaultSolution: string; countries: readonly CountryOption[] }) {
   const [state, action, pending] = useActionState<SubmitState, FormData>(submitProblem, null)
   const [blurErrors, setBlurErrors] = useState<FieldErrors>({})
   const formRef = useRef<HTMLFormElement>(null)
@@ -102,7 +104,7 @@ export function SubmitProblemForm({ defaultSolution }: { defaultSolution: string
 
   // Inline validation on blur: only the blurred field's message is set or cleared.
   const onBlur = (field: keyof SubmissionFields) => () => {
-    const msg = validateSubmission(readValues())[field]
+    const msg = validateSubmission(readValues(), countries)[field]
     setBlurErrors((prev) => ({ ...prev, [field]: msg }))
   }
 
@@ -150,7 +152,7 @@ export function SubmitProblemForm({ defaultSolution }: { defaultSolution: string
           <input id="email" name="email" type="email" autoComplete="email" defaultValue={v?.email} className={inputClass(!!errors.email)} {...fp('email')} />
         </Field>
         <Field id="country" label="Country *" error={errors.country}>
-          <input id="country" name="country" autoComplete="country-name" defaultValue={v?.country} className={inputClass(!!errors.country)} {...fp('country')} />
+          <CountryCombobox key={v?.country ?? ''} id="country" name="country" countries={countries} defaultValue={v?.country} className={inputClass(!!errors.country)} {...fp('country')} />
         </Field>
       </div>
 

@@ -15,7 +15,9 @@ export const siteSettings: SiteSettings = {
   description:
     'Pro Solutors helps engineering consultants, contractors, research centres and government institutions innovate, align their technical data, and choose solutions backed by feasibility analysis.',
   promiseText: 'Every submission is read by an engineer and answered within 2 working days.',
-  notificationEmail: 'hello@prosolutors.com',
+  notificationEmail: 'zaidmohiyuddin21@gmail.com',
+  phone: '+61 459 258 322',
+  address: '49 Sweeney Ave, Plumpton, Sydney',
   sampleDisclaimerText:
     'This is an illustrative sample. The company, project and all figures are fictional and are not real client data or real client results. It shows the structure and standard of our reports.',
 }
@@ -58,24 +60,6 @@ export const navigation = {
         { label: 'Blog', href: '#' },
         { label: 'Privacy policy', href: '/privacy' },
         { label: 'Terms of use', href: '/terms' },
-      ],
-    },
-    {
-      title: 'Disciplines',
-      links: [
-        { label: 'Civil and Mechanical', href: '/who-we-serve' },
-        { label: 'HVAC and Electrical', href: '/who-we-serve' },
-        { label: 'MEP', href: '/who-we-serve' },
-        { label: 'Mechatronics and Transportation, coming soon', href: '/who-we-serve', muted: true },
-      ],
-    },
-    {
-      title: 'For institutions',
-      links: [
-        { label: 'Audit-friendly reports', href: '/who-we-serve' },
-        { label: 'Tenders and RFPs', href: '/who-we-serve' },
-        { label: 'International payments', href: '/who-we-serve' },
-        { label: 'Capability Statement', href: '/who-we-serve', accent: true },
       ],
     },
   ] as { title: string; links: { label: string; href: string; muted?: boolean; accent?: boolean }[] }[],
@@ -601,8 +585,8 @@ export const aboutPage = {
     intro:
       'Pro Solutors is a multidisciplinary problem-solving organisation that brings engineering, research, structured data and business strategy together to help organisations understand complex challenges and make practical, evidence-based decisions.',
     secondLine: 'We focus on solutions that are technically sound, operationally practical and commercially viable.',
-    // Optional. Until an image is uploaded in Payload, the hero shows a placeholder panel.
-    image: { src: '', alt: '' },
+    // Built-in hero image; editors can replace it with an upload in Payload.
+    image: { src: '/images/about-teamwork.webp', alt: 'Engineering team collaborating over architectural plans in a global office.' },
   },
   founder: {
     eyebrow: 'OUR FOUNDER',

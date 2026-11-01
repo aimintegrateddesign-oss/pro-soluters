@@ -59,7 +59,14 @@ function pageLoader<T>(key: PageKey, defaults: T) {
   })
 }
 
-export const getSiteSettings = loader('site-settings', siteSettings)
+const loadSiteSettings = loader('site-settings', siteSettings)
+
+export const getSiteSettings = cache(async () => {
+  const page = await loadSiteSettings()
+  // Retire the seeded template email while keeping later CMS contact edits authoritative.
+  if (page.content.notificationEmail.trim().toLowerCase() !== 'hello@prosolutors.com') return page
+  return { ...page, content: { ...page.content, notificationEmail: siteSettings.notificationEmail } }
+})
 export const getNavigation = loader('navigation', navigation)
 export const getHomePage = pageLoader('home', homePage)
 export const getAboutPage = pageLoader('about', aboutPage)

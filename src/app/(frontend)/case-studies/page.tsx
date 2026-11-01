@@ -7,6 +7,7 @@ import { CaseMetricCard } from '@/components/case-study/parts'
 import { Band, HeroContainer, HeroShell, WIDE } from '@/components/ds/band'
 import { Button, Container } from '@/components/ds/primitives'
 import { HomeCta } from '@/components/home/HomeCta'
+import { ALL_SOLUTIONS, caseStudiesHref, parseCaseStudyFilters, type CaseStudySearchParams } from '@/lib/case-study-filters'
 import { getCaseStudiesPage, getSiteSettings, pageMetadata } from '@/lib/queries/content'
 import { getIndustries } from '@/lib/queries/industries'
 import { searchCaseStudies } from '@/lib/queries/caseStudies'
@@ -22,23 +23,12 @@ export async function generateMetadata(): Promise<Metadata> {
   )
 }
 
-type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> }
-
-const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v)
-
-function href(params: Record<string, string | undefined>) {
-  const qs = new URLSearchParams(Object.entries(params).filter((e): e is [string, string] => Boolean(e[1])))
-  return qs.size ? `/case-studies?${qs}#case-results` : '/case-studies#case-results'
-}
+type Props = { searchParams: Promise<CaseStudySearchParams> }
 
 const fieldClass = 'min-h-12 rounded-[4px] border border-line bg-card px-4 text-ink'
 
 export default async function CaseStudiesPage({ searchParams }: Props) {
-  const sp = await searchParams
-  const solution = one(sp.solution)
-  const industry = one(sp.industry)
-  const q = one(sp.q)
-  const page = Number(one(sp.page)) || 1
+  const { solution, industry, q, page } = parseCaseStudyFilters(await searchParams)
 
   const [solutions, industries, result, { content }] = await Promise.all([
     getSolutions(),
@@ -101,18 +91,18 @@ export default async function CaseStudiesPage({ searchParams }: Props) {
           {/* DECISION: a plain GET form keeps filters in the URL with no client JS. */}
           <div className="rounded-[4px] border border-line bg-card p-4 sm:p-6">
             <nav aria-label="Filter by solution" className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
-              <Link href={href({ industry, q })} className={chip(!solution)} aria-current={!solution ? 'true' : undefined}>
+              <Link href={caseStudiesHref({ industry, q })} className={chip(!solution)} aria-current={!solution ? 'true' : undefined}>
                 All solutions
               </Link>
               {solutions.map((s) => (
-                <Link key={s.slug} href={href({ solution: s.slug, industry, q })} className={chip(solution === s.slug)} aria-current={solution === s.slug ? 'true' : undefined}>
+                <Link key={s.slug} href={caseStudiesHref({ solution: s.slug, industry, q })} className={chip(solution === s.slug)} aria-current={solution === s.slug ? 'true' : undefined}>
                   {s.name}
                 </Link>
               ))}
             </nav>
 
             <form method="get" action="/case-studies#case-results" className="mt-4 flex flex-col gap-3 sm:flex-row">
-              {solution && <input type="hidden" name="solution" value={solution} />}
+              <input type="hidden" name="solution" value={solution ?? ALL_SOLUTIONS} />
               <label className="sr-only" htmlFor="q">
                 Search case studies
               </label>
@@ -144,7 +134,7 @@ export default async function CaseStudiesPage({ searchParams }: Props) {
           {result.docs.length === 0 ? (
             <div className="rounded-[4px] border border-dashed border-line bg-card p-10 text-center">
               <p className="text-lg font-bold text-heading">No case studies match those filters.</p>
-              <Button href="/case-studies" variant="secondary" className="mt-4">
+              <Button href={caseStudiesHref()} variant="secondary" className="mt-4">
                 Reset filters
               </Button>
             </div>
@@ -161,7 +151,7 @@ export default async function CaseStudiesPage({ searchParams }: Props) {
           {result.totalPages > 1 && (
             <nav aria-label="Pagination" className="mt-10 flex justify-center gap-2">
               {Array.from({ length: result.totalPages }, (_, i) => i + 1).map((p) => (
-                <Link key={p} href={href({ solution, industry, q, page: p === 1 ? undefined : String(p) })} className={chip(p === result.page)}>
+                <Link key={p} href={caseStudiesHref({ solution, industry, q, page: p === 1 ? undefined : p })} className={chip(p === result.page)}>
                   {p}
                 </Link>
               ))}

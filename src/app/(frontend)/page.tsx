@@ -78,9 +78,9 @@ export default async function HomePage() {
               <h2 className="text-[clamp(1.9rem,3.6vw,3rem)] font-extrabold leading-[1.05] text-heading">{home.path.title}</h2>
               <p className="mt-3 text-muted">{home.path.lead}</p>
             </div>
-            <ol className="grid gap-5 md:grid-cols-3 lg:items-end lg:pt-24">
+            <ol className="grid gap-5 md:grid-cols-3">
               {home.path.steps.map((c, i) => (
-                <li key={c.title} className={['', 'lg:mb-12', 'lg:mb-24'][i]}>
+                <li key={c.title}>
                   <SequentialReveal index={i}>
                     <div className={`${cardBase} border-b-[3px] border-b-btn`}>
                       <span aria-hidden className="mb-4 inline-flex size-9 items-center justify-center rounded-[4px] bg-btn font-bold text-white">

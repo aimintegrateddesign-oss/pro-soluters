@@ -77,6 +77,7 @@ export interface Config {
     'case-studies': CaseStudy;
     submissions: Submission;
     'site-pages': SitePage;
+    countries: Country;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -104,6 +105,7 @@ export interface Config {
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     'site-pages': SitePagesSelect<false> | SitePagesSelect<true>;
+    countries: CountriesSelect<false> | CountriesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -1669,6 +1671,20 @@ export interface SitePage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: string;
+  name: string;
+  /**
+   * Two-letter country code, e.g. AU or PK.
+   */
+  code: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1896,6 +1912,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'site-pages';
         value: string | SitePage;
+      } | null)
+    | ({
+        relationTo: 'countries';
+        value: string | Country;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -3160,6 +3180,16 @@ export interface SitePagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries_select".
+ */
+export interface CountriesSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects_select".
  */
 export interface RedirectsSelect<T extends boolean = true> {
@@ -3492,7 +3522,7 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
- * Company-wide text: tagline, contact email, the promise line and the sample disclaimer. The SEO tab is the site default.
+ * Company-wide text: tagline, contact details, the promise line and the sample disclaimer. The SEO tab is the site default.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -3506,6 +3536,8 @@ export interface SiteSetting {
    */
   promiseText?: string | null;
   notificationEmail?: string | null;
+  phone?: string | null;
+  address?: string | null;
   /**
    * Shown on sample case studies and reports.
    */
@@ -3635,6 +3667,8 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   description?: T;
   promiseText?: T;
   notificationEmail?: T;
+  phone?: T;
+  address?: T;
   sampleDisclaimerText?: T;
   meta?:
     | T

@@ -9,8 +9,12 @@ import { Logo } from './Logo'
 
 // The footer is always navy (theme-dark), so its text contrast holds on every page and in either OS theme.
 export function Footer({ settings, navigation: nav }: { settings: SiteSettings; navigation: typeof navigation }) {
+  // Retired columns may still be present in saved CMS navigation.
+  const footerColumns = nav.footerColumns.filter(({ title }) => !['disciplines', 'for institutions'].includes(title.trim().toLowerCase()))
   const contact = [
     { label: 'Email an engineer', value: settings.notificationEmail, href: `mailto:${settings.notificationEmail}` },
+    { label: 'Phone', value: settings.phone, href: 'tel:' + settings.phone.replace(/[^\d+]/g, '') },
+    { label: 'Address', value: settings.address },
     { label: 'Response time', value: nav.footer.responseTime },
     { label: 'Confidential', value: nav.footer.confidentiality },
   ]
@@ -19,11 +23,14 @@ export function Footer({ settings, navigation: nav }: { settings: SiteSettings; 
   const copyrightLeft = copyrightParts?.[1] ?? nav.footer.copyright
   const copyrightRight = copyrightParts?.[2] ?? ''
   return (
-    <footer className="theme-dark bg-blueprint relative overflow-hidden border-t border-accent/40 bg-[#050e19] text-ink">
-      <div className="mx-auto w-full max-w-[77.5rem] px-5 pt-10">
-        <div className="grid gap-10 py-12 lg:grid-cols-[minmax(0,2.6fr)_minmax(0,8.4fr)]">
-          <div>
-            <Logo variant="full" />
+    <footer className="theme-dark relative overflow-hidden border-t border-accent/40 bg-[#050e19] text-ink">
+      <div className="mx-auto w-full max-w-[90rem] px-5 pt-10">
+        <div className="grid grid-cols-1 gap-10 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <div className="min-w-0">
+            {/* Same max width as the blurb, so the logo sits centred over the text beneath it. */}
+            <div className="flex max-w-[26rem] justify-center">
+              <Logo variant="full" />
+            </div>
             <p className="mt-5 max-w-[26rem] text-[15px] leading-relaxed text-muted">{nav.footer.blurb}</p>
             <Button href="/submit-a-problem" className="mt-6">
               Submit your problem
@@ -31,9 +38,9 @@ export function Footer({ settings, navigation: nav }: { settings: SiteSettings; 
             </Button>
           </div>
 
-          <nav aria-label="Footer" className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-[repeat(4,minmax(0,1fr))_minmax(0,1.45fr)]">
-            {nav.footerColumns.map((col) => (
-              <div key={col.title}>
+          <nav aria-label="Footer" className="grid min-w-0 grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+            {footerColumns.map((col) => (
+              <div key={col.title} className="min-w-0">
                 <h2 className="border-b border-line pb-2 text-[13px] font-bold text-accent [font-family:var(--font-sans)] !tracking-normal">{col.title}</h2>
                 <ul className="mt-3 space-y-2.5">
                   {col.links.map((l) => (
@@ -57,7 +64,7 @@ export function Footer({ settings, navigation: nav }: { settings: SiteSettings; 
                 </ul>
               </div>
             ))}
-            <div>
+            <div className="min-w-0 md:col-span-2 lg:col-span-1">
               <h2 className="border-b border-line pb-2 text-[13px] font-bold text-accent [font-family:var(--font-sans)] !tracking-normal">Contact</h2>
               <ul className="mt-3 space-y-4">
                 {contact.map(({ label, value, href }) => (
@@ -68,7 +75,7 @@ export function Footer({ settings, navigation: nav }: { settings: SiteSettings; 
                         {value}
                       </a>
                     ) : (
-                      <p className="text-[15px] font-semibold leading-snug text-white">{value}</p>
+                      <p className="text-[15px] font-semibold leading-snug text-white [overflow-wrap:anywhere]">{value}</p>
                     )}
                   </li>
                 ))}
@@ -78,7 +85,7 @@ export function Footer({ settings, navigation: nav }: { settings: SiteSettings; 
         </div>
 
         {/* The copyright text splits at its first full stop: the name on the left, "All rights reserved." on the right. */}
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 border-t border-line py-5 text-[13px] text-muted">
+        <div className="flex flex-col gap-x-6 gap-y-1 border-t border-line py-5 text-[13px] text-muted md:flex-row md:flex-wrap md:items-center md:justify-between">
           <p>
             © {new Date().getFullYear()} {copyrightLeft}
           </p>

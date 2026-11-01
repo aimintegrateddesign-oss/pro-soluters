@@ -1,6 +1,8 @@
 // DECISION: hand-written validator (no zod dependency). It is imported by both the client form
 // and the server action, so the rules live in one place; the server is the source of truth.
 
+import { COUNTRIES, findCountryByName, type CountryOption } from '@/data/countries'
+
 export const ORG_TYPES = [
   { value: 'consultant', label: 'Consultant' },
   { value: 'contractor', label: 'Contractor' },
@@ -54,11 +56,11 @@ export type FieldErrors = Partial<Record<keyof SubmissionFields | 'files', strin
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
-export function validateSubmission(v: SubmissionFields): FieldErrors {
+export function validateSubmission(v: SubmissionFields, countries: readonly CountryOption[] = COUNTRIES): FieldErrors {
   const e: FieldErrors = {}
   if (v.name.trim().length < 2) e.name = 'Enter your full name.'
   if (v.company.trim().length < 2) e.company = 'Enter your organisation.'
-  if (v.country.trim().length < 2) e.country = 'Enter your country.'
+  if (!findCountryByName(v.country, countries)) e.country = 'Choose a country from the list.'
   if (!EMAIL_RE.test(v.email.trim())) e.email = 'Enter a valid email address.'
   if (!ORG_TYPES.some((o) => o.value === v.orgType)) e.orgType = 'Choose an organisation type.'
   if (!DISCIPLINES.some((o) => o.value === v.discipline)) e.discipline = 'Choose a discipline.'
