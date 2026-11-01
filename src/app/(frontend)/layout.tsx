@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, Inter_Tight } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { preconnect } from 'react-dom'
 import type { ReactNode } from 'react'
 
@@ -61,6 +63,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <main id="main">{children}</main>
         <Footer settings={settings} navigation={nav} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
