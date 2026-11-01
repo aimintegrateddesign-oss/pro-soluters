@@ -17,18 +17,20 @@ export function AboutPreview({ about }: { about: AboutContent }) {
   const { founderName, founderRole, founderImage, expertise } = about
 
   return (
-    <section className="theme-light bg-bg py-16 sm:py-20 lg:py-24">
+    <section className="theme-light bg-bg py-12 sm:py-14 lg:py-16">
       <Container className="!max-w-[77.5rem]">
-        <div className="grid items-center gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-12 lg:gap-20">
-          <Reveal tilt={0} lift={28}>
-            <figure className="mx-auto w-full max-w-[26rem] md:max-w-none">
-              <FounderPortrait image={founderImage} name={founderName} role={founderRole} />
-              <figcaption className="mt-4 md:hidden">
-                <p className="text-lg font-bold text-heading">{founderName}</p>
-                <p className="text-[14px] text-muted">{founderRole}</p>
-              </figcaption>
-            </figure>
-          </Reveal>
+        <div className="grid items-start gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-12 lg:gap-20">
+          <div>
+            <Reveal tilt={0} lift={28}>
+              <figure className="mx-auto w-full max-w-[20rem]">
+                <FounderPortrait image={founderImage} name={founderName} role={founderRole} />
+                <figcaption className="mt-4 md:hidden">
+                  <p className="text-lg font-bold text-heading">{founderName}</p>
+                  <p className="text-[14px] text-muted">{founderRole}</p>
+                </figcaption>
+              </figure>
+            </Reveal>
+          </div>
 
           <Reveal tilt={0} lift={28} delay={0.12}>
             <div className="max-w-[40rem]">
@@ -36,31 +38,34 @@ export function AboutPreview({ about }: { about: AboutContent }) {
                 <span aria-hidden className="h-px w-8 bg-btn" />
                 {about.eyebrow}
               </p>
-              <h2 className="mt-4 text-balance text-[clamp(1.9rem,3.6vw,3rem)] font-extrabold leading-[1.05] text-heading">{about.heading}</h2>
-              <p className="mt-5 text-pretty text-[17px] leading-relaxed text-ink">{about.description}</p>
-              {about.secondaryDescription && <p className="mt-4 text-pretty text-[16px] leading-relaxed text-muted">{about.secondaryDescription}</p>}
+              <h2 className="mt-3 text-balance text-[clamp(1.9rem,3.6vw,3rem)] font-extrabold leading-[1.05] text-heading">{about.heading}</h2>
+              <p className="mt-3 text-pretty text-[17px] leading-relaxed text-ink">{about.description}</p>
+              {about.secondaryDescription && <p className="mt-3 line-clamp-3 text-pretty text-[16px] leading-relaxed text-muted">{about.secondaryDescription}</p>}
 
-              <div className="mt-7 hidden border-t border-line pt-5 md:block">
-                <p className="text-lg font-bold text-heading">{founderName}</p>
-                <p className="text-[14px] text-muted">{founderRole}</p>
+              <p className="mt-4 hidden text-[14px] text-muted md:block">
+                <span className="text-lg font-bold text-heading">{founderName}</span>
+                <span aria-hidden> · </span>
+                {founderRole}
+              </p>
+
+              <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3">
+                {expertise.length > 0 && (
+                  <ul aria-label="Areas of expertise" className="flex flex-wrap gap-2">
+                    {expertise.map((label) => (
+                      <li key={label} className="rounded-[4px] border border-line bg-card px-3 py-1.5 text-[13px] font-semibold text-heading">
+                        {label}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {about.ctaLabel && about.ctaLink && (
+                  <Button href={about.ctaLink} className="min-h-12 w-full px-7 sm:w-auto">
+                    {about.ctaLabel}
+                    <ArrowRight aria-hidden className="size-4" />
+                  </Button>
+                )}
               </div>
-
-              {expertise.length > 0 && (
-                <ul aria-label="Areas of expertise" className="mt-5 flex flex-wrap gap-2">
-                  {expertise.map((label) => (
-                    <li key={label} className="rounded-[4px] border border-line bg-card px-3 py-1.5 text-[13px] font-semibold text-heading">
-                      {label}
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              {about.ctaLabel && about.ctaLink && (
-                <Button href={about.ctaLink} className="mt-8 min-h-12 w-full px-7 sm:w-auto">
-                  {about.ctaLabel}
-                  <ArrowRight aria-hidden className="size-4" />
-                </Button>
-              )}
             </div>
           </Reveal>
         </div>
