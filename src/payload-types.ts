@@ -1050,6 +1050,12 @@ export interface Submission {
   consent: boolean;
   status?: ('new' | 'in-review' | 'replied') | null;
   internalNotes?: string | null;
+  notifySentAt?: string | null;
+  confirmationSentAt?: string | null;
+  /**
+   * Set when an email failed to send. The submission itself is still saved.
+   */
+  emailError?: string | null;
   ipHash?: string | null;
   userAgent?: string | null;
   updatedAt: string;
@@ -2519,6 +2525,9 @@ export interface SubmissionsSelect<T extends boolean = true> {
   consent?: T;
   status?: T;
   internalNotes?: T;
+  notifySentAt?: T;
+  confirmationSentAt?: T;
+  emailError?: T;
   ipHash?: T;
   userAgent?: T;
   updatedAt?: T;
